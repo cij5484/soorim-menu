@@ -1,0 +1,21 @@
+{
+   "id": "/soorim/menu/",
+  "name": "수림횟집 메뉴판",
+  "short_name": "수림 메뉴",
+  "description": "수림횟집 메뉴판",
+  "lang": "ko",
+  "start_url": "/soorim/menu/",
+  "scope": "/soorim/menu/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fffaf3",
+  "theme_color": "#17322b",
+  "icons": [
+    {
+      "src": "./icons/menu-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

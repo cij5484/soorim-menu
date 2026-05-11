@@ -1,0 +1,5207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>수림횟집 메뉴판</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#17322b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="수림 메뉴" />
+  <link rel="apple-touch-icon" href="./icons/menu-icon.svg" />
+
+  <link rel="preload" as="image" href="images/b-course.JPG" fetchpriority="high">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+      background: #f7f3ec;
+      color: #1f1f1f;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #fffaf3;
+      min-height: 100vh;
+      box-shadow: 0 0 30px rgba(0,0,0,0.08);
+    }
+
+    .hero {
+      position: relative;
+      padding: 28px 18px 20px;
+      background: linear-gradient(135deg, #17322b, #0f1f1b);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      top: -70px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .store-name {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(24px, 7vw, 30px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin: 0;
+      white-space: nowrap;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .store-title-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .wifi-qr-btn {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      padding: 2px;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .wifi-qr-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 7px;
+    }
+
+    .event-btn {
+      margin-left: auto;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 245, 190, 0.9);
+      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
+      color: #3a2500;
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.28);
+      white-space: nowrap;
+    }
+
+    .event-btn,
+    .about-soorim-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-width: 2px;
+      transform: translateY(0);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+
+    .event-btn::before {
+      content: "🎁";
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .about-soorim-btn::before {
+      content: "ⓘ";
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .event-btn::after,
+    .about-soorim-btn::after {
+      content: "›";
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1;
+      margin-left: 1px;
+    }
+
+    .event-btn:active,
+    .about-soorim-btn:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 6px rgba(126, 82, 0, 0.22);
+    }
+
+    @media (hover: hover) {
+      .event-btn:hover,
+      .about-soorim-btn:hover {
+        filter: brightness(1.05);
+        box-shadow: 0 5px 15px rgba(126, 82, 0, 0.32);
+      }
+    }
+
+    .info-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.55);
+      padding: 18px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .info-modal.show {
+      display: flex;
+    }
+
+    .info-modal-card {
+      width: 100%;
+      max-width: 420px;
+      background: #fffaf3;
+      border-radius: 22px;
+      border: 1px solid #eadfce;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+      padding: 18px;
+    }
+
+    .info-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .info-modal-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .info-close-btn {
+      border: 0;
+      background: #17322b;
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .wifi-qr-large {
+      width: 100%;
+      max-width: 320px;
+      display: block;
+      margin: 8px auto 12px;
+      border-radius: 18px;
+      border: 1px solid #eadfce;
+      background: #fff;
+    }
+
+    .modal-desc {
+      margin: 0;
+      font-size: 14px;
+      color: #51483d;
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+    .event-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .event-item {
+      padding: 12px;
+      border-radius: 14px;
+      background: #fff4e1;
+      border: 1px solid #f1d4a6;
+      font-size: 14px;
+      color: #5d4121;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .event-steps {
+      margin: 9px 0 0;
+      padding-left: 18px;
+      color: #51483d;
+      font-size: 13.5px;
+      font-weight: 750;
+      line-height: 1.55;
+    }
+
+    .event-steps li {
+      margin-bottom: 5px;
+    }
+
+    .event-gift-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 13px;
+      background: #17322b;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    .event-small-note {
+      margin-top: 8px;
+      color: #8a3b1f;
+      font-size: 12.5px;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    .event-review-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+      padding: 11px 13px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
+      color: #3a2500;
+      font-size: 14px;
+      font-weight: 900;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(126, 82, 0, 0.24);
+      border: 1px solid rgba(255, 245, 190, 0.9);
+    }
+
+    .event-choice-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .event-choice-btn {
+      width: 100%;
+      border: 1px solid #f1d4a6;
+      background: #fff4e1;
+      color: #5d4121;
+      border-radius: 15px;
+      padding: 13px 14px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 900;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.035);
+    }
+
+    .event-choice-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 15px;
+    }
+
+    .event-choice-title::after {
+      content: "›";
+      font-size: 20px;
+      font-weight: 900;
+      color: #b13b25;
+    }
+
+    .event-choice-sub {
+      display: block;
+      margin-top: 5px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #8a7764;
+      line-height: 1.4;
+    }
+
+    .event-back-btn {
+      width: 100%;
+      margin-top: 10px;
+      border: 1px solid #eadfce;
+      background: #fff;
+      color: #51483d;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .store-subtitle {
+      position: relative;
+      z-index: 1;
+      margin: 5px 0 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .language-bar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 18px 0 2px;
+      scrollbar-width: none;
+    }
+
+    .language-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .lang-btn {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: #fff;
+      color: #17322b;
+    }
+
+    .main-visual {
+      padding: 16px;
+      background: #17322b;
+      color: #fff;
+    }
+
+    .main-photo {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+      border-radius: 22px;
+      background: #ddd;
+    }
+
+    .main-visual-text {
+      padding: 16px 4px 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #e94b35;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .main-title-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0 4px;
+    }
+
+    .main-title {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .main-desc {
+      margin: 0;
+      color: rgba(255,255,255,0.86);
+      font-size: 14px;
+    }
+
+    .quick-nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,250,243,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #eadfce;
+    }
+
+    .quick-nav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 9px 12px;
+      scrollbar-width: none;
+    }
+
+    .language-bar,
+    .quick-nav {
+      cursor: grab;
+      user-select: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .language-bar.dragging,
+    .quick-nav.dragging {
+      cursor: grabbing;
+    }
+
+    .quick-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .quick-link {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #e5d7c4;
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #3a2a1c;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .quick-link {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+
+    
+    .quick-link.active {
+      background: #17322b;
+      color: #fff;
+      border-color: #17322b;
+      box-shadow: 0 5px 14px rgba(23, 50, 43, 0.28);
+      transform: translateY(-1px);
+    }
+
+    section {
+      padding: 26px 16px;
+      border-bottom: 10px solid #f2eadf;
+      scroll-margin-top: 64px;
+    }
+
+    .section-title-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+    }
+
+    .section-note {
+      margin: 5px 0 0;
+      font-size: 13px;
+      color: #786b5b;
+    }
+
+    .section-important-note {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #17322b;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 4px 12px rgba(23, 50, 43, 0.18);
+    }
+
+    .section-change-note {
+      margin: 9px 0 14px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #fff4e1;
+      border: 1px solid #f1d4a6;
+      color: #5d4121;
+      font-size: 13.5px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .compact-title-row {
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .section-inline-note {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #17322b;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(23, 50, 43, 0.18);
+    }
+
+    .about-soorim-btn {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 245, 190, 0.9);
+      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
+      color: #3a2500;
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.22);
+      white-space: nowrap;
+    }
+
+    .about-modal-card {
+      max-width: 560px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .about-modal-card .info-modal-head {
+      margin: 0;
+      padding: 18px 18px 14px;
+      background: linear-gradient(135deg, #17322b, #0f1f1b);
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .about-modal-card .info-modal-title {
+      color: #fff;
+      font-size: 21px;
+    }
+
+    .about-modal-card .info-close-btn {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .about-body {
+      display: grid;
+      gap: 14px;
+      max-height: 72vh;
+      overflow-y: auto;
+      padding: 16px;
+      background:
+        radial-gradient(circle at top right, rgba(212,160,23,0.18), transparent 32%),
+        #fffaf3;
+    }
+
+    .about-hero-box {
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #fff8e9, #f6ead7);
+      border: 1px solid #ead7b8;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    }
+
+    .about-eyebrow {
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 900;
+      color: #b13b25;
+      letter-spacing: 1.1px;
+    }
+
+    .about-lead {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+      color: #241a12;
+      line-height: 1.55;
+      letter-spacing: -0.25px;
+    }
+
+    .about-list {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .about-list li {
+      position: relative;
+      margin: 0;
+      padding: 12px 13px 12px 36px;
+      border-radius: 15px;
+      background: #fff;
+      border: 1px solid #eadfce;
+      color: #51483d;
+      font-size: 13.5px;
+      font-weight: 750;
+      line-height: 1.55;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.035);
+    }
+
+    .about-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 13px;
+      top: 12px;
+      width: 17px;
+      height: 17px;
+      border-radius: 999px;
+      background: #17322b;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .about-philosophy-box {
+      padding: 15px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #17322b, #23473d);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(23,50,43,0.22);
+    }
+
+    .about-philosophy-title {
+      display: inline-flex;
+      margin-bottom: 8px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
+      color: #3a2500;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+    }
+
+    .about-quote {
+      margin: 0;
+      color: rgba(255,255,255,0.92);
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.65;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .featured-card {
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #eadfce;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    .featured-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      background: #ddd;
+    }
+
+    .featured-placeholder {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #efe3d1, #d7c1a1);
+      color: #5b452d;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+      text-align: center;
+      padding: 16px;
+    }
+    
+    .featured-body {
+      padding: 13px 14px 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 8px;
+      row-gap: 6px;
+      align-items: center;
+    }
+
+    .featured-kicker {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 0;
+    }
+
+    .small-badge {
+      display: inline-flex;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: #17322b;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .best-badge {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f8df8a, #d4a017 45%, #fff1a8 70%, #a76f00);
+      color: #3a2500;
+      border: 1px solid rgba(255, 245, 190, 0.9);
+      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.28);
+      letter-spacing: 0.4px;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+    }
+
+    .best-badge::after {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -70%;
+      width: 45%;
+      height: 180%;
+      background: rgba(255,255,255,0.35);
+      transform: rotate(25deg);
+      animation: bestShine 2.8s ease-in-out infinite;
+    }
+
+    @keyframes bestShine {
+      0% {
+        left: -70%;
+      }
+      45% {
+        left: 130%;
+      }
+      100% {
+        left: 130%;
+      }
+    }
+
+    .featured-title {
+      grid-column: 1;
+      grid-row: 1;
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+      min-width: 0;
+    }
+
+    .featured-price {
+      grid-column: 1 / -1;
+      margin: 0;
+      font-size: 15px;
+      font-weight: 900;
+      color: #b13b25;
+    }
+
+    .featured-desc {
+      grid-column: 1 / -1;
+      margin: 0;
+      font-size: 13.5px;
+      color: #51483d;
+      line-height: 1.45;
+    }
+
+    .menu-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .menu-card {
+      background: #fff;
+      border: 1px solid #eadfce;
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.035);
+    }
+
+    .menu-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .menu-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+    }
+
+    .menu-price {
+      flex: 0 0 auto;
+      font-size: 16px;
+      font-weight: 900;
+      color: #b13b25;
+      white-space: nowrap;
+    }
+
+    .menu-desc {
+      margin: 8px 0 0;
+      font-size: 14px;
+      color: #51483d;
+    }
+
+    .menu-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .menu-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #f3eadc;
+      color: #5f4a34;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .menu-tag.best {
+      background: #17322b;
+      color: #fff;
+    }
+
+    .menu-tag.raw {
+      background: #fff1e8;
+      color: #8a3b1f;
+    }
+
+    .menu-tag.cooked {
+      background: #eaf4eb;
+      color: #225b30;
+    }
+
+    .menu-tag.spicy {
+      background: #ffecea;
+      color: #9e2d22;
+    }
+
+    .menu-tag.meal {
+      background: #eef2ff;
+      color: #273c8f;
+    }
+
+    .option-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 7px;
+      width: 100%;
+    }
+
+    .option-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: baseline;
+      gap: 12px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #fbf6ee;
+      border: 1px solid #f0e3d2;
+    }
+
+    .option-left {
+      min-width: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .option-name {
+      font-size: 14px;
+      font-weight: 900;
+      color: #2b2118;
+      white-space: nowrap;
+    }
+
+    .option-desc {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #6b5d4d;
+      line-height: 1.35;
+    }
+
+    .option-price {
+      font-size: 14px;
+      font-weight: 900;
+      color: #b13b25;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .eating-guide {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 13px;
+      background: #fff8eb;
+      border: 1px solid #efd7ad;
+      color: #5d4121;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .size-price-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .size-price-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 7px 10px;
+      border-radius: 11px;
+      background: #fbf6ee;
+      border: 1px solid #f0e3d2;
+      font-size: 14px;
+    }
+
+    .size-name {
+      font-weight: 900;
+      color: #332a22;
+      white-space: nowrap;
+    }
+
+    .size-price {
+      font-weight: 900;
+      color: #b13b25;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .price-lines {
+      margin-top: 9px;
+      display: grid;
+      gap: 5px;
+      font-size: 14px;
+      color: #332a22;
+    }
+
+    .notice-box {
+      margin-top: 14px;
+      padding: 13px 14px;
+      border-radius: 14px;
+      background: #fff4e1;
+      border: 1px solid #f1d4a6;
+      color: #5d4121;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .menu-card .notice-box {
+      margin-top: 8px;
+      padding: 6px 9px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+
+    details {
+      background: #fff;
+      border: 1px solid #eadfce;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: 900;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "⌄";
+      float: right;
+      font-size: 18px;
+      color: #8a7764;
+      margin-top: 0;
+    }
+
+    details[open] summary::after {
+      content: "⌃";
+    }
+
+    .details-content {
+      padding: 0 16px 16px;
+    }
+
+    .drink-group {
+      padding: 12px 0;
+      border-top: 1px solid #f0e5d6;
+    }
+
+    .drink-group:first-child {
+      border-top: 0;
+    }
+
+    .drink-title {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .drink-text {
+      margin: 0;
+      font-size: 14px;
+      color: #51483d;
+    }
+
+    .footer {
+      padding: 28px 16px 40px;
+      background: #17322b;
+      color: #fff;
+    }
+
+    .footer-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .footer-list {
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,0.86);
+      font-size: 14px;
+    }
+
+    .footer-list li {
+      margin-bottom: 8px;
+    }
+
+    .top-button {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 0;
+      background: #17322b;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      cursor: pointer;
+      z-index: 20;
+    }
+
+    .main-photo,
+    .featured-card img {
+      cursor: pointer;
+      transition: height 0.25s ease, max-height 0.25s ease;
+    }
+
+    .main-photo.photo-expanded,
+    .featured-card img.photo-expanded {
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+    }
+
+    .photo-hint {
+      margin-top: 7px;
+      font-size: 12px;
+      color: #8a7764;
+      font-weight: 800;
+    }
+
+    @media (min-width: 720px) {
+      .hero {
+        padding: 34px 26px 24px;
+      }
+
+      .store-name {
+        font-size: 38px;
+      }
+
+      .main-photo {
+        height: 420px;
+      }
+
+      .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .featured-card img,
+      .featured-placeholder {
+        height: 210px;
+      }
+
+      section {
+        padding: 34px 24px;
+      }
+
+      .quick-nav {
+        gap: 8px;
+        padding: 12px 18px;
+      }
+
+      .quick-link {
+        padding: 8px 13px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header class="hero" id="top">
+      <div class="store-title-row">
+        <h1 class="store-name" data-i18n="storeName">수림횟집</h1>
+
+        <button class="wifi-qr-btn" type="button" onclick="openInfoModal('wifi-modal')" aria-label="와이파이 QR 보기">
+          <img class="wifi-qr-thumb" src="images/wifi-qr.JPG" alt="와이파이 QR">
+        </button>
+
+        <button class="event-btn" id="event-btn-text" type="button" onclick="openInfoModal('event-modal')">
+          EVENT
+        </button>
+      </div>
+
+      <p class="store-subtitle" data-i18n="storeSubtitle">사시미 & 해산물 전문점</p>
+      
+      <div class="language-bar">
+        <button class="lang-btn active" data-lang="ko">한국어</button>
+        <button class="lang-btn" data-lang="en">English</button>
+        <button class="lang-btn" data-lang="ja">日本語</button>
+        <button class="lang-btn" data-lang="zh">简体中文</button>
+        <button class="lang-btn" data-lang="zhTw">繁體中文</button>
+        <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+        <button class="lang-btn" data-lang="fil">Filipino</button>
+        <button class="lang-btn" data-lang="ru">Русский</button>
+        <button class="lang-btn" data-lang="mn">Монгол</button>
+      </div>
+    </header>
+
+    <div class="main-visual">
+      <img class="main-photo" src="images/b-course.JPG" alt="수림횟집 B코스 대표 사진" fetchpriority="high" decoding="async" width="1200" height="800">
+      <div class="main-visual-text">
+        <div class="main-title-line">
+          <h2 class="main-title" data-i18n="mainTitle">B코스</h2>
+          <span class="badge best-badge">★ BEST</span>
+        </div>
+        <p class="main-desc" data-i18n="mainDesc">수림횟집 대표 코스 메뉴 · 고급모듬회와 다양한 해산물을 함께 즐길 수 있는 인기 메뉴입니다.</p>
+      </div>
+    </div>
+
+    <div class="quick-nav-wrap">
+      <nav class="quick-nav">
+        <a class="quick-link" href="#order-guide" data-i18n="navOrderGuide">주문안내</a>
+        <a class="quick-link" href="#featured" data-i18n="navFeatured">대표메뉴</a>
+        <a class="quick-link" href="#course" data-i18n="navCourse">코스메뉴</a>
+        <a class="quick-link" href="#sashimi" data-i18n="navSashimi">단품 사시미</a>
+        <a class="quick-link" href="#meal" data-i18n="navMeal">식사메뉴</a>
+        <a class="quick-link" href="#lunch" data-i18n="navLunch">점심특선</a>
+        <a class="quick-link" href="#kids" data-i18n="navKids">어린이메뉴</a>
+        <a class="quick-link" href="#extra-seafood" data-i18n="navExtraSeafood">추가해산물</a>
+        <a class="quick-link" href="#extra-menu" data-i18n="navExtraMenu">추가메뉴</a>
+        <a class="quick-link" href="#drink" data-i18n="navDrink">주류/음료</a>
+      </nav>
+    </div>
+
+    <section id="order-guide">
+      <div class="section-title-row compact-title-row">
+        <h2 class="section-title" id="order-guide-title-text">주문 전 안내</h2>
+        <button class="about-soorim-btn" id="about-soorim-btn-text" type="button" onclick="openInfoModal('about-modal')">
+          About Soorim
+        </button>
+      </div>
+      <p class="section-note" id="order-guide-note-text">메뉴를 고르기 전 확인해 주세요.</p>
+
+      <div class="notice-box" id="order-guide-box-text">
+        날 음식을 드시지 못하는 분께는 <strong>생우럭 매운탕 / 지리탕</strong>, <strong>우럭탕수</strong>, <strong>돈까스 정식</strong>을 추천합니다.<br><br>
+        생선회, 산낙지 등 일부 메뉴는 날것으로 제공됩니다. 산낙지는 접시 위에서 움직일 수 있으니 천천히 꼭꼭 씹어 드세요.<br><br>
+        <strong>모든 코스 메뉴는 2인 이상 주문 가능합니다.</strong> 추가 해산물과 추가 메뉴는 단독 주문이 불가합니다.<br><br>
+        사진은 대표 이미지이며 실제 구성은 계절, 재료 수급, 주문 인원에 따라 달라질 수 있습니다.<br><br>
+        <strong>1인 1주문을 부탁드립니다.</strong>
+      </div>
+    </section>
+
+    <section id="featured">
+      <div class="section-title-row">
+        <div>
+          <h2 class="section-title" id="featured-title-text">대표 메뉴</h2>
+        </div>
+      </div>
+
+      <div class="photo-hint" id="photo-hint-text">사진을 누르면 전체 사진으로 펼쳐집니다.</div>
+
+      <div class="featured-grid" id="featured-grid"></div>
+    </section>
+
+    <section id="course">
+      <h2 class="section-title" id="course-title-text">수림 코스</h2>
+      <div class="section-important-note" id="course-important-text">2인 이상 주문 가능 · 모든 코스는 1인 가격입니다.</div>
+      <div class="section-change-note" id="course-change-text">
+        코스에 포함된 매운탕은 매콤합니다. 맵지 않은 <strong>지리탕</strong>으로 변경 가능합니다.
+      </div>
+
+      <div class="menu-list" id="course-list"></div>
+    </section>
+
+    <section id="sashimi">
+      <div class="section-title-row compact-title-row">
+        <h2 class="section-title" id="sashimi-title-text">단품 사시미</h2>
+        <div class="section-inline-note" id="sashimi-included-text">모듬해물 · 맛보기 물회 · 매운탕 포함</div>
+      </div>
+      <div class="section-change-note" id="sashimi-change-text">
+        포함된 매운탕은 매콤합니다. 맵지 않은 <strong>지리탕</strong>으로 변경 가능합니다.
+      </div>
+
+      <div class="menu-list" id="sashimi-list"></div>
+
+      <div class="notice-box" id="sashimi-notice-text">
+        회를 드신 후 매운탕을 꼭 요청해 주세요. 매운탕 조리 시간은 약 10분 정도 소요됩니다.
+      </div>
+    </section>
+
+    <section id="meal">
+      <h2 class="section-title" id="meal-title-text">식사 메뉴</h2>
+      <div class="menu-list" id="meal-list"></div>
+    </section>
+
+    <section id="lunch">
+      <div class="section-title-row compact-title-row">
+        <h2 class="section-title" id="lunch-title-text">점심특선</h2>
+        <div class="section-inline-note" id="lunch-inline-note-text">2인 이상 주문 가능</div>
+      </div>
+      <div class="section-change-note" id="lunch-change-text">
+        점심시간에 주문 가능합니다. <strong>오후 2:30까지 주문 가능</strong><br>
+        포함된 매운탕은 매콤합니다. 맵지 않은 <strong>지리탕</strong>으로 변경 가능합니다.
+      </div>
+
+      <div class="menu-list" id="lunch-list"></div>
+    </section>
+
+    <section id="kids">
+      <h2 class="section-title" id="kids-title-text">어린이 메뉴</h2>
+      <div class="menu-list" id="kids-list"></div>
+    </section>
+
+    <section id="extra-seafood">
+      <h2 class="section-title" id="extra-seafood-title-text">추가 해산물</h2>
+      <div class="menu-list" id="extra-seafood-list"></div>
+
+      <div class="notice-box" id="extra-seafood-notice-text">
+        추가 해산물은 단독 주문이 불가합니다. 코스, 사시미, 식사 메뉴 주문 시 직원에게 함께 문의해 주세요.
+      </div>
+    </section>
+
+    <section id="extra-menu">
+      <h2 class="section-title" id="extra-menu-title-text">추가 메뉴</h2>
+      <div class="menu-list" id="extra-menu-list"></div>
+
+      <div class="notice-box" id="extra-menu-notice-text">
+        추가 메뉴는 단독 주문이 불가합니다. 주문 가능 여부는 직원에게 확인해 주세요.
+      </div>
+    </section>
+
+    <section id="drink">
+      <h2 class="section-title" id="drink-title-text">주류 및 음료</h2>
+      <p class="section-note" id="drink-note-text">주류는 종류별로 접었다 펼칠 수 있습니다.</p>
+
+      <div id="drink-list"></div>
+
+      <div class="notice-box" id="drink-notice-text">
+        주류 주문 시 신분증 확인이 필요할 수 있습니다.
+      </div>
+    </section>
+   
+
+    <footer class="footer">
+      <h2 class="footer-title" id="footer-title-text">수림횟집</h2>
+      <ul class="footer-list" id="footer-list-text"></ul>
+    </footer>
+
+  </div>
+
+  <div class="info-modal" id="wifi-modal" onclick="closeModalByBg(event, 'wifi-modal')">
+    <div class="info-modal-card">
+      <div class="info-modal-head">
+        <h2 class="info-modal-title" id="wifi-modal-title-text">Wi-Fi</h2>
+        <button class="info-close-btn" type="button" onclick="closeInfoModal('wifi-modal')">×</button>
+      </div>
+
+      <img class="wifi-qr-large" src="images/wifi-qr.JPG" alt="와이파이 QR">
+    </div>
+  </div>
+
+  <div class="info-modal" id="event-modal" onclick="closeModalByBg(event, 'event-modal')">
+    <div class="info-modal-card">
+      <div class="info-modal-head">
+        <h2 class="info-modal-title" id="event-modal-title-text">리뷰 이벤트</h2>
+        <button class="info-close-btn" type="button" onclick="closeInfoModal('event-modal')">×</button>
+      </div>
+
+      <p class="modal-desc" id="event-modal-desc-text">
+        식사 후 리뷰를 남겨주시면 감사의 마음을 담아 작은 혜택을 준비해 드립니다.
+      </p>
+
+      <div class="event-list" id="event-list-text"></div>
+    </div>
+  </div>
+
+  <div class="info-modal" id="about-modal" onclick="closeModalByBg(event, 'about-modal')">
+      <div class="info-modal-card about-modal-card">
+      <div class="info-modal-head">
+        <h2 class="info-modal-title" id="about-modal-title-text">About Soorim</h2>
+        <button class="info-close-btn" type="button" onclick="closeInfoModal('about-modal')">×</button>
+      </div>
+
+        <div class="about-body">
+          <div class="about-philosophy-box">
+            <div class="about-philosophy-title" id="about-philosophy-title-text">운영 철학</div>
+            <p class="about-quote" id="about-quote-text"></p>
+          </div>
+
+          <div class="about-hero-box">
+            <div class="about-eyebrow">HAEUNDAE SOORIM</div>
+            <p class="about-lead" id="about-lead-text"></p>
+          </div>
+
+          <ul class="about-list" id="about-list-text"></ul>
+        </div>
+    </div>
+  </div>
+
+  <button class="top-button" onclick="scrollToTop()">↑</button>
+
+  <script>
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    window.addEventListener("load", () => {
+      if (!window.location.hash) {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "auto"
+        });
+      }
+    });
+    const translations = {
+      ko: {
+        storeName: "수림횟집",
+        storeSubtitle: "생선회 & 해산물 전문점",
+        mainTitle: "B코스",
+        mainDesc: "수림횟집 대표 코스 메뉴 · 고급모듬회와 다양한 해산물을 함께 즐길 수 있는 인기 메뉴입니다.",
+
+        navOrderGuide: "주문안내",
+        navFeatured: "대표메뉴",
+        navCourse: "코스메뉴",
+        navSashimi: "단품 사시미",
+        navMeal: "식사메뉴",
+        navLunch: "점심특선",
+        navKids: "어린이메뉴",
+        navExtraSeafood: "추가해산물",
+        navExtraMenu: "추가메뉴",
+        navDrink: "주류/음료"
+      },
+
+      en: {
+        storeName: "Soorim",
+        storeSubtitle: "Sashimi & Seafood Restaurant",
+        mainTitle: "B Course",
+        mainDesc: "Soorim’s signature course menu. Enjoy premium assorted sashimi and a variety of seafood dishes.",
+
+        navOrderGuide: "Order Guide",
+        navFeatured: "Signature",
+        navCourse: "Courses",
+        navSashimi: "Sashimi",
+        navMeal: "Meals",
+        navLunch: "Lunch",
+        navKids: "Kids",
+        navExtraSeafood: "Extra Seafood",
+        navExtraMenu: "Extras",
+        navDrink: "Drinks"
+      },
+
+      ja: {
+        storeName: "スリム",
+        storeSubtitle: "刺身・海鮮料理店",
+        mainTitle: "Bコース",
+        mainDesc: "海雲台スリム海鮮料理店の代表コースです。高級盛り合わせ刺身とさまざまな海鮮料理を一緒に楽しめます。",
+
+        navOrderGuide: "注文案内",
+        navFeatured: "代表メニュー",
+        navCourse: "コース",
+        navSashimi: "単品刺身",
+        navMeal: "食事",
+        navLunch: "ランチ",
+        navKids: "お子様",
+        navExtraSeafood: "追加海鮮",
+        navExtraMenu: "追加メニュー",
+        navDrink: "お酒/飲み物"
+      },
+
+      zh: {
+        storeName: "水林",
+        storeSubtitle: "生鱼片 · 海鲜餐厅",
+        mainTitle: "B套餐",
+        mainDesc: "水林的招牌套餐。可以同时享用高级综合生鱼片和多种海鲜料理。",
+
+        navOrderGuide: "点餐指南",
+        navFeatured: "招牌菜单",
+        navCourse: "套餐",
+        navSashimi: "单品生鱼片",
+        navMeal: "餐食",
+        navLunch: "午餐特选",
+        navKids: "儿童菜单",
+        navExtraSeafood: "追加海鲜",
+        navExtraMenu: "追加菜单",
+        navDrink: "酒水/饮料"
+      },
+
+      vi: {
+        storeName: "Soorim",
+        storeSubtitle: "Nhà hàng sashimi & hải sản",
+        mainTitle: "Set B",
+        mainDesc: "Set món đại diện của Soorim. Bao gồm sashimi cao cấp và nhiều món hải sản đa dạng.",
+
+        navOrderGuide: "Hướng dẫn gọi món",
+        navFeatured: "Món nổi bật",
+        navCourse: "Set món",
+        navSashimi: "Sashimi",
+        navMeal: "Món ăn",
+        navLunch: "Bữa trưa",
+        navKids: "Trẻ em",
+        navExtraSeafood: "Hải sản thêm",
+        navExtraMenu: "Món thêm",
+        navDrink: "Đồ uống"
+      },
+
+      fil: {
+        storeName: "Soorim",
+        storeSubtitle: "Sashimi & Seafood Restaurant",
+        mainTitle: "B Course",
+        mainDesc: "Signature course ng Soorim. May premium assorted sashimi at iba’t ibang seafood dishes.",
+
+        navOrderGuide: "Gabay sa Order",
+        navFeatured: "Signature",
+        navCourse: "Courses",
+        navSashimi: "Sashimi",
+        navMeal: "Meals",
+        navLunch: "Lunch",
+        navKids: "Kids",
+        navExtraSeafood: "Extra Seafood",
+        navExtraMenu: "Extras",
+        navDrink: "Drinks"
+      },
+
+      ru: {
+        storeName: "Soorim",
+        storeSubtitle: "Сашими и морепродукты",
+        mainTitle: "Сет B",
+        mainDesc: "Фирменный сет Soorim. Включает премиальное ассорти сашими и разные блюда из морепродуктов.",
+
+        navOrderGuide: "Перед заказом",
+        navFeatured: "Популярное",
+        navCourse: "Сеты",
+        navSashimi: "Сашими",
+        navMeal: "Блюда",
+        navLunch: "Обед",
+        navKids: "Детское",
+        navExtraSeafood: "Доп. морепродукты",
+        navExtraMenu: "Доп. меню",
+        navDrink: "Напитки"
+      },
+
+      mn: {
+        storeName: "Soorim",
+        storeSubtitle: "Сашими ба далайн хоол",
+        mainTitle: "B сет",
+        mainDesc: "Soorim рестораны төлөөлөх сет меню. Дээд зэрэглэлийн сашими болон олон төрлийн далайн хоол багтсан.",
+
+        navOrderGuide: "Захиалгын зөвлөмж",
+        navFeatured: "Онцлох",
+        navCourse: "Сет меню",
+        navSashimi: "Сашими",
+        navMeal: "Хоол",
+        navLunch: "Өдрийн хоол",
+        navKids: "Хүүхдийн",
+        navExtraSeafood: "Нэмэлт далайн хоол",
+        navExtraMenu: "Нэмэлт",
+        navDrink: "Ундаа"
+      }
+    };
+
+
+    function getLanguageBlock(blocks, lang) {
+      return blocks[lang] || (lang === "zhTw" ? blocks.zh : null) || (lang === "fil" ? blocks.en : null) || blocks.ko || blocks.en || {};
+    }
+
+    function getAnyText(value, lang) {
+      if (!value) return "";
+      if (typeof value === "string") return value;
+      return value[lang] || (lang === "zhTw" ? value.zh : null) || (lang === "fil" ? value.fil || value.en : null) || value.en || value.ko || "";
+    }
+
+    function getAnyArray(value, lang) {
+      if (!value) return [];
+      return value[lang] || (lang === "zhTw" ? value.zh : null) || (lang === "fil" ? value.fil || value.en : null) || value.en || value.ko || [];
+    }
+
+    const featuredSectionTexts = {
+      ko: {
+        title: "대표 메뉴",
+        photoHint: "사진을 누르면 전체 사진으로 펼쳐집니다."
+      },
+      en: {
+        title: "Signature Menu",
+        photoHint: "Tap a photo to view the full image."
+      },
+      ja: {
+        title: "代表メニュー",
+        photoHint: "写真をタップすると全体写真が表示されます。"
+      },
+      zh: {
+        title: "招牌菜单",
+        photoHint: "点击照片可查看完整图片。"
+      },
+      vi: {
+        title: "Món nổi bật",
+        photoHint: "Chạm vào ảnh để xem ảnh đầy đủ."
+      },
+      fil: {
+        title: "Signature Menu",
+        photoHint: "I-tap ang larawan para makita ang buong photo."
+      },
+      ru: {
+        title: "Популярные блюда",
+        photoHint: "Нажмите на фото, чтобы увидеть полное изображение."
+      },
+      mn: {
+        title: "Онцлох меню",
+        photoHint: "Зургийг дарж бүтнээр нь үзнэ үү."
+      }
+    };
+
+    const badgeTexts = {
+      ko: {
+        best: "★ BEST",
+        signatureCourse: "대표 코스",
+        cooked: "익힌 메뉴",
+        recommend: "추천",
+        signatureMenu: "대표 메뉴",
+        popularMeal: "인기 식사",
+        lunchSpecial: "점심특선",
+        meal: "식사",
+        kids: "어린이",
+        sashimi: "사시미",
+        experience: "체험 메뉴"
+      },
+      en: {
+        best: "★ BEST",
+        signatureCourse: "Signature Course",
+        cooked: "Cooked",
+        recommend: "Recommended",
+        signatureMenu: "Signature",
+        popularMeal: "Popular Meal",
+        lunchSpecial: "Lunch Special",
+        meal: "Meal",
+        kids: "Kids",
+        sashimi: "Sashimi",
+        experience: "Experience"
+      },
+      ja: {
+        best: "★ BEST",
+        signatureCourse: "代表コース",
+        cooked: "加熱料理",
+        recommend: "おすすめ",
+        signatureMenu: "代表メニュー",
+        popularMeal: "人気食事",
+        lunchSpecial: "ランチ",
+        meal: "食事",
+        kids: "お子様",
+        sashimi: "刺身",
+        experience: "体験メニュー"
+      },
+      zh: {
+        best: "★ BEST",
+        signatureCourse: "招牌套餐",
+        cooked: "熟食",
+        recommend: "推荐",
+        signatureMenu: "招牌",
+        popularMeal: "人气餐食",
+        lunchSpecial: "午餐特选",
+        meal: "餐食",
+        kids: "儿童",
+        sashimi: "生鱼片",
+        experience: "体验菜单"
+      },
+      vi: {
+        best: "★ BEST",
+        signatureCourse: "Set đại diện",
+        cooked: "Món chín",
+        recommend: "Gợi ý",
+        signatureMenu: "Món đại diện",
+        popularMeal: "Món ăn phổ biến",
+        lunchSpecial: "Bữa trưa",
+        meal: "Món ăn",
+        kids: "Trẻ em",
+        sashimi: "Sashimi",
+        experience: "Trải nghiệm"
+      },
+      fil: {
+        best: "★ BEST",
+        signatureCourse: "Signature Course",
+        cooked: "Cooked",
+        recommend: "Recommended",
+        signatureMenu: "Signature",
+        popularMeal: "Popular Meal",
+        lunchSpecial: "Lunch Special",
+        meal: "Meal",
+        kids: "Kids",
+        sashimi: "Sashimi",
+        experience: "Experience"
+      },
+      ru: {
+        best: "★ BEST",
+        signatureCourse: "Фирменный сет",
+        cooked: "Готовое блюдо",
+        recommend: "Рекомендуем",
+        signatureMenu: "Фирменное",
+        popularMeal: "Популярное блюдо",
+        lunchSpecial: "Обед",
+        meal: "Блюдо",
+        kids: "Детское",
+        sashimi: "Сашими",
+        experience: "Для опыта"
+      },
+      mn: {
+        best: "★ BEST",
+        signatureCourse: "Төлөөлөх сет",
+        cooked: "Болгосон хоол",
+        recommend: "Санал болгох",
+        signatureMenu: "Онцлох",
+        popularMeal: "Алдартай хоол",
+        lunchSpecial: "Өдрийн хоол",
+        meal: "Хоол",
+        kids: "Хүүхдийн",
+        sashimi: "Сашими",
+        experience: "Туршлага меню"
+      }
+    };
+
+    const featuredMenus = [
+      {
+        image: "images/b-course.JPG",
+        alt: "B코스",
+        badgeKeys: ["best", "signatureCourse"],
+        title: {
+          ko: "B코스",
+          en: "B Course",
+          ja: "Bコース",
+          zh: "B套餐",
+          vi: "Set B",
+          ru: "Сет B",
+          mn: "B сет"
+        },
+        price: {
+          ko: "1인 70,000원",
+          en: "70,000 KRW / person",
+          ja: "1名 70,000ウォン",
+          zh: "每人 70,000韩元",
+          vi: "70,000 KRW / người",
+          ru: "70,000 KRW / 1 чел.",
+          mn: "1 хүн 70,000 KRW"
+        },
+        desc: {
+          ko: "고급모듬회, 모듬해물, 맛보기 물회, 우럭탕수, 산낙지, 가리비찜, 매운탕이 포함된 수림횟집 대표 코스입니다.",
+          en: "Soorim’s signature course with premium assorted sashimi, seafood, mulhoe tasting, fried rockfish, live octopus, steamed scallops, and spicy fish stew.",
+          ja: "高級盛り合わせ刺身、海鮮、味見用ムルフェ、ウロク酢豚、活きテナガダコ、ホタテ蒸し、辛い魚鍋が含まれる代表コースです。",
+          zh: "水林招牌套餐，包含高级综合生鱼片、综合海鲜、品尝水会、糖醋韩式岩鱼、活章鱼、蒸扇贝和辣鱼汤。",
+          vi: "Set đại diện gồm sashimi cao cấp, hải sản, mulhoe ăn thử, cá chiên sốt chua ngọt, bạch tuộc sống, sò điệp hấp và canh cá cay.",
+          ru: "Фирменный сет с премиальным ассорти сашими, морепродуктами, пробным мульхве, жареной рыбой, живым осьминогом, гребешками и острым рыбным супом.",
+          mn: "Дээд зэрэглэлийн сашими, далайн хоол, амталгааны мулхве, шарсан загас, амьд наймаалж, жигнэсэн хясаа, халуун ногоотой загасны шөл багтсан төлөөлөх сет."
+        }
+      },
+      {
+        image: "images/wooreok-maeuntang.JPG",
+        alt: "생우럭 매운탕",
+        badgeKeys: ["cooked", "recommend"],
+        title: {
+          ko: "생우럭 매운탕 / 지리탕",
+          en: "Fresh Rockfish Spicy Stew / Clear Soup",
+          ja: "生ウロク辛鍋 / 澄ましスープ",
+          zh: "鲜韩式岩鱼辣汤 / 清汤",
+          vi: "Canh cá rockfish cay / canh trong",
+          ru: "Суп из свежей рыбы / прозрачный суп",
+          mn: "Шинэ загасны халуун шөл / тунгалаг шөл"
+        },
+        price: {
+          ko: "소(1~2인) 30,000원 / 중(2~3인) 50,000원 / 대(3~4인) 70,000원",
+          en: "Small 30,000 / Medium 50,000 / Large 70,000 KRW",
+          ja: "小 30,000 / 中 50,000 / 大 70,000ウォン",
+          zh: "小 30,000 / 中 50,000 / 大 70,000韩元",
+          vi: "Nhỏ 30,000 / Vừa 50,000 / Lớn 70,000 KRW",
+          ru: "Мал. 30,000 / Сред. 50,000 / Бол. 70,000 KRW",
+          mn: "Жижиг 30,000 / Дунд 50,000 / Том 70,000 KRW"
+        },
+        desc: {
+          ko: "날 음식을 드시지 못하는 분들께 추천하는 대표 메뉴입니다. 얼큰한 매운탕 또는 맑은 지리탕으로 즐길 수 있습니다.",
+          en: "Recommended for guests who do not eat raw food. Choose spicy stew or a mild, clear soup.",
+          ja: "生ものが苦手な方におすすめです。辛い鍋、または辛くない澄ましスープを選べます。",
+          zh: "推荐给不吃生食的客人。可选择辣鱼汤或不辣的清汤。",
+          vi: "Gợi ý cho khách không ăn đồ sống. Có thể chọn canh cay hoặc canh trong không cay.",
+          ru: "Подходит гостям, которые не едят сырые блюда. Можно выбрать острый суп или мягкий прозрачный суп.",
+          mn: "Түүхий хоол иддэггүй зочдод санал болгож байна. Халуун ногоотой шөл эсвэл зөөлөн тунгалаг шөл сонгож болно."
+        }
+      },
+      {
+        image: "images/wooreok-tangsuyuk.JPG",
+        alt: "우럭탕수",
+        badgeKeys: ["cooked", "signatureMenu"],
+        title: {
+          ko: "우럭탕수",
+          en: "Fried Rockfish with Sweet & Sour Sauce",
+          ja: "ウロクの甘酢あんかけ",
+          zh: "糖醋韩式岩鱼",
+          vi: "Cá rockfish chiên sốt chua ngọt",
+          ru: "Жареная рыба в кисло-сладком соусе",
+          mn: "Амтат исгэлэн соустай шарсан загас"
+        },
+        price: {
+          ko: "30,000원",
+          en: "30,000 KRW",
+          ja: "30,000ウォン",
+          zh: "30,000韩元",
+          vi: "30,000 KRW",
+          ru: "30,000 KRW",
+          mn: "30,000 KRW"
+        },
+        desc: {
+          ko: "바삭하게 튀긴 우럭에 새콤달콤한 소스를 곁들인 메뉴입니다. 회를 못 드시는 분들도 부담 없이 즐기기 좋습니다.",
+          en: "Crispy fried rockfish with sweet and sour sauce. A good cooked option for guests who do not eat sashimi.",
+          ja: "カリッと揚げたウロクに甘酸っぱいソースをかけた料理です。刺身が苦手な方にもおすすめです。",
+          zh: "炸得酥脆的韩式岩鱼搭配酸甜酱。不吃生鱼片的客人也可以轻松享用。",
+          vi: "Cá chiên giòn ăn cùng sốt chua ngọt. Phù hợp cho khách không ăn sashimi.",
+          ru: "Хрустящая жареная рыба с кисло-сладким соусом. Хороший вариант для тех, кто не ест сашими.",
+          mn: "Шарж шаржигнуулсан загасыг амтат исгэлэн соустай өгдөг. Сашими иддэггүй хүмүүст тохиромжтой."
+        }
+      },
+      {
+        image: "images/mulhoe.JPG",
+        alt: "물회",
+        badgeKeys: ["best", "popularMeal"],
+        title: {
+          ko: "물회",
+          en: "Mulhoe (Cold Spicy Sashimi Soup)",
+          ja: "ムルフェ（冷たい辛味刺身スープ）",
+          zh: "韩式冷辣生鱼汤",
+          vi: "Mulhoe",
+          ru: "Мульхве",
+          mn: "Мулхве"
+        },
+        price: {
+          ko: "일반 20,000원",
+          en: "From 20,000 KRW",
+          ja: "20,000ウォンから",
+          zh: "20,000韩元起",
+          vi: "Từ 20,000 KRW",
+          ru: "от 20,000 KRW",
+          mn: "20,000 KRW-с"
+        },
+        desc: {
+          ko: "차갑고 매콤달콤한 물회 소스에 생선회와 채소를 함께 먹는 수림횟집 인기 메뉴입니다. 다양한 과일을 갈아 넣어 직접 개발한 특제 소스를 사용합니다.",
+          en: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits.",
+          ja: "冷たく甘辛いムルフェソースに刺身と野菜を混ぜて食べる人気メニューです。さまざまな果物をすり入れて開発した自家製特製ソースを使用しています。",
+          zh: "将生鱼片和蔬菜与冰凉酸甜微辣的水会酱汁一起拌食的人气菜单。酱汁为本店使用多种水果研磨后研发的特制酱汁。",
+          vi: "Món cá sống lạnh vị ngọt cay nhẹ, ăn cùng rau và sốt mulhoe đặc biệt của Soorim được xay từ nhiều loại trái cây.",
+          fil: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits.",
+          ru: "Популярное холодное сладко-острое блюдо из сырой рыбы и овощей с фирменным соусом Soorim, приготовленным с измельченными фруктами.",
+          mn: "Түүхий загас, ногоо, жимсээр хийсэн Soorim-ийн тусгай соустай, хүйтэн, чихэрлэг халуун ногоотой алдартай хоол."
+        }
+      },
+      {
+        image: "images/lunch-set.JPG",
+        alt: "회정식",
+        badgeKeys: ["lunchSpecial"],
+        title: {
+          ko: "회정식",
+          en: "Lunch Sashimi Set",
+          ja: "刺身定食",
+          zh: "生鱼片午餐套餐",
+          vi: "Set sashimi bữa trưa",
+          ru: "Обеденный сет с сашими",
+          mn: "Сашими өдрийн хоолны сет"
+        },
+        price: {
+          ko: "1인 35,000원",
+          en: "35,000 KRW / person",
+          ja: "1名 35,000ウォン",
+          zh: "每人 35,000韩元",
+          vi: "35,000 KRW / người",
+          ru: "35,000 KRW / 1 чел.",
+          mn: "1 хүн 35,000 KRW"
+        },
+        desc: {
+          ko: "모듬회, 모듬해물, 맛보기 물회, 매운탕 또는 지리탕, 공기밥이 포함된 점심 대표 메뉴입니다.",
+          en: "Lunch set with assorted sashimi, seafood, mulhoe tasting, fish stew or clear soup, and rice.",
+          ja: "盛り合わせ刺身、海鮮、味見用ムルフェ、魚鍋または澄ましスープ、ご飯が含まれるランチメニューです。",
+          zh: "包含综合生鱼片、综合海鲜、品尝水会、鱼汤或清汤和米饭的午餐套餐。",
+          vi: "Set trưa gồm sashimi tổng hợp, hải sản, mulhoe ăn thử, canh cá hoặc canh trong và cơm.",
+          ru: "Обеденный сет с ассорти сашими, морепродуктами, пробным мульхве, рыбным супом или прозрачным супом и рисом.",
+          mn: "Сашими, далайн хоол, амталгааны мулхве, загасны шөл эсвэл тунгалаг шөл, будаа багтсан өдрийн хоол."
+        }
+      },
+      {
+        image: "images/hoedeopbap.JPG",
+        alt: "회덮밥",
+        badgeKeys: ["meal"],
+        title: {
+          ko: "회덮밥",
+          en: "Sashimi Rice Bowl",
+          ja: "刺身ビビンバ",
+          zh: "生鱼片拌饭",
+          vi: "Cơm trộn cá sống",
+          ru: "Рис с сырой рыбой",
+          mn: "Түүхий загастай будаатай хоол"
+        },
+        price: {
+          ko: "일반 17,000원",
+          en: "From 17,000 KRW",
+          ja: "17,000ウォンから",
+          zh: "17,000韩元起",
+          vi: "Từ 17,000 KRW",
+          ru: "от 17,000 KRW",
+          mn: "17,000 KRW-с"
+        },
+        desc: {
+          ko: "생선회와 채소를 밥과 함께 비벼 먹는 식사 메뉴입니다. 매운탕은 지리탕으로 변경 가능합니다.",
+          en: "A rice bowl mixed with raw fish, vegetables, rice, and red chili-vinegar sauce. Fish stew can be changed to clear soup.",
+          ja: "刺身、野菜、ご飯、赤い酢コチュジャンを混ぜて食べる食事メニューです。魚鍋は澄ましスープに変更できます。",
+          zh: "将生鱼片、蔬菜、米饭和红色辣醋酱拌在一起食用。鱼汤可换成清汤。",
+          vi: "Món cơm trộn cá sống, rau và sốt đỏ chua cay. Canh cá có thể đổi sang canh trong.",
+          ru: "Блюдо с рисом, сырой рыбой, овощами и красным соусом. Рыбный суп можно заменить на прозрачный суп.",
+          mn: "Түүхий загас, ногоо, будаа, улаан соустай хольж иддэг хоол. Загасны шөлийг тунгалаг шөлөөр сольж болно."
+        }
+      },
+      {
+        image: "images/kids-donkatsu.JPG",
+        alt: "돈까스 정식",
+        badgeKeys: ["kids", "cooked"],
+        title: {
+          ko: "돈까스 정식",
+          en: "Kids Pork Cutlet Set",
+          ja: "お子様とんかつ定食",
+          zh: "儿童炸猪排套餐",
+          vi: "Set cơm thịt heo chiên cho trẻ em",
+          ru: "Детский сет с тонкацу",
+          mn: "Хүүхдийн тонкацу сет"
+        },
+        price: {
+          ko: "10,000원",
+          en: "10,000 KRW",
+          ja: "10,000ウォン",
+          zh: "10,000韩元",
+          vi: "10,000 KRW",
+          ru: "10,000 KRW",
+          mn: "10,000 KRW"
+        },
+        desc: {
+          ko: "등심 돈까스, 샐러드, 후리가케 밥으로 구성된 어린이 메뉴입니다.",
+          en: "Kids menu with pork cutlet, salad, and rice with furikake.",
+          ja: "ロースとんかつ、サラダ、ふりかけご飯の子供向けメニューです。",
+          zh: "儿童菜单，包含炸猪排、沙拉和拌饭调味料米饭。",
+          vi: "Món trẻ em gồm thịt heo chiên, salad và cơm rắc furikake.",
+          ru: "Детское меню со свиной котлетой, салатом и рисом с фурикакэ.",
+          mn: "Гахайн котлет, салат, амталсан будаатай хүүхдийн меню."
+        }
+      },
+      {
+        image: "images/sashimi-red-sea-bream.JPG",
+        alt: "참돔 사시미",
+        badgeKeys: ["sashimi"],
+        title: {
+          ko: "참돔 사시미",
+          en: "Red Sea Bream Sashimi",
+          ja: "真鯛の刺身",
+          zh: "真鲷生鱼片",
+          vi: "Sashimi cá tráp đỏ",
+          ru: "Сашими из красного морского леща",
+          mn: "Улаан далайн загасны сашими"
+        },
+        price: {
+          ko: "소(2인) 120,000원",
+          en: "Small 120,000 KRW",
+          ja: "小 120,000ウォン",
+          zh: "小 120,000韩元",
+          vi: "Nhỏ 120,000 KRW",
+          ru: "Мал. 120,000 KRW",
+          mn: "Жижиг 120,000 KRW"
+        },
+        desc: {
+          ko: "담백하고 고급스러운 맛의 참돔 사시미입니다. 모듬해물, 맛보기 물회, 매운탕이 포함됩니다.",
+          en: "Premium white fish sashimi with a clean and delicate taste. Includes seafood, mulhoe tasting, and fish stew.",
+          ja: "淡白で上品な味の真鯛刺身です。海鮮、味見用ムルフェ、魚鍋が含まれます。",
+          zh: "味道清淡高级的真鲷生鱼片。包含综合海鲜、品尝水会和鱼汤。",
+          vi: "Sashimi cá trắng cao cấp, vị thanh và tinh tế. Bao gồm hải sản, mulhoe ăn thử và canh cá.",
+          ru: "Премиальное сашими из белой рыбы с чистым нежным вкусом. Включает морепродукты, пробный мульхве и рыбный суп.",
+          mn: "Зөөлөн амттай дээд зэрэглэлийн цагаан загасны сашими. Далайн хоол, амталгааны мулхве, загасны шөл багтана."
+        }
+      },
+      {
+        image: "images/live-octopus.JPG",
+        alt: "산낙지",
+        badgeKeys: ["experience"],
+        title: {
+          ko: "산낙지",
+          en: "Live Octopus",
+          ja: "活きテナガダコ",
+          zh: "活章鱼",
+          vi: "Bạch tuộc sống",
+          ru: "Живой осьминог",
+          mn: "Амьд наймаалж"
+        },
+        price: {
+          ko: "소 30,000원 / 중 50,000원",
+          en: "Small 30,000 / Medium 50,000 KRW",
+          ja: "小 30,000 / 中 50,000ウォン",
+          zh: "小 30,000 / 中 50,000韩元",
+          vi: "Nhỏ 30,000 / Vừa 50,000 KRW",
+          ru: "Мал. 30,000 / Сред. 50,000 KRW",
+          mn: "Жижиг 30,000 / Дунд 50,000 KRW"
+        },
+        desc: {
+          ko: "주문 후 손질되어 제공되며, 접시 위에서 움직일 수 있습니다. 천천히 꼭꼭 씹어 드세요.",
+          en: "Freshly prepared after ordering. The pieces may still move on the plate. Please chew carefully.",
+          ja: "注文後に調理され、皿の上で動くことがあります。ゆっくりよく噛んでお召し上がりください。",
+          zh: "点餐后现处理，上桌后可能还会移动。请慢慢充分咀嚼后食用。",
+          vi: "Được sơ chế sau khi gọi món. Miếng bạch tuộc có thể còn chuyển động trên đĩa. Vui lòng nhai kỹ.",
+          ru: "Готовится после заказа. Кусочки могут двигаться на тарелке. Пожалуйста, тщательно пережевывайте.",
+          mn: "Захиалсны дараа бэлтгэнэ. Таваг дээр хөдөлж болзошгүй. Сайн зажилж иднэ үү."
+        }
+      }
+    ];
+
+    function getFeaturedText(value, lang) {
+      return getAnyText(value, lang);
+    }
+
+    function renderFeatured(lang) {
+      const sectionText = getLanguageBlock(featuredSectionTexts, lang);
+      const badgeText = getLanguageBlock(badgeTexts, lang);
+      const titleEl = document.getElementById("featured-title-text");
+      const hintEl = document.getElementById("photo-hint-text");
+      const gridEl = document.getElementById("featured-grid");
+
+      if (titleEl) titleEl.textContent = sectionText.title;
+      if (hintEl) hintEl.textContent = sectionText.photoHint;
+      if (!gridEl) return;
+
+      gridEl.innerHTML = featuredMenus.map((menu) => {
+        const badges = menu.badgeKeys.map((key) => {
+          const badgeClass = key === "best" ? "small-badge best-badge" : "small-badge";
+          return `<span class="${badgeClass}">${badgeText[key] || key}</span>`;
+        }).join("");
+
+        return `
+          <article class="featured-card">
+            <img src="${menu.image}" alt="${getFeaturedText(menu.title, lang)}" loading="lazy" decoding="async">
+            <div class="featured-body">
+              <div class="featured-kicker">${badges}</div>
+              <h3 class="featured-title">${getFeaturedText(menu.title, lang)}</h3>
+              <p class="featured-price">${getFeaturedText(menu.price, lang)}</p>
+              <p class="featured-desc">${getFeaturedText(menu.desc, lang)}</p>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    const courseSectionTexts = {
+      ko: {
+        title: "수림 코스",
+        important: "2인 이상 주문 가능 · 모든 코스는 1인 가격입니다.",
+        change: "코스에 포함된 매운탕은 매콤합니다. 맵지 않은 지리탕으로 변경 가능합니다.",
+        rawTag: "날음식 포함",
+        cookedTag: "익힌 메뉴 포함"
+      },
+      en: {
+        title: "Soorim Courses",
+        important: "Minimum order: 2 people · All course prices are per person.",
+        change: "The spicy fish stew included in the course can be changed to non-spicy clear fish soup.",
+        rawTag: "Includes raw food",
+        cookedTag: "Includes cooked dishes"
+      },
+      ja: {
+        title: "スリム コース",
+        important: "2名様以上注文可能 · すべてのコースは1名様価格です。",
+        change: "コースに含まれる辛い魚鍋は、辛くない澄ましスープに変更できます。",
+        rawTag: "生もの含む",
+        cookedTag: "加熱料理含む"
+      },
+      zh: {
+        title: "水林套餐",
+        important: "2人以上可点 · 所有套餐价格均为每人价格。",
+        change: "套餐中的辣鱼汤可以更换为不辣的清汤。",
+        rawTag: "含生食",
+        cookedTag: "含熟食"
+      },
+      vi: {
+        title: "Set món Soorim",
+        important: "Gọi từ 2 người trở lên · Giá set tính theo mỗi người.",
+        change: "Canh cá cay trong set có thể đổi sang canh cá trong không cay.",
+        rawTag: "Có món sống",
+        cookedTag: "Có món chín"
+      },
+      fil: {
+        title: "Soorim Courses",
+        important: "Minimum order: 2 people · Presyo ay bawat tao.",
+        change: "Ang spicy fish stew sa course ay puwedeng palitan ng non-spicy clear fish soup.",
+        rawTag: "May raw food",
+        cookedTag: "May cooked dishes"
+      },
+      ru: {
+        title: "Сеты Soorim",
+        important: "Минимальный заказ от 2 человек · Цена указана за 1 человека.",
+        change: "Острый рыбный суп в сете можно заменить на неострый прозрачный рыбный суп.",
+        rawTag: "Есть сырые блюда",
+        cookedTag: "Есть готовые блюда"
+      },
+      mn: {
+        title: "Soorim сет меню",
+        important: "2 хүнээс дээш захиална · Бүх сетийн үнэ 1 хүний үнэ.",
+        change: "Сетэд багтсан халуун ногоотой загасны шөлийг халуун ногоогүй тунгалаг шөлөөр сольж болно.",
+        rawTag: "Түүхий хоол орсон",
+        cookedTag: "Болгосон хоол орсон"
+      }
+    };
+
+    const courseMenus = [
+      {
+        title: {
+          ko: "A코스",
+          en: "A Course",
+          ja: "Aコース",
+          zh: "A套餐",
+          vi: "Set A",
+          ru: "Сет A",
+          mn: "A сет"
+        },
+        price: {
+          ko: "50,000원",
+          en: "50,000 KRW",
+          ja: "50,000ウォン",
+          zh: "50,000韩元",
+          vi: "50,000 KRW",
+          ru: "50,000 KRW",
+          mn: "50,000 KRW"
+        },
+        desc: {
+          ko: "수림횟집의 기본 코스입니다. 모듬회와 해산물, 맛보기 물회, 매운탕 또는 지리탕을 함께 즐길 수 있습니다.",
+          en: "A basic Soorim course with assorted sashimi, seafood, mulhoe tasting, and spicy fish stew or clear fish soup.",
+          ja: "盛り合わせ刺身、海鮮、味見用ムルフェ、辛い魚鍋または澄ましスープを楽しめる基本コースです。",
+          zh: "水林的基础套餐，包含综合生鱼片、海鲜、品尝水会、辣鱼汤或清汤。",
+          vi: "Set cơ bản gồm sashimi tổng hợp, hải sản, mulhoe ăn thử, canh cá cay hoặc canh trong.",
+          ru: "Базовый сет с ассорти сашими, морепродуктами, пробным мульхве и острым или прозрачным рыбным супом.",
+          mn: "Сашими, далайн хоол, амталгааны мулхве, халуун ногоотой эсвэл тунгалаг загасны шөлтэй үндсэн сет."
+        },
+        items: {
+          ko: "구성: 모듬회 + 모듬해물 + 맛보기 물회 + 매운탕",
+          en: "Includes: assorted sashimi + seafood + mulhoe tasting + fish stew",
+          ja: "内容: 盛り合わせ刺身 + 海鮮 + 味見用ムルフェ + 魚鍋",
+          zh: "内容: 综合生鱼片 + 综合海鲜 + 品尝水会 + 鱼汤",
+          vi: "Bao gồm: sashimi tổng hợp + hải sản + mulhoe ăn thử + canh cá",
+          ru: "Состав: ассорти сашими + морепродукты + пробный мульхве + рыбный суп",
+          mn: "Орц: сашими + далайн хоол + амталгааны мулхве + загасны шөл"
+        },
+        tags: ["rawTag"]
+      },
+      {
+        title: {
+          ko: "B코스",
+          en: "B Course",
+          ja: "Bコース",
+          zh: "B套餐",
+          vi: "Set B",
+          ru: "Сет B",
+          mn: "B сет"
+        },
+        price: {
+          ko: "70,000원",
+          en: "70,000 KRW",
+          ja: "70,000ウォン",
+          zh: "70,000韩元",
+          vi: "70,000 KRW",
+          ru: "70,000 KRW",
+          mn: "70,000 KRW"
+        },
+        desc: {
+          ko: "수림횟집 대표 코스입니다. 회, 해산물, 우럭탕수, 산낙지, 가리비찜, 매운탕 또는 지리탕까지 다양하게 즐길 수 있습니다.",
+          en: "Soorim’s signature course with sashimi, seafood, fried rockfish, live octopus, steamed scallops, and fish stew or clear soup.",
+          ja: "刺身、海鮮、ウロク酢豚、活きテナガダコ、ホタテ蒸し、魚鍋または澄ましスープを楽しめる代表コースです。",
+          zh: "水林招牌套餐，可享用生鱼片、海鲜、糖醋韩式岩鱼、活章鱼、蒸扇贝、鱼汤或清汤。",
+          vi: "Set đại diện gồm sashimi, hải sản, cá chiên sốt chua ngọt, bạch tuộc sống, sò điệp hấp và canh cá.",
+          ru: "Фирменный сет с сашими, морепродуктами, жареной рыбой, живым осьминогом, гребешками и рыбным супом.",
+          mn: "Сашими, далайн хоол, шарсан загас, амьд наймаалж, жигнэсэн хясаа, загасны шөл багтсан төлөөлөх сет."
+        },
+        items: {
+          ko: "구성: 고급모듬회 + 모듬해물 + 맛보기 물회 + 우럭탕수 + 산낙지 + 가리비찜 + 매운탕",
+          en: "Includes: premium assorted sashimi + seafood + mulhoe tasting + fried rockfish + live octopus + steamed scallops + fish stew",
+          ja: "内容: 高級盛り合わせ刺身 + 海鮮 + 味見用ムルフェ + ウロク酢豚 + 活きテナガダコ + ホタテ蒸し + 魚鍋",
+          zh: "内容: 高级综合生鱼片 + 综合海鲜 + 品尝水会 + 糖醋韩式岩鱼 + 活章鱼 + 蒸扇贝 + 鱼汤",
+          vi: "Bao gồm: sashimi cao cấp + hải sản + mulhoe ăn thử + cá chiên sốt chua ngọt + bạch tuộc sống + sò điệp hấp + canh cá",
+          ru: "Состав: премиальное ассорти сашими + морепродукты + пробный мульхве + жареная рыба + живой осьминог + гребешки + рыбный суп",
+          mn: "Орц: дээд зэрэглэлийн сашими + далайн хоол + амталгааны мулхве + шарсан загас + амьд наймаалж + жигнэсэн хясаа + загасны шөл"
+        },
+        tags: ["rawTag", "cookedTag"],
+        best: true
+      },
+      {
+        title: {
+          ko: "C코스",
+          en: "C Course",
+          ja: "Cコース",
+          zh: "C套餐",
+          vi: "Set C",
+          ru: "Сет C",
+          mn: "C сет"
+        },
+        price: {
+          ko: "90,000원",
+          en: "90,000 KRW",
+          ja: "90,000ウォン",
+          zh: "90,000韩元",
+          vi: "90,000 KRW",
+          ru: "90,000 KRW",
+          mn: "90,000 KRW"
+        },
+        desc: {
+          ko: "최고급 모듬회와 계절회를 포함한 프리미엄 코스입니다. 매운탕은 맵지 않은 지리탕으로 변경 가능합니다.",
+          en: "A premium course with top-grade assorted sashimi and seasonal sashimi. Spicy fish stew can be changed to clear fish soup.",
+          ja: "最高級盛り合わせ刺身と季節の刺身を含むプレミアムコースです。魚鍋は澄ましスープに変更できます。",
+          zh: "高级套餐，包含最高级综合生鱼片和季节生鱼片。辣鱼汤可换成清汤。",
+          vi: "Set cao cấp gồm sashimi tổng hợp hạng cao và sashimi theo mùa. Canh cay có thể đổi sang canh trong.",
+          ru: "Премиальный сет с лучшим ассорти сашими и сезонным сашими. Острый суп можно заменить на прозрачный суп.",
+          mn: "Дээд зэрэглэлийн сашими болон улирлын сашими багтсан премиум сет. Халуун ногоотой шөлийг тунгалаг шөлөөр сольж болно."
+        },
+        items: {
+          ko: "구성: 최고급모듬회 + 계절회 + 모듬해물 + 맛보기 물회 + 우럭탕수 + 산낙지 + 가리비찜 + 매운탕",
+          en: "Includes: top-grade assorted sashimi + seasonal sashimi + seafood + mulhoe tasting + fried rockfish + live octopus + steamed scallops + fish stew",
+          ja: "内容: 最高級盛り合わせ刺身 + 季節の刺身 + 海鮮 + 味見用ムルフェ + ウロク酢豚 + 活きテナガダコ + ホタテ蒸し + 魚鍋",
+          zh: "内容: 最高级综合生鱼片 + 季节生鱼片 + 综合海鲜 + 品尝水会 + 糖醋韩式岩鱼 + 活章鱼 + 蒸扇贝 + 鱼汤",
+          vi: "Bao gồm: sashimi cao cấp nhất + sashimi theo mùa + hải sản + mulhoe ăn thử + cá chiên sốt chua ngọt + bạch tuộc sống + sò điệp hấp + canh cá",
+          ru: "Состав: лучшее ассорти сашими + сезонное сашими + морепродукты + пробный мульхве + жареная рыба + живой осьминог + гребешки + рыбный суп",
+          mn: "Орц: хамгийн дээд зэрэглэлийн сашими + улирлын сашими + далайн хоол + амталгааны мулхве + шарсан загас + амьд наймаалж + жигнэсэн хясаа + загасны шөл"
+        },
+        tags: ["rawTag", "cookedTag"]
+      }
+    ];
+
+    function getCourseText(value, lang) {
+      return getAnyText(value, lang);
+    }
+
+    function renderCourse(lang) {
+      const sectionText = getLanguageBlock(courseSectionTexts, lang);
+      const titleEl = document.getElementById("course-title-text");
+      const importantEl = document.getElementById("course-important-text");
+      const changeEl = document.getElementById("course-change-text");
+      const listEl = document.getElementById("course-list");
+
+      if (titleEl) titleEl.textContent = sectionText.title;
+      if (importantEl) importantEl.textContent = sectionText.important;
+      if (changeEl) changeEl.textContent = sectionText.change;
+      if (!listEl) return;
+
+      listEl.innerHTML = courseMenus.map((menu) => {
+        const bestBadge = menu.best ? `<span class="small-badge best-badge">★ BEST</span>` : "";
+        const tags = menu.tags.map((tagKey) => {
+          const className = tagKey === "rawTag" ? "menu-tag raw" : "menu-tag cooked";
+          return `<span class="${className}">${sectionText[tagKey]}</span>`;
+        }).join("");
+
+        return `
+          <article class="menu-card">
+            <div class="menu-head">
+              <h3 class="menu-name">${getCourseText(menu.title, lang)} ${bestBadge}</h3>
+              <div class="menu-price">${getCourseText(menu.price, lang)}</div>
+            </div>
+            <p class="menu-desc">${getCourseText(menu.desc, lang)}</p>
+            <div class="menu-tags">${tags}</div>
+            <div class="price-lines">
+              <div>${getCourseText(menu.items, lang)}</div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    const sashimiSectionTexts = {
+      ko: {
+        title: "단품 사시미",
+        included: "모듬해물 · 맛보기 물회 · 매운탕 포함",
+        change: "포함된 매운탕은 매콤합니다. 맵지 않은 지리탕으로 변경 가능합니다.",
+        notice: "회를 드신 후 매운탕을 꼭 요청해 주세요. 매운탕 조리 시간은 약 10분 정도 소요됩니다.",
+        rawTag: "날음식",
+        premiumTag: "프리미엄",
+        mildTag: "담백한 맛",
+        chewyTag: "쫄깃한 식감",
+        seasonalTag: "계절 메뉴",
+        boneTag: "뼈째 썬 회",
+        strongTextureTag: "식감 강함"
+      },
+      en: {
+        title: "Sashimi",
+        included: "Includes seafood · mulhoe tasting · fish stew",
+        change: "The included spicy fish stew can be changed to non-spicy clear fish soup.",
+        notice: "Please ask our staff for the fish stew after finishing your sashimi. It takes about 10 minutes to prepare.",
+        rawTag: "Raw food",
+        premiumTag: "Premium",
+        mildTag: "Mild taste",
+        chewyTag: "Chewy texture",
+        seasonalTag: "Seasonal",
+        boneTag: "Thin-sliced with bones",
+        strongTextureTag: "Strong texture"
+      },
+      ja: {
+        title: "単品刺身",
+        included: "海鮮 · 味見用ムルフェ · 魚鍋付き",
+        change: "含まれる辛い魚鍋は、辛くない澄ましスープに変更できます。",
+        notice: "刺身を召し上がった後、魚鍋をスタッフにお申し付けください。調理に約10分かかります。",
+        rawTag: "生もの",
+        premiumTag: "プレミアム",
+        mildTag: "淡白な味",
+        chewyTag: "弾力のある食感",
+        seasonalTag: "季節メニュー",
+        boneTag: "骨ごと薄切り",
+        strongTextureTag: "食感強め"
+      },
+      zh: {
+        title: "单品生鱼片",
+        included: "包含海鲜 · 品尝水会 · 鱼汤",
+        change: "包含的辣鱼汤可以更换为不辣的清汤。",
+        notice: "吃完生鱼片后，请向工作人员要求鱼汤。烹饪大约需要10分钟。",
+        rawTag: "生食",
+        premiumTag: "高级",
+        mildTag: "清淡口味",
+        chewyTag: "有嚼劲",
+        seasonalTag: "季节菜单",
+        boneTag: "带骨薄切",
+        strongTextureTag: "口感较强"
+      },
+      vi: {
+        title: "Sashimi gọi riêng",
+        included: "Bao gồm hải sản · mulhoe ăn thử · canh cá",
+        change: "Canh cá cay đi kèm có thể đổi sang canh cá trong không cay.",
+        notice: "Sau khi dùng sashimi, vui lòng yêu cầu nhân viên phục vụ canh cá. Thời gian nấu khoảng 10 phút.",
+        rawTag: "Món sống",
+        premiumTag: "Cao cấp",
+        mildTag: "Vị thanh",
+        chewyTag: "Dai giòn",
+        seasonalTag: "Theo mùa",
+        boneTag: "Thái mỏng cả xương",
+        strongTextureTag: "Kết cấu mạnh"
+      },
+      fil: {
+        title: "Sashimi",
+        included: "May kasamang seafood · mulhoe tasting · fish stew",
+        change: "Ang kasamang spicy fish stew ay puwedeng palitan ng non-spicy clear fish soup.",
+        notice: "Pagkatapos kumain ng sashimi, pakiusap humingi sa staff ng fish stew. Mga 10 minuto ang pagluluto.",
+        rawTag: "Raw food",
+        premiumTag: "Premium",
+        mildTag: "Mild taste",
+        chewyTag: "Chewy texture",
+        seasonalTag: "Seasonal",
+        boneTag: "Thin-sliced with bones",
+        strongTextureTag: "Strong texture"
+      },
+      ru: {
+        title: "Сашими",
+        included: "Включает морепродукты · пробный мульхве · рыбный суп",
+        change: "Острый рыбный суп можно заменить на неострый прозрачный рыбный суп.",
+        notice: "После сашими попросите персонал подать рыбный суп. Приготовление занимает около 10 минут.",
+        rawTag: "Сырое блюдо",
+        premiumTag: "Премиум",
+        mildTag: "Мягкий вкус",
+        chewyTag: "Плотная текстура",
+        seasonalTag: "Сезонное",
+        boneTag: "Тонкая нарезка с костями",
+        strongTextureTag: "Выраженная текстура"
+      },
+      mn: {
+        title: "Сашими",
+        included: "Далайн хоол · амталгааны мулхве · загасны шөл багтана",
+        change: "Багтсан халуун ногоотой загасны шөлийг халуун ногоогүй тунгалаг шөлөөр сольж болно.",
+        notice: "Сашими идсэний дараа загасны шөлийг ажилтнаас хүснэ үү. Бэлтгэхэд ойролцоогоор 10 минут зарцуулна.",
+        rawTag: "Түүхий хоол",
+        premiumTag: "Премиум",
+        mildTag: "Зөөлөн амт",
+        chewyTag: "Зажлууртай",
+        seasonalTag: "Улирлын меню",
+        boneTag: "Ястай нимгэн хэрчсэн",
+        strongTextureTag: "Хүчтэй бүтэц"
+      }
+    };
+
+    const sashimiMenus = [
+      {
+        title: {
+          ko: "참돔",
+          en: "Red Sea Bream",
+          ja: "真鯛",
+          zh: "真鲷",
+          vi: "Cá tráp đỏ",
+          ru: "Красный морской лещ",
+          mn: "Улаан далайн загас"
+        },
+        desc: {
+          ko: "담백하고 고급스러운 맛의 흰살 생선 사시미입니다. 처음 방문한 손님께도 추천하기 좋은 메뉴입니다.",
+          en: "Premium white fish sashimi with a clean and delicate taste. Recommended for first-time visitors.",
+          ja: "淡白で上品な味の白身魚刺身です。初めてのお客様にもおすすめです。",
+          zh: "味道清淡高级的白身鱼生鱼片。也推荐给第一次来店的客人。",
+          vi: "Sashimi cá trắng cao cấp, vị thanh và tinh tế. Phù hợp cho khách lần đầu đến quán.",
+          ru: "Премиальное сашими из белой рыбы с чистым нежным вкусом. Подходит для первого посещения.",
+          mn: "Цэвэр, зөөлөн амттай дээд зэрэглэлийн цагаан загасны сашими. Анх ирж буй зочдод тохиромжтой."
+        },
+        tags: ["rawTag", "premiumTag"],
+        prices: {
+          ko: [["소(2인)", "120,000원"], ["중(3인)", "170,000원"], ["대(4인)", "220,000원"]],
+          en: [["Small (2 people)", "120,000 KRW"], ["Medium (3 people)", "170,000 KRW"], ["Large (4 people)", "220,000 KRW"]],
+          ja: [["小(2名)", "120,000ウォン"], ["中(3名)", "170,000ウォン"], ["大(4名)", "220,000ウォン"]],
+          zh: [["小(2人)", "120,000韩元"], ["中(3人)", "170,000韩元"], ["大(4人)", "220,000韩元"]],
+          vi: [["Nhỏ (2 người)", "120,000 KRW"], ["Vừa (3 người)", "170,000 KRW"], ["Lớn (4 người)", "220,000 KRW"]],
+          ru: [["Мал. (2 чел.)", "120,000 KRW"], ["Сред. (3 чел.)", "170,000 KRW"], ["Бол. (4 чел.)", "220,000 KRW"]],
+          mn: [["Жижиг (2 хүн)", "120,000 KRW"], ["Дунд (3 хүн)", "170,000 KRW"], ["Том (4 хүн)", "220,000 KRW"]]
+        }
+      },
+      {
+        title: {
+          ko: "줄돔",
+          en: "Striped Beakfish",
+          ja: "イシダイ",
+          zh: "条石鲷",
+          vi: "Cá sọc cao cấp",
+          ru: "Полосатая морская рыба",
+          mn: "Судалтай далайн загас"
+        },
+        desc: {
+          ko: "쫄깃한 식감과 깊은 맛이 특징인 고급 생선 사시미입니다. 생선회를 좋아하는 손님께 추천합니다.",
+          en: "Premium sashimi with a chewy texture and deep flavor. Recommended for sashimi lovers.",
+          ja: "弾力のある食感と深い味が特徴の高級刺身です。刺身が好きな方におすすめです。",
+          zh: "口感有嚼劲、味道浓郁的高级生鱼片。推荐给喜欢生鱼片的客人。",
+          vi: "Sashimi cao cấp có độ dai và vị đậm. Phù hợp cho khách thích sashimi.",
+          ru: "Премиальное сашими с плотной текстурой и насыщенным вкусом. Рекомендуется любителям сашими.",
+          mn: "Зажлууртай бүтэц, гүн амттай дээд зэрэглэлийн сашими. Сашимид дуртай зочдод санал болгоно."
+        },
+        tags: ["rawTag", "premiumTag"],
+        prices: {
+          ko: [["소(2인)", "160,000원"], ["중(3인)", "230,000원"], ["대(4인)", "300,000원"]],
+          en: [["Small (2 people)", "160,000 KRW"], ["Medium (3 people)", "230,000 KRW"], ["Large (4 people)", "300,000 KRW"]],
+          ja: [["小(2名)", "160,000ウォン"], ["中(3名)", "230,000ウォン"], ["大(4名)", "300,000ウォン"]],
+          zh: [["小(2人)", "160,000韩元"], ["中(3人)", "230,000韩元"], ["大(4人)", "300,000韩元"]],
+          vi: [["Nhỏ (2 người)", "160,000 KRW"], ["Vừa (3 người)", "230,000 KRW"], ["Lớn (4 người)", "300,000 KRW"]],
+          ru: [["Мал. (2 чел.)", "160,000 KRW"], ["Сред. (3 чел.)", "230,000 KRW"], ["Бол. (4 чел.)", "300,000 KRW"]],
+          mn: [["Жижиг (2 хүн)", "160,000 KRW"], ["Дунд (3 хүн)", "230,000 KRW"], ["Том (4 хүн)", "300,000 KRW"]]
+        }
+      },
+      {
+        title: {
+          ko: "광어",
+          en: "Flatfish",
+          ja: "ヒラメ",
+          zh: "比目鱼",
+          vi: "Cá bơn",
+          ru: "Камбала",
+          mn: "Хавтгай загас"
+        },
+        desc: {
+          ko: "한국에서 가장 대중적인 흰살 생선회입니다. 담백하고 깔끔한 맛이라 부담 없이 즐기기 좋습니다.",
+          en: "One of the most popular white fish sashimi in Korea. Mild, clean, and easy to enjoy.",
+          ja: "韓国で最も一般的な白身魚の刺身です。淡白で食べやすい味です。",
+          zh: "韩国最常见的白身鱼生鱼片之一。味道清淡干净，容易入口。",
+          vi: "Một loại sashimi cá trắng rất phổ biến ở Hàn Quốc. Vị thanh, dễ ăn.",
+          ru: "Один из самых популярных видов сашими из белой рыбы в Корее. Мягкий и чистый вкус.",
+          mn: "Солонгост түгээмэл цагаан загасны сашими. Зөөлөн, цэвэр амттай."
+        },
+        tags: ["rawTag", "mildTag"],
+        prices: {
+          ko: [["소(2인)", "110,000원"], ["중(3인)", "160,000원"], ["대(4인)", "210,000원"]],
+          en: [["Small (2 people)", "110,000 KRW"], ["Medium (3 people)", "160,000 KRW"], ["Large (4 people)", "210,000 KRW"]],
+          ja: [["小(2名)", "110,000ウォン"], ["中(3名)", "160,000ウォン"], ["大(4名)", "210,000ウォン"]],
+          zh: [["小(2人)", "110,000韩元"], ["中(3人)", "160,000韩元"], ["大(4人)", "210,000韩元"]],
+          vi: [["Nhỏ (2 người)", "110,000 KRW"], ["Vừa (3 người)", "160,000 KRW"], ["Lớn (4 người)", "210,000 KRW"]],
+          ru: [["Мал. (2 чел.)", "110,000 KRW"], ["Сред. (3 чел.)", "160,000 KRW"], ["Бол. (4 чел.)", "210,000 KRW"]],
+          mn: [["Жижиг (2 хүн)", "110,000 KRW"], ["Дунд (3 хүн)", "160,000 KRW"], ["Том (4 хүн)", "210,000 KRW"]]
+        }
+      },
+      {
+        title: {
+          ko: "우럭 / 농어",
+          en: "Rockfish / Sea Bass",
+          ja: "ウロク / スズキ",
+          zh: "韩式岩鱼 / 鲈鱼",
+          vi: "Cá rockfish / cá vược",
+          ru: "Рыба рокфиш / сибас",
+          mn: "Рокфиш / далайн басс"
+        },
+        desc: {
+          ko: "쫄깃한 식감이 좋은 흰살 생선 사시미입니다. 회를 드신 후 매운탕 또는 지리탕과 함께 즐기기 좋습니다.",
+          en: "White fish sashimi with a pleasantly chewy texture. Enjoy it with spicy stew or clear soup afterward.",
+          ja: "弾力のある食感が特徴の白身魚刺身です。食後に魚鍋または澄ましスープと一緒に楽しめます。",
+          zh: "口感有嚼劲的白身鱼生鱼片。吃完后可搭配辣鱼汤或清汤。",
+          vi: "Sashimi cá trắng có độ dai dễ chịu. Có thể dùng cùng canh cay hoặc canh trong sau đó.",
+          ru: "Сашими из белой рыбы с приятной плотной текстурой. После него хорошо подходит острый или прозрачный суп.",
+          mn: "Зажлууртай цагаан загасны сашими. Дараа нь халуун ногоотой эсвэл тунгалаг шөлтэй идэхэд тохиромжтой."
+        },
+        tags: ["rawTag", "chewyTag"],
+        prices: {
+          ko: [["소(2인)", "110,000원"], ["중(3인)", "160,000원"], ["대(4인)", "210,000원"]],
+          en: [["Small (2 people)", "110,000 KRW"], ["Medium (3 people)", "160,000 KRW"], ["Large (4 people)", "210,000 KRW"]],
+          ja: [["小(2名)", "110,000ウォン"], ["中(3名)", "160,000ウォン"], ["大(4名)", "210,000ウォン"]],
+          zh: [["小(2人)", "110,000韩元"], ["中(3人)", "160,000韩元"], ["大(4人)", "210,000韩元"]],
+          vi: [["Nhỏ (2 người)", "110,000 KRW"], ["Vừa (3 người)", "160,000 KRW"], ["Lớn (4 người)", "210,000 KRW"]],
+          ru: [["Мал. (2 чел.)", "110,000 KRW"], ["Сред. (3 чел.)", "160,000 KRW"], ["Бол. (4 чел.)", "210,000 KRW"]],
+          mn: [["Жижиг (2 хүн)", "110,000 KRW"], ["Дунд (3 хүн)", "160,000 KRW"], ["Том (4 хүн)", "210,000 KRW"]]
+        }
+      },
+      {
+        title: {
+          ko: "밀치",
+          en: "Mullet",
+          ja: "ボラ",
+          zh: "鲻鱼",
+          vi: "Cá đối",
+          ru: "Кефаль",
+          mn: "Кефаль загас"
+        },
+        desc: {
+          ko: "계절에 따라 많이 찾는 생선회입니다. 고소하고 부드러운 맛을 좋아하는 손님께 추천합니다.",
+          en: "A seasonal sashimi choice with a savory and smooth taste.",
+          ja: "季節によく選ばれる刺身です。香ばしく柔らかい味がお好きな方におすすめです。",
+          zh: "季节性常见的生鱼片。适合喜欢香醇柔和口味的客人。",
+          vi: "Món sashimi theo mùa, vị béo nhẹ và mềm.",
+          ru: "Сезонное сашими с мягким и насыщенным вкусом.",
+          mn: "Улирлын чанартай, зөөлөн амттай сашими."
+        },
+        tags: ["rawTag", "seasonalTag"],
+        prices: {
+          ko: [["소(2인)", "110,000원"], ["중(3인)", "160,000원"], ["대(4인)", "210,000원"]],
+          en: [["Small (2 people)", "110,000 KRW"], ["Medium (3 people)", "160,000 KRW"], ["Large (4 people)", "210,000 KRW"]],
+          ja: [["小(2名)", "110,000ウォン"], ["中(3名)", "160,000ウォン"], ["大(4名)", "210,000ウォン"]],
+          zh: [["小(2人)", "110,000韩元"], ["中(3人)", "160,000韩元"], ["大(4人)", "210,000韩元"]],
+          vi: [["Nhỏ (2 người)", "110,000 KRW"], ["Vừa (3 người)", "160,000 KRW"], ["Lớn (4 người)", "210,000 KRW"]],
+          ru: [["Мал. (2 чел.)", "110,000 KRW"], ["Сред. (3 чел.)", "160,000 KRW"], ["Бол. (4 чел.)", "210,000 KRW"]],
+          mn: [["Жижиг (2 хүн)", "110,000 KRW"], ["Дунд (3 хүн)", "160,000 KRW"], ["Том (4 хүн)", "210,000 KRW"]]
+        }
+      },
+      {
+        title: {
+          ko: "도다리 세꼬시",
+          en: "Thin-sliced Flounder with Bones",
+          ja: "ドダリ セコシ",
+          zh: "薄切带骨鲽鱼",
+          vi: "Cá bơn thái mỏng cả xương",
+          ru: "Тонко нарезанная камбала с костями",
+          mn: "Ястай нимгэн хэрчсэн загас"
+        },
+        desc: {
+          ko: "도다리를 뼈째 얇게 썰어 씹는 식감을 즐기는 사시미입니다. 처음 드시는 분께는 식감이 낯설 수 있습니다.",
+          en: "Flounder sliced thinly with small bones for texture. The texture may feel unfamiliar if it is your first time.",
+          ja: "ドダリを骨ごと薄く切り、食感を楽しむ刺身です。初めての方には食感が慣れない場合があります。",
+          zh: "将鲽鱼带骨薄切，享受嚼劲的生鱼片。第一次吃的客人可能会觉得口感陌生。",
+          vi: "Cá bơn thái mỏng cả xương để cảm nhận độ giòn. Nếu ăn lần đầu, kết cấu có thể hơi lạ.",
+          ru: "Камбала, тонко нарезанная с мелкими костями ради текстуры. При первом разе текстура может быть непривычной.",
+          mn: "Жижиг ястай нь нимгэн хэрчсэн загас. Анх идэж байгаа бол бүтэц нь сонин санагдаж магадгүй."
+        },
+        tags: ["rawTag", "boneTag", "strongTextureTag"],
+        prices: {
+          ko: [["소(2인)", "100,000원"], ["중(3인)", "140,000원"], ["대(4인)", "180,000원"]],
+          en: [["Small (2 people)", "100,000 KRW"], ["Medium (3 people)", "140,000 KRW"], ["Large (4 people)", "180,000 KRW"]],
+          ja: [["小(2名)", "100,000ウォン"], ["中(3名)", "140,000ウォン"], ["大(4名)", "180,000ウォン"]],
+          zh: [["小(2人)", "100,000韩元"], ["中(3人)", "140,000韩元"], ["大(4人)", "180,000韩元"]],
+          vi: [["Nhỏ (2 người)", "100,000 KRW"], ["Vừa (3 người)", "140,000 KRW"], ["Lớn (4 người)", "180,000 KRW"]],
+          ru: [["Мал. (2 чел.)", "100,000 KRW"], ["Сред. (3 чел.)", "140,000 KRW"], ["Бол. (4 чел.)", "180,000 KRW"]],
+          mn: [["Жижиг (2 хүн)", "100,000 KRW"], ["Дунд (3 хүн)", "140,000 KRW"], ["Том (4 хүн)", "180,000 KRW"]]
+        }
+      }
+    ];
+
+    function getSashimiText(value, lang) {
+      return getAnyText(value, lang);
+    }
+
+    function renderSashimi(lang) {
+      const sectionText = getLanguageBlock(sashimiSectionTexts, lang);
+      const titleEl = document.getElementById("sashimi-title-text");
+      const includedEl = document.getElementById("sashimi-included-text");
+      const changeEl = document.getElementById("sashimi-change-text");
+      const noticeEl = document.getElementById("sashimi-notice-text");
+      const listEl = document.getElementById("sashimi-list");
+
+      if (titleEl) titleEl.textContent = sectionText.title;
+      if (includedEl) includedEl.textContent = sectionText.included;
+      if (changeEl) changeEl.textContent = sectionText.change;
+      if (noticeEl) noticeEl.textContent = sectionText.notice;
+      if (!listEl) return;
+
+      listEl.innerHTML = sashimiMenus.map((menu) => {
+        const tags = menu.tags.map((tagKey) => {
+          const className = tagKey === "rawTag" ? "menu-tag raw" : "menu-tag";
+          return `<span class="${className}">${sectionText[tagKey]}</span>`;
+        }).join("");
+
+        const prices = getAnyArray(menu.prices, lang).map((row) => {
+          return `
+            <div class="size-price-row">
+              <span class="size-name">${row[0]}</span>
+              <span class="size-price">${row[1]}</span>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <article class="menu-card">
+            <h3 class="menu-name">${getSashimiText(menu.title, lang)}</h3>
+            <p class="menu-desc">${getSashimiText(menu.desc, lang)}</p>
+            <div class="menu-tags">${tags}</div>
+            <div class="size-price-list">${prices}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    const mealSectionTexts = {
+      ko: {
+        title: "식사 메뉴",
+        cookedTag: "익힌 메뉴",
+        rawTag: "날음식 포함",
+        mealTag: "식사 메뉴",
+        bestTag: "★ BEST",
+        spicyColdTag: "차갑고 매콤달콤함",
+        winterTag: "겨울 한정",
+        howToEat: "먹는 방법"
+      },
+      en: {
+        title: "Meals",
+        cookedTag: "Cooked",
+        rawTag: "Includes raw food",
+        mealTag: "Meal",
+        bestTag: "★ BEST",
+        spicyColdTag: "Cold, sweet & spicy",
+        winterTag: "Winter only",
+        howToEat: "How to eat"
+      },
+      ja: {
+        title: "食事メニュー",
+        cookedTag: "加熱料理",
+        rawTag: "生もの含む",
+        mealTag: "食事",
+        bestTag: "★ BEST",
+        spicyColdTag: "冷たく甘辛い",
+        winterTag: "冬限定",
+        howToEat: "食べ方"
+      },
+      zh: {
+        title: "餐食菜单",
+        cookedTag: "熟食",
+        rawTag: "含生食",
+        mealTag: "餐食",
+        bestTag: "★ BEST",
+        spicyColdTag: "冰凉酸甜微辣",
+        winterTag: "冬季限定",
+        howToEat: "食用方法"
+      },
+      vi: {
+        title: "Món ăn",
+        cookedTag: "Món chín",
+        rawTag: "Có món sống",
+        mealTag: "Món ăn",
+        bestTag: "★ BEST",
+        spicyColdTag: "Lạnh, ngọt & cay",
+        winterTag: "Chỉ mùa đông",
+        howToEat: "Cách ăn"
+      },
+      fil: {
+        title: "Meals",
+        cookedTag: "Cooked",
+        rawTag: "May raw food",
+        mealTag: "Meal",
+        bestTag: "★ BEST",
+        spicyColdTag: "Cold, sweet & spicy",
+        winterTag: "Winter only",
+        howToEat: "Paano kainin"
+      },
+      ru: {
+        title: "Блюда",
+        cookedTag: "Готовое блюдо",
+        rawTag: "Есть сырые продукты",
+        mealTag: "Блюдо",
+        bestTag: "★ BEST",
+        spicyColdTag: "Холодное, сладко-острое",
+        winterTag: "Только зимой",
+        howToEat: "Как есть"
+      },
+      mn: {
+        title: "Хоол",
+        cookedTag: "Болгосон хоол",
+        rawTag: "Түүхий хоол орсон",
+        mealTag: "Хоол",
+        bestTag: "★ BEST",
+        spicyColdTag: "Хүйтэн, чихэрлэг халуун ногоотой",
+        winterTag: "Зөвхөн өвөл",
+        howToEat: "Идэх арга"
+      }
+    };
+
+    const mealMenus = [
+      {
+        type: "sizes",
+        title: {
+          ko: "생우럭 매운탕 / 지리탕",
+          en: "Fresh Rockfish Spicy Stew / Clear Soup",
+          ja: "生ウロク辛鍋 / 澄ましスープ",
+          zh: "鲜韩式岩鱼辣汤 / 清汤",
+          vi: "Canh cá rockfish cay / canh trong",
+          ru: "Суп из свежей рыбы / прозрачный суп",
+          mn: "Шинэ загасны халуун шөл / тунгалаг шөл"
+        },
+        desc: {
+          ko: "날 음식을 드시지 못하는 분께 추천하는 대표 식사 메뉴입니다. 얼큰한 매운탕 또는 맑고 맵지 않은 지리탕으로 선택할 수 있습니다.",
+          en: "Recommended for guests who do not eat raw food. Choose spicy fish stew or a mild, non-spicy clear fish soup.",
+          ja: "生ものが苦手な方におすすめの食事メニューです。辛い魚鍋、または辛くない澄ましスープを選べます。",
+          zh: "推荐给不吃生食的客人。可选择辣鱼汤或不辣的清汤。",
+          vi: "Gợi ý cho khách không ăn đồ sống. Có thể chọn canh cá cay hoặc canh trong không cay.",
+          ru: "Рекомендуется гостям, которые не едят сырое. Можно выбрать острый рыбный суп или мягкий прозрачный суп.",
+          mn: "Түүхий хоол иддэггүй зочдод санал болгоно. Халуун ногоотой шөл эсвэл зөөлөн тунгалаг шөл сонгож болно."
+        },
+        tags: ["cookedTag", "mealTag"],
+        prices: {
+          ko: [["소(1~2인)", "30,000원"], ["중(2~3인)", "50,000원"], ["대(3~4인)", "70,000원"]],
+          en: [["Small (1–2 people)", "30,000 KRW"], ["Medium (2–3 people)", "50,000 KRW"], ["Large (3–4 people)", "70,000 KRW"]],
+          ja: [["小(1〜2名)", "30,000ウォン"], ["中(2〜3名)", "50,000ウォン"], ["大(3〜4名)", "70,000ウォン"]],
+          zh: [["小(1~2人)", "30,000韩元"], ["中(2~3人)", "50,000韩元"], ["大(3~4人)", "70,000韩元"]],
+          vi: [["Nhỏ (1–2 người)", "30,000 KRW"], ["Vừa (2–3 người)", "50,000 KRW"], ["Lớn (3–4 người)", "70,000 KRW"]],
+          ru: [["Мал. (1–2 чел.)", "30,000 KRW"], ["Сред. (2–3 чел.)", "50,000 KRW"], ["Бол. (3–4 чел.)", "70,000 KRW"]],
+          mn: [["Жижиг (1–2 хүн)", "30,000 KRW"], ["Дунд (2–3 хүн)", "50,000 KRW"], ["Том (3–4 хүн)", "70,000 KRW"]]
+        }
+      },
+      {
+        type: "single",
+        title: {
+          ko: "생대구탕",
+          en: "Fresh Cod Soup",
+          ja: "生タラ鍋",
+          zh: "鲜鳕鱼汤",
+          vi: "Canh cá tuyết tươi",
+          ru: "Суп из свежей трески",
+          mn: "Шинэ сагамхай загасны шөл"
+        },
+        price: {
+          ko: "22,000원",
+          en: "22,000 KRW",
+          ja: "22,000ウォン",
+          zh: "22,000韩元",
+          vi: "22,000 KRW",
+          ru: "22,000 KRW",
+          mn: "22,000 KRW"
+        },
+        desc: {
+          ko: "겨울 한정으로 제공되는 따뜻한 탕 메뉴입니다.",
+          en: "A warm soup menu served only in winter.",
+          ja: "冬限定で提供される温かい鍋メニューです。",
+          zh: "冬季限定的热汤菜单。",
+          vi: "Món canh nóng chỉ phục vụ vào mùa đông.",
+          ru: "Тёплый суп, который подается только зимой.",
+          mn: "Зөвхөн өвөл гардаг халуун шөл."
+        },
+        tags: ["cookedTag", "mealTag", "winterTag"]
+      },
+      {
+        type: "options",
+        title: {
+          ko: "회덮밥",
+          en: "Sashimi Rice Bowl",
+          ja: "刺身ビビンバ",
+          zh: "生鱼片拌饭",
+          vi: "Cơm trộn cá sống",
+          ru: "Рис с сырой рыбой",
+          mn: "Түүхий загастай будаатай хоол"
+        },
+        desc: {
+          ko: "생선회와 채소를 밥과 함께 비벼 먹는 메뉴입니다. 매운탕과 공기밥이 포함되며, 매운탕은 맵지 않은 지리탕으로 변경 가능합니다.",
+          en: "A rice bowl mixed with raw fish, vegetables, rice, and red chili-vinegar sauce. Includes fish stew and rice; the stew can be changed to clear soup.",
+          ja: "刺身、野菜、ご飯を赤い酢コチュジャンと混ぜて食べるメニューです。魚鍋とご飯付きで、魚鍋は澄ましスープに変更できます。",
+          zh: "将生鱼片、蔬菜、米饭和红色辣醋酱拌在一起食用。包含鱼汤和米饭，鱼汤可换成清汤。",
+          vi: "Món cơm trộn cá sống, rau, cơm và sốt đỏ chua cay. Bao gồm canh cá và cơm; canh có thể đổi sang canh trong.",
+          ru: "Рис с сырой рыбой, овощами и красным соусом. Включает рыбный суп и рис; суп можно заменить на прозрачный.",
+          mn: "Түүхий загас, ногоо, будаа, улаан соустай хольж иддэг хоол. Загасны шөл, будаа багтана; шөлийг тунгалаг шөлөөр сольж болно."
+        },
+        eating: {
+          ko: "야채와 생선회가 들어있는 그릇에 붉은 소스통의 초고추장을 넣고, 밥과 함께 잘 비벼서 드세요.",
+          en: "Add the red sauce from the sauce bottle to the bowl with vegetables and raw fish, then mix well with rice.",
+          ja: "野菜と刺身が入った器に赤いソースボトルの酢コチュジャンを入れ、ご飯とよく混ぜてお召し上がりください。",
+          zh: "将红色酱瓶中的辣醋酱加入装有蔬菜和生鱼片的碗中，再和米饭充分拌匀后食用。",
+          vi: "Cho sốt đỏ trong chai vào tô có rau và cá sống, rồi trộn đều với cơm trước khi ăn.",
+          ru: "Добавьте красный соус из бутылочки в миску с овощами и сырой рыбой, затем хорошо перемешайте с рисом.",
+          mn: "Ногоо, түүхий загас байгаа аяганд улаан соусны савнаас соус хийж, будаатай сайн хольж иднэ үү."
+        },
+        tags: ["rawTag", "mealTag"],
+        options: {
+          ko: [["일반", "생선회", "17,000원"], ["모듬", "생선회 + 멍게 + 해삼", "22,000원"], ["전복모듬", "생선회 + 멍게 + 해삼 + 전복", "27,000원"], ["도다리", "도다리회", "19,000원"]],
+          en: [["Regular", "raw fish", "17,000 KRW"], ["Assorted", "raw fish + sea squirt + sea cucumber", "22,000 KRW"], ["Abalone assorted", "raw fish + sea squirt + sea cucumber + abalone", "27,000 KRW"], ["Flounder", "flounder sashimi", "19,000 KRW"]],
+          ja: [["一般", "刺身", "17,000ウォン"], ["盛り合わせ", "刺身 + ホヤ + ナマコ", "22,000ウォン"], ["アワビ盛り合わせ", "刺身 + ホヤ + ナマコ + アワビ", "27,000ウォン"], ["ドダリ", "ドダリ刺身", "19,000ウォン"]],
+          zh: [["普通", "生鱼片", "17,000韩元"], ["综合", "生鱼片 + 海鞘 + 海参", "22,000韩元"], ["鲍鱼综合", "生鱼片 + 海鞘 + 海参 + 鲍鱼", "27,000韩元"], ["鲽鱼", "鲽鱼生鱼片", "19,000韩元"]],
+          vi: [["Thường", "cá sống", "17,000 KRW"], ["Tổng hợp", "cá sống + hải tiêu + hải sâm", "22,000 KRW"], ["Tổng hợp bào ngư", "cá sống + hải tiêu + hải sâm + bào ngư", "27,000 KRW"], ["Cá bơn", "sashimi cá bơn", "19,000 KRW"]],
+          ru: [["Обычный", "сырая рыба", "17,000 KRW"], ["Ассорти", "сырая рыба + асцидия + морской огурец", "22,000 KRW"], ["Ассорти с абалоном", "сырая рыба + асцидия + морской огурец + абалон", "27,000 KRW"], ["Камбала", "сашими из камбалы", "19,000 KRW"]],
+          mn: [["Энгийн", "түүхий загас", "17,000 KRW"], ["Холимог", "түүхий загас + далайн хан боргоцой + далайн өргөст хэмх", "22,000 KRW"], ["Абалонтой холимог", "түүхий загас + далайн хан боргоцой + далайн өргөст хэмх + абалон", "27,000 KRW"], ["Хавтгай загас", "хавтгай загасны сашими", "19,000 KRW"]]
+        }
+      },
+      {
+        type: "options",
+        best: true,
+        title: {
+          ko: "물회",
+          en: "Mulhoe (Cold Spicy Sashimi Soup)",
+          ja: "ムルフェ（冷たい辛味刺身スープ）",
+          zh: "韩式冷辣生鱼汤",
+          vi: "Mulhoe",
+          ru: "Мульхве",
+          mn: "Мулхве"
+        },
+        desc: {
+          ko: "차갑고 매콤달콤한 물회 소스에 생선회와 채소를 함께 먹는 수림횟집 인기 메뉴입니다. 다양한 과일을 갈아 넣어 직접 개발한 특제 소스를 사용합니다. 매운탕, 공기밥, 소면이 포함되며, 매운탕은 맵지 않은 지리탕으로 변경 가능합니다.",
+          en: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits. Includes fish stew, rice, and noodles; the stew can be changed to clear soup.",
+          ja: "冷たく甘辛いムルフェソースに刺身と野菜を混ぜて食べる人気メニューです。さまざまな果物をすり入れて開発した自家製特製ソースを使用しています。魚鍋、ご飯、素麺付きで、魚鍋は澄ましスープに変更できます。",
+          zh: "将生鱼片和蔬菜与冰凉酸甜微辣的水会酱汁一起拌食的人气菜单。酱汁为本店使用多种水果研磨后研发的特制酱汁。包含鱼汤、米饭和素面，鱼汤可换成清汤。",
+          vi: "Món cá sống lạnh vị ngọt cay nhẹ, ăn cùng rau và sốt mulhoe đặc biệt của Soorim được xay từ nhiều loại trái cây. Bao gồm canh cá, cơm và mì; canh có thể đổi sang canh trong.",
+          fil: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits. Includes fish stew, rice, and noodles; the stew can be changed to clear soup.",
+          ru: "Популярное холодное сладко-острое блюдо из сырой рыбы и овощей с фирменным соусом Soorim, приготовленным с измельченными фруктами. Включает суп, рис и лапшу; суп можно заменить на прозрачный.",
+          mn: "Түүхий загас, ногоо, жимсээр хийсэн Soorim-ийн тусгай соустай, хүйтэн, чихэрлэг халуун ногоотой алдартай хоол. Загасны шөл, будаа, гоймон багтана; шөлийг тунгалаг шөлөөр сольж болно."
+        },
+        eating: {
+          ko: "그릇 안에 물회 소스가 함께 들어있습니다. 생선회와 채소, 소스를 잘 섞어서 시원하게 드세요.",
+          en: "The mulhoe sauce is already in the bowl. Mix the raw fish, vegetables, and sauce well before eating.",
+          ja: "器の中にムルフェ（冷たい辛味刺身スープ）ソースが入っています。刺身、野菜、ソースをよく混ぜて冷たくお召し上がりください。",
+          zh: "碗里已经有水会酱汁。请将生鱼片、蔬菜和酱汁充分拌匀后享用。",
+          vi: "Sốt mulhoe đã có trong tô. Trộn đều cá sống, rau và sốt trước khi ăn.",
+          ru: "Соус мульхве уже находится в миске. Хорошо перемешайте сырую рыбу, овощи и соус.",
+          mn: "Мулхве соус аяган дотор байгаа. Түүхий загас, ногоо, соусаа сайн хольж иднэ үү."
+        },
+        tags: ["rawTag", "spicyColdTag", "mealTag"],
+        options: {
+          ko: [["일반", "생선회", "20,000원"], ["모듬", "생선회 + 멍게 + 해삼", "25,000원"], ["전복모듬", "생선회 + 멍게 + 해삼 + 전복", "30,000원"], ["도다리", "도다리회", "22,000원"]],
+          en: [["Regular", "raw fish", "20,000 KRW"], ["Assorted", "raw fish + sea squirt + sea cucumber", "25,000 KRW"], ["Abalone assorted", "raw fish + sea squirt + sea cucumber + abalone", "30,000 KRW"], ["Flounder", "flounder sashimi", "22,000 KRW"]],
+          ja: [["一般", "刺身", "20,000ウォン"], ["盛り合わせ", "刺身 + ホヤ + ナマコ", "25,000ウォン"], ["アワビ盛り合わせ", "刺身 + ホヤ + ナマコ + アワビ", "30,000ウォン"], ["ドダリ", "ドダリ刺身", "22,000ウォン"]],
+          zh: [["普通", "生鱼片", "20,000韩元"], ["综合", "生鱼片 + 海鞘 + 海参", "25,000韩元"], ["鲍鱼综合", "生鱼片 + 海鞘 + 海参 + 鲍鱼", "30,000韩元"], ["鲽鱼", "鲽鱼生鱼片", "22,000韩元"]],
+          vi: [["Thường", "cá sống", "20,000 KRW"], ["Tổng hợp", "cá sống + hải tiêu + hải sâm", "25,000 KRW"], ["Tổng hợp bào ngư", "cá sống + hải tiêu + hải sâm + bào ngư", "30,000 KRW"], ["Cá bơn", "sashimi cá bơn", "22,000 KRW"]],
+          ru: [["Обычный", "сырая рыба", "20,000 KRW"], ["Ассорти", "сырая рыба + асцидия + морской огурец", "25,000 KRW"], ["Ассорти с абалоном", "сырая рыба + асцидия + морской огурец + абалон", "30,000 KRW"], ["Камбала", "сашими из камбалы", "22,000 KRW"]],
+          mn: [["Энгийн", "түүхий загас", "20,000 KRW"], ["Холимог", "түүхий загас + далайн хан боргоцой + далайн өргөст хэмх", "25,000 KRW"], ["Абалонтой холимог", "түүхий загас + далайн хан боргоцой + далайн өргөст хэмх + абалон", "30,000 KRW"], ["Хавтгай загас", "хавтгай загасны сашими", "22,000 KRW"]]
+        }
+      }
+    ];
+
+    function getMealText(value, lang) {
+      return getAnyText(value, lang);
+    }
+
+    function renderMeal(lang) {
+      const sectionText = getLanguageBlock(mealSectionTexts, lang);
+      const titleEl = document.getElementById("meal-title-text");
+      const listEl = document.getElementById("meal-list");
+
+      if (titleEl) titleEl.textContent = sectionText.title;
+      if (!listEl) return;
+
+      listEl.innerHTML = mealMenus.map((menu) => {
+        const bestBadge = menu.best ? ` <span class="small-badge best-badge">${sectionText.bestTag}</span>` : "";
+
+        const tags = menu.tags.map((tagKey) => {
+          const className = tagKey === "rawTag" ? "menu-tag raw" :
+                            tagKey === "cookedTag" ? "menu-tag cooked" :
+                            tagKey === "spicyColdTag" ? "menu-tag spicy" :
+                            tagKey === "mealTag" ? "menu-tag meal" :
+                            "menu-tag";
+          return `<span class="${className}">${sectionText[tagKey]}</span>`;
+        }).join("");
+
+        let priceHtml = "";
+
+        if (menu.type === "sizes") {
+          const prices = getAnyArray(menu.prices, lang).map((row) => {
+            return `
+              <div class="size-price-row">
+                <span class="size-name">${row[0]}</span>
+                <span class="size-price">${row[1]}</span>
+              </div>
+            `;
+          }).join("");
+          priceHtml = `<div class="size-price-list">${prices}</div>`;
+        }
+
+        if (menu.type === "single") {
+          priceHtml = `
+            <div class="menu-head">
+              <h3 class="menu-name">${getMealText(menu.title, lang)}${bestBadge}</h3>
+              <div class="menu-price">${getMealText(menu.price, lang)}</div>
+            </div>
+          `;
+        }
+
+        if (menu.type === "options") {
+          const options = getAnyArray(menu.options, lang).map((row) => {
+            return `
+              <div class="option-row">
+                <div class="option-left">
+                  <span class="option-name">${row[0]}</span>
+                  <span class="option-desc">${row[1]}</span>
+                </div>
+                <span class="option-price">${row[2]}</span>
+              </div>
+            `;
+          }).join("");
+
+          priceHtml = `
+            <div class="option-list">${options}</div>
+            <div class="eating-guide">
+              ${sectionText.howToEat}: ${getMealText(menu.eating, lang)}
+            </div>
+          `;
+        }
+
+        if (menu.type === "single") {
+          return `
+            <article class="menu-card">
+              ${priceHtml}
+              <p class="menu-desc">${getMealText(menu.desc, lang)}</p>
+              <div class="menu-tags">${tags}</div>
+            </article>
+          `;
+        }
+
+        return `
+          <article class="menu-card">
+            <h3 class="menu-name">${getMealText(menu.title, lang)}${bestBadge}</h3>
+            <p class="menu-desc">${getMealText(menu.desc, lang)}</p>
+            ${priceHtml}
+            <div class="menu-tags">${tags}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    const lunchKidsTexts = {
+      ko: {
+        lunchTitle: "점심특선",
+        lunchInline: "2인 이상 주문 가능",
+        lunchChange: "점심시간에 주문 가능합니다. 오후 2:30까지 주문 가능 / 포함된 매운탕은 맵지 않은 지리탕으로 변경 가능합니다.",
+        kidsTitle: "어린이 메뉴",
+        rawTag: "날음식 포함",
+        mealTag: "점심특선",
+        cookedTag: "익힌 메뉴",
+        kidsTag: "어린이",
+        includedLabel: "구성"
+      },
+      en: {
+        lunchTitle: "Lunch Special",
+        lunchInline: "Minimum order: 2 people",
+        lunchChange: "Available during lunch time. Order available until 2:30 PM. The included spicy fish stew can be changed to non-spicy clear fish soup.",
+        kidsTitle: "Kids Menu",
+        rawTag: "Includes raw food",
+        mealTag: "Lunch special",
+        cookedTag: "Cooked",
+        kidsTag: "Kids",
+        includedLabel: "Includes"
+      },
+      ja: {
+        lunchTitle: "ランチ特選",
+        lunchInline: "2名様以上注文可能",
+        lunchChange: "ランチ時間に注文できます。午後2:30まで注文可能です。含まれる辛い魚鍋は、辛くない澄ましスープに変更できます。",
+        kidsTitle: "お子様メニュー",
+        rawTag: "生もの含む",
+        mealTag: "ランチ",
+        cookedTag: "加熱料理",
+        kidsTag: "お子様",
+        includedLabel: "内容"
+      },
+      zh: {
+        lunchTitle: "午餐特选",
+        lunchInline: "2人以上可点",
+        lunchChange: "午餐时间可点，下午2:30前可点。包含的辣鱼汤可以更换为不辣的清汤。",
+        kidsTitle: "儿童菜单",
+        rawTag: "含生食",
+        mealTag: "午餐特选",
+        cookedTag: "熟食",
+        kidsTag: "儿童",
+        includedLabel: "内容"
+      },
+      vi: {
+        lunchTitle: "Bữa trưa đặc biệt",
+        lunchInline: "Gọi từ 2 người trở lên",
+        lunchChange: "Có thể gọi trong giờ trưa, đến 2:30 chiều. Canh cá cay đi kèm có thể đổi sang canh trong không cay.",
+        kidsTitle: "Món trẻ em",
+        rawTag: "Có món sống",
+        mealTag: "Bữa trưa",
+        cookedTag: "Món chín",
+        kidsTag: "Trẻ em",
+        includedLabel: "Bao gồm"
+      },
+      fil: {
+        lunchTitle: "Lunch Special",
+        lunchInline: "Minimum order: 2 people",
+        lunchChange: "Available during lunch time until 2:30 PM. Ang kasamang spicy fish stew ay puwedeng palitan ng non-spicy clear soup.",
+        kidsTitle: "Kids Menu",
+        rawTag: "May raw food",
+        mealTag: "Lunch special",
+        cookedTag: "Cooked",
+        kidsTag: "Kids",
+        includedLabel: "Includes"
+      },
+      ru: {
+        lunchTitle: "Обеденное спецменю",
+        lunchInline: "Минимум от 2 человек",
+        lunchChange: "Доступно во время обеда, заказ до 14:30. Острый рыбный суп можно заменить на неострый прозрачный рыбный суп.",
+        kidsTitle: "Детское меню",
+        rawTag: "Есть сырые продукты",
+        mealTag: "Обед",
+        cookedTag: "Готовое блюдо",
+        kidsTag: "Детское",
+        includedLabel: "Состав"
+      },
+      mn: {
+        lunchTitle: "Өдрийн тусгай хоол",
+        lunchInline: "2 хүнээс дээш захиална",
+        lunchChange: "Өдрийн хоолны цагаар захиална. 14:30 хүртэл захиалах боломжтой. Халуун ногоотой загасны шөлийг халуун ногоогүй тунгалаг шөлөөр сольж болно.",
+        kidsTitle: "Хүүхдийн меню",
+        rawTag: "Түүхий хоол орсон",
+        mealTag: "Өдрийн хоол",
+        cookedTag: "Болгосон хоол",
+        kidsTag: "Хүүхдийн",
+        includedLabel: "Орц"
+      }
+    };
+
+    const lunchMenus = [
+      {
+        title: {
+          ko: "회정식",
+          en: "Lunch Sashimi Set",
+          ja: "刺身定食",
+          zh: "生鱼片午餐套餐",
+          vi: "Set sashimi bữa trưa",
+          ru: "Обеденный сет с сашими",
+          mn: "Сашими өдрийн хоолны сет"
+        },
+        price: {
+          ko: "35,000원",
+          en: "35,000 KRW",
+          ja: "35,000ウォン",
+          zh: "35,000韩元",
+          vi: "35,000 KRW",
+          ru: "35,000 KRW",
+          mn: "35,000 KRW"
+        },
+        desc: {
+          ko: "점심 대표 메뉴입니다. 모듬회, 모듬해물, 맛보기 물회, 매운탕 또는 지리탕, 공기밥이 포함됩니다.",
+          en: "A popular lunch set with assorted sashimi, seafood, mulhoe tasting, fish stew or clear soup, and rice.",
+          ja: "ランチ代表メニューです。盛り合わせ刺身、海鮮、味見用ムルフェ、魚鍋または澄ましスープ、ご飯が含まれます。",
+          zh: "午餐代表菜单。包含综合生鱼片、综合海鲜、品尝水会、鱼汤或清汤和米饭。",
+          vi: "Set trưa đại diện gồm sashimi tổng hợp, hải sản, mulhoe ăn thử, canh cá hoặc canh trong và cơm.",
+          ru: "Популярный обеденный сет с ассорти сашими, морепродуктами, пробным мульхве, рыбным супом или прозрачным супом и рисом.",
+          mn: "Сашими, далайн хоол, амталгааны мулхве, загасны шөл эсвэл тунгалаг шөл, будаа багтсан өдрийн хоол."
+        },
+        items: {
+          ko: "모듬회 + 모듬해물 + 맛보기 물회 + 매운탕 + 공기밥",
+          en: "Assorted sashimi + seafood + mulhoe tasting + fish stew + rice",
+          ja: "盛り合わせ刺身 + 海鮮 + 味見用ムルフェ + 魚鍋 + ご飯",
+          zh: "综合生鱼片 + 综合海鲜 + 品尝水会 + 鱼汤 + 米饭",
+          vi: "Sashimi tổng hợp + hải sản + mulhoe ăn thử + canh cá + cơm",
+          ru: "Ассорти сашими + морепродукты + пробный мульхве + рыбный суп + рис",
+          mn: "Сашими + далайн хоол + амталгааны мулхве + загасны шөл + будаа"
+        }
+      }
+    ];
+
+    const kidsMenus = [
+      {
+        title: {
+          ko: "돈까스 정식",
+          en: "Kids Pork Cutlet Set",
+          ja: "お子様とんかつ定食",
+          zh: "儿童炸猪排套餐",
+          vi: "Set cơm thịt heo chiên cho trẻ em",
+          ru: "Детский сет с тонкацу",
+          mn: "Хүүхдийн тонкацу сет"
+        },
+        price: {
+          ko: "10,000원",
+          en: "10,000 KRW",
+          ja: "10,000ウォン",
+          zh: "10,000韩元",
+          vi: "10,000 KRW",
+          ru: "10,000 KRW",
+          mn: "10,000 KRW"
+        },
+        desc: {
+          ko: "등심 돈까스 + 샐러드 + 후리가케 밥",
+          en: "Pork cutlet + salad + rice with furikake",
+          ja: "ロースとんかつ + サラダ + ふりかけご飯",
+          zh: "炸猪排 + 沙拉 + 拌饭调味料米饭",
+          vi: "Thịt heo chiên + salad + cơm rắc furikake",
+          ru: "Свиная котлета + салат + рис с фурикакэ",
+          mn: "Гахайн котлет + салат + амталсан будаа"
+        }
+      }
+    ];
+
+    function getLunchKidsText(value, lang) {
+      return getAnyText(value, lang);
+    }
+
+    function renderLunchKids(lang) {
+      const text = getLanguageBlock(lunchKidsTexts, lang);
+
+      const lunchTitleEl = document.getElementById("lunch-title-text");
+      const lunchInlineEl = document.getElementById("lunch-inline-note-text");
+      const lunchChangeEl = document.getElementById("lunch-change-text");
+      const lunchListEl = document.getElementById("lunch-list");
+
+      const kidsTitleEl = document.getElementById("kids-title-text");
+      const kidsListEl = document.getElementById("kids-list");
+
+      if (lunchTitleEl) lunchTitleEl.textContent = text.lunchTitle;
+      if (lunchInlineEl) lunchInlineEl.textContent = text.lunchInline;
+      if (lunchChangeEl) lunchChangeEl.textContent = text.lunchChange;
+      if (kidsTitleEl) kidsTitleEl.textContent = text.kidsTitle;
+
+      if (lunchListEl) {
+        lunchListEl.innerHTML = lunchMenus.map((menu) => {
+          return `
+            <article class="menu-card">
+              <div class="menu-head">
+                <h3 class="menu-name">${getLunchKidsText(menu.title, lang)}</h3>
+                <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
+              </div>
+              <p class="menu-desc">${getLunchKidsText(menu.desc, lang)}</p>
+              <div class="menu-tags">
+                <span class="menu-tag raw">${text.rawTag}</span>
+                <span class="menu-tag meal">${text.mealTag}</span>
+              </div>
+              <div class="price-lines">
+                <div>${text.includedLabel}: ${getLunchKidsText(menu.items, lang)}</div>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      if (kidsListEl) {
+        kidsListEl.innerHTML = kidsMenus.map((menu) => {
+          return `
+            <article class="menu-card">
+              <div class="menu-head">
+                <h3 class="menu-name">${getLunchKidsText(menu.title, lang)}</h3>
+                <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
+              </div>
+              <p class="menu-desc">${getLunchKidsText(menu.desc, lang)}</p>
+              <div class="menu-tags">
+                <span class="menu-tag cooked">${text.cookedTag}</span>
+                <span class="menu-tag">${text.kidsTag}</span>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+    }
+
+    const extraTexts = {
+      ko: {
+        seafoodTitle: "추가 해산물",
+        extraMenuTitle: "추가 메뉴",
+        seafoodNotice: "추가 해산물은 단독 주문이 불가합니다. 코스, 사시미, 식사 메뉴 주문 시 직원에게 함께 문의해 주세요.",
+        extraMenuNotice: "추가 메뉴는 단독 주문이 불가합니다. 주문 가능 여부는 직원에게 확인해 주세요.",
+        rawTag: "날음식",
+        cookedTag: "익힌 메뉴",
+        seafoodTag: "해산물",
+        experienceTag: "체험 메뉴",
+        strongTextureTag: "식감 강함",
+        uniqueTag: "독특한 해산물",
+        recommendTag: "추천",
+        kidsTag: "아이 추천",
+        signatureTag: "대표 메뉴",
+        movingTag: "움직일 수 있음",
+        soyTag: "간장 양념"
+      },
+      en: {
+        seafoodTitle: "Extra Seafood",
+        extraMenuTitle: "Extra Menu",
+        seafoodNotice: "Extra seafood cannot be ordered alone. Please ask our staff when ordering a course, sashimi, or meal.",
+        extraMenuNotice: "Extra menu items cannot be ordered alone. Please ask our staff if they are available.",
+        rawTag: "Raw food",
+        cookedTag: "Cooked",
+        seafoodTag: "Seafood",
+        experienceTag: "Experience",
+        strongTextureTag: "Strong texture",
+        uniqueTag: "Unique seafood",
+        recommendTag: "Recommended",
+        kidsTag: "Good for kids",
+        signatureTag: "Signature",
+        movingTag: "May move",
+        soyTag: "Soy sauce"
+      },
+      ja: {
+        seafoodTitle: "追加海鮮",
+        extraMenuTitle: "追加メニュー",
+        seafoodNotice: "追加海鮮は単品注文できません。コース、刺身、食事メニュー注文時にスタッフへお問い合わせください。",
+        extraMenuNotice: "追加メニューは単品注文できません。注文可能かスタッフへご確認ください。",
+        rawTag: "生もの",
+        cookedTag: "加熱料理",
+        seafoodTag: "海鮮",
+        experienceTag: "体験メニュー",
+        strongTextureTag: "食感強め",
+        uniqueTag: "独特な海鮮",
+        recommendTag: "おすすめ",
+        kidsTag: "お子様向け",
+        signatureTag: "代表メニュー",
+        movingTag: "動く場合あり",
+        soyTag: "醤油だれ"
+      },
+      zh: {
+        seafoodTitle: "追加海鲜",
+        extraMenuTitle: "追加菜单",
+        seafoodNotice: "追加海鲜不可单独点餐。点套餐、生鱼片或餐食时请向工作人员咨询。",
+        extraMenuNotice: "追加菜单不可单独点餐。是否可点请向工作人员确认。",
+        rawTag: "生食",
+        cookedTag: "熟食",
+        seafoodTag: "海鲜",
+        experienceTag: "体验菜单",
+        strongTextureTag: "口感较强",
+        uniqueTag: "独特海鲜",
+        recommendTag: "推荐",
+        kidsTag: "儿童推荐",
+        signatureTag: "招牌菜单",
+        movingTag: "可能会动",
+        soyTag: "酱油调味"
+      },
+      vi: {
+        seafoodTitle: "Hải sản thêm",
+        extraMenuTitle: "Món thêm",
+        seafoodNotice: "Hải sản thêm không gọi riêng được. Vui lòng hỏi nhân viên khi gọi set, sashimi hoặc món ăn.",
+        extraMenuNotice: "Món thêm không gọi riêng được. Vui lòng hỏi nhân viên xem có thể gọi được không.",
+        rawTag: "Món sống",
+        cookedTag: "Món chín",
+        seafoodTag: "Hải sản",
+        experienceTag: "Trải nghiệm",
+        strongTextureTag: "Kết cấu mạnh",
+        uniqueTag: "Hải sản đặc biệt",
+        recommendTag: "Gợi ý",
+        kidsTag: "Trẻ em thích",
+        signatureTag: "Món đại diện",
+        movingTag: "Có thể còn động đậy",
+        soyTag: "Ướp xì dầu"
+      },
+      fil: {
+        seafoodTitle: "Extra Seafood",
+        extraMenuTitle: "Extra Menu",
+        seafoodNotice: "Hindi puwedeng i-order nang hiwalay ang extra seafood. Pakiusap magtanong sa staff kapag umorder ng course, sashimi, o meal.",
+        extraMenuNotice: "Hindi puwedeng i-order nang hiwalay ang extra menu. Pakiusap magtanong sa staff kung available.",
+        rawTag: "Raw food",
+        cookedTag: "Cooked",
+        seafoodTag: "Seafood",
+        experienceTag: "Experience",
+        strongTextureTag: "Strong texture",
+        uniqueTag: "Unique seafood",
+        recommendTag: "Recommended",
+        kidsTag: "Good for kids",
+        signatureTag: "Signature",
+        movingTag: "May move",
+        soyTag: "Soy sauce"
+      },
+      ru: {
+        seafoodTitle: "Доп. морепродукты",
+        extraMenuTitle: "Доп. меню",
+        seafoodNotice: "Дополнительные морепродукты нельзя заказать отдельно. Уточните у персонала при заказе сета, сашими или блюда.",
+        extraMenuNotice: "Дополнительные блюда нельзя заказать отдельно. Уточните доступность у персонала.",
+        rawTag: "Сырое блюдо",
+        cookedTag: "Готовое блюдо",
+        seafoodTag: "Морепродукты",
+        experienceTag: "Для опыта",
+        strongTextureTag: "Выраженная текстура",
+        uniqueTag: "Особый морепродукт",
+        recommendTag: "Рекомендуем",
+        kidsTag: "Для детей",
+        signatureTag: "Фирменное",
+        movingTag: "Может двигаться",
+        soyTag: "Соевый маринад"
+      },
+      mn: {
+        seafoodTitle: "Нэмэлт далайн хоол",
+        extraMenuTitle: "Нэмэлт меню",
+        seafoodNotice: "Нэмэлт далайн хоолыг дангаар захиалах боломжгүй. Сет, сашими, хоол захиалахдаа ажилтнаас асууна уу.",
+        extraMenuNotice: "Нэмэлт менюг дангаар захиалах боломжгүй. Захиалах боломжтой эсэхийг ажилтнаас асууна уу.",
+        rawTag: "Түүхий хоол",
+        cookedTag: "Болгосон хоол",
+        seafoodTag: "Далайн хоол",
+        experienceTag: "Туршлага меню",
+        strongTextureTag: "Хүчтэй бүтэц",
+        uniqueTag: "Өвөрмөц далайн хоол",
+        recommendTag: "Санал болгох",
+        kidsTag: "Хүүхдэд тохиромжтой",
+        signatureTag: "Онцлох",
+        movingTag: "Хөдөлж магадгүй",
+        soyTag: "Шар буурцагны амтлагч"
+      }
+    };
+
+    const extraSeafoodMenus = [
+      {
+        title: {
+          ko: "모듬 해물",
+          en: "Assorted Seafood",
+          ja: "盛り合わせ海鮮",
+          zh: "综合海鲜",
+          vi: "Hải sản tổng hợp",
+          ru: "Ассорти морепродуктов",
+          mn: "Холимог далайн хоол"
+        },
+        price: {
+          ko: "50,000원",
+          en: "50,000 KRW",
+          ja: "50,000ウォン",
+          zh: "50,000韩元",
+          vi: "50,000 KRW",
+          ru: "50,000 KRW",
+          mn: "50,000 KRW"
+        },
+        desc: {
+          ko: "여러 가지 해산물을 함께 맛볼 수 있는 추가 메뉴입니다. 해산물을 다양하게 즐기고 싶은 손님께 추천합니다.",
+          en: "An extra menu with a variety of seafood. Recommended for guests who want to try different seafood items.",
+          ja: "さまざまな海鮮を一緒に楽しめる追加メニューです。",
+          zh: "可以一起品尝多种海鲜的追加菜单。",
+          vi: "Món thêm gồm nhiều loại hải sản khác nhau.",
+          ru: "Дополнительное блюдо с разными морепродуктами.",
+          mn: "Олон төрлийн далайн хоолыг хамтад нь амтлах нэмэлт меню."
+        },
+        tags: ["rawTag", "seafoodTag"]
+      },
+      {
+        title: {
+          ko: "해삼",
+          en: "Sea Cucumber",
+          ja: "ナマコ",
+          zh: "海参",
+          vi: "Hải sâm",
+          ru: "Морской огурец",
+          mn: "Далайн өргөст хэмх"
+        },
+        price: {
+          ko: "30,000원",
+          en: "30,000 KRW",
+          ja: "30,000ウォン",
+          zh: "30,000韩元",
+          vi: "30,000 KRW",
+          ru: "30,000 KRW",
+          mn: "30,000 KRW"
+        },
+        desc: {
+          ko: "꼬들꼬들한 식감이 강한 해산물입니다. 처음 드시는 분께는 식감이 낯설 수 있습니다.",
+          en: "A seafood item with a very firm, chewy texture. The texture may feel unfamiliar at first.",
+          ja: "コリコリとした食感が強い海鮮です。初めての方には食感が珍しく感じられます。",
+          zh: "口感较硬、有嚼劲的海鲜。第一次吃可能会觉得陌生。",
+          vi: "Hải sản có độ giòn dai mạnh. Khách ăn lần đầu có thể thấy hơi lạ.",
+          ru: "Морепродукт с очень плотной и хрустящей текстурой.",
+          mn: "Зажлууртай, хатуу бүтэцтэй далайн хоол. Анх идэхэд сонин санагдаж магадгүй."
+        },
+        tags: ["rawTag", "strongTextureTag"]
+      },
+      {
+        title: {
+          ko: "산낙지",
+          en: "Live Octopus",
+          ja: "活きテナガダコ",
+          zh: "活章鱼",
+          vi: "Bạch tuộc sống",
+          ru: "Живой осьминог",
+          mn: "Амьд наймаалж"
+        },
+        price: {
+          ko: "소 30,000원<br>중 50,000원",
+          en: "Small 30,000 KRW<br>Medium 50,000 KRW",
+          ja: "小 30,000ウォン<br>中 50,000ウォン",
+          zh: "小 30,000韩元<br>中 50,000韩元",
+          vi: "Nhỏ 30,000 KRW<br>Vừa 50,000 KRW",
+          ru: "Мал. 30,000 KRW<br>Сред. 50,000 KRW",
+          mn: "Жижиг 30,000 KRW<br>Дунд 50,000 KRW"
+        },
+        desc: {
+          ko: "주문 후 손질되어 제공되며, 접시 위에서 움직일 수 있습니다. 외국인 손님들이 체험 메뉴로 많이 찾습니다.",
+          en: "Prepared after ordering. The pieces may still move on the plate. Many foreign guests order it as a unique experience.",
+          ja: "注文後に調理され、皿の上で動くことがあります。体験メニューとして人気です。",
+          zh: "点餐后现处理，上桌后可能还会移动。很多外国客人会作为体验菜单点餐。",
+          vi: "Được sơ chế sau khi gọi món. Miếng bạch tuộc có thể còn động đậy trên đĩa.",
+          ru: "Готовится после заказа. Кусочки могут двигаться на тарелке. Часто заказывают как необычный опыт.",
+          mn: "Захиалсны дараа бэлтгэнэ. Таваг дээр хөдөлж болзошгүй. Гадаад зочид туршиж үзэхээр их захиалдаг."
+        },
+        notice: {
+          ko: "산낙지는 천천히 꼭꼭 씹어 드세요.",
+          en: "Please chew live octopus slowly and carefully.",
+          ja: "活きダコはゆっくりよく噛んでお召し上がりください。",
+          zh: "请慢慢充分咀嚼活章鱼后食用。",
+          vi: "Vui lòng nhai bạch tuộc sống thật kỹ và chậm.",
+          ru: "Пожалуйста, ешьте медленно и тщательно пережевывайте.",
+          mn: "Амьд наймаалжийг удаан, сайн зажилж иднэ үү."
+        },
+        tags: ["rawTag", "experienceTag", "movingTag"]
+      },
+      {
+        title: {
+          ko: "개불",
+          en: "Spoon Worm",
+          ja: "ユムシ",
+          zh: "海肠",
+          vi: "Sá sùng biển",
+          ru: "Морской червь",
+          mn: "Далайн өт"
+        },
+        price: {
+          ko: "30,000원",
+          en: "30,000 KRW",
+          ja: "30,000ウォン",
+          zh: "30,000韩元",
+          vi: "30,000 KRW",
+          ru: "30,000 KRW",
+          mn: "30,000 KRW"
+        },
+        desc: {
+          ko: "한국에서도 호불호가 있는 독특한 해산물입니다. 바다 향과 씹는 식감이 강한 편입니다.",
+          en: "A very unique seafood even in Korea. It has a strong ocean flavor and chewy texture.",
+          ja: "韓国でも好みが分かれる独特な海鮮です。磯の香りと食感が強いです。",
+          zh: "在韩国也比较独特、喜好分明的海鲜。海味和嚼劲较强。",
+          vi: "Hải sản khá đặc biệt, ngay cả ở Hàn Quốc. Có mùi biển và độ dai mạnh.",
+          ru: "Очень необычный морепродукт даже для Кореи, с сильным морским вкусом и плотной текстурой.",
+          mn: "Солонгост ч өвөрмөц далайн хоол. Далайн үнэр, зажлууртай бүтэц нь хүчтэй."
+        },
+        tags: ["rawTag", "uniqueTag", "strongTextureTag"]
+      },
+      {
+        title: {
+          ko: "전복회",
+          en: "Abalone Sashimi",
+          ja: "アワビ刺身",
+          zh: "鲍鱼刺身",
+          vi: "Sashimi bào ngư",
+          ru: "Сашими из абалона",
+          mn: "Абалон сашими"
+        },
+        price: {
+          ko: "50,000원",
+          en: "50,000 KRW",
+          ja: "50,000ウォン",
+          zh: "50,000韩元",
+          vi: "50,000 KRW",
+          ru: "50,000 KRW",
+          mn: "50,000 KRW"
+        },
+        desc: {
+          ko: "전복을 얇게 썰어 신선하게 즐기는 메뉴입니다. 쫄깃한 식감이 특징입니다.",
+          en: "Freshly sliced abalone served as sashimi. Known for its chewy texture.",
+          ja: "アワビを薄く切って新鮮に楽しむメニューです。弾力のある食感が特徴です。",
+          zh: "将鲍鱼薄切后新鲜享用的菜单。口感有嚼劲。",
+          vi: "Bào ngư thái mỏng ăn tươi. Đặc trưng bởi độ dai giòn.",
+          ru: "Свежий абалон, тонко нарезанный как сашими. Отличается плотной текстурой.",
+          mn: "Абалоныг нимгэн хэрчиж шинэхнээр иддэг меню. Зажлууртай бүтэцтэй."
+        },
+        tags: ["rawTag", "seafoodTag"]
+      },
+      {
+        title: {
+          ko: "멍게",
+          en: "Sea Squirt",
+          ja: "ホヤ",
+          zh: "海鞘",
+          vi: "Hải tiêu",
+          ru: "Асцидия",
+          mn: "Далайн хан боргоцой"
+        },
+        price: {
+          ko: "30,000원",
+          en: "30,000 KRW",
+          ja: "30,000ウォン",
+          zh: "30,000韩元",
+          vi: "30,000 KRW",
+          ru: "30,000 KRW",
+          mn: "30,000 KRW"
+        },
+        desc: {
+          ko: "바다 향이 강한 해산물입니다. 신선한 해산물 특유의 향을 좋아하는 손님께 추천합니다.",
+          en: "A seafood item with a strong ocean aroma. Recommended for guests who enjoy fresh seafood flavors.",
+          ja: "磯の香りが強い海鮮です。新鮮な海鮮特有の香りが好きな方におすすめです。",
+          zh: "海味较强的海鲜。推荐给喜欢新鲜海鲜香气的客人。",
+          vi: "Hải sản có mùi biển đậm. Phù hợp với khách thích hương vị hải sản tươi.",
+          ru: "Морепродукт с сильным морским ароматом. Подходит тем, кто любит вкус свежих морепродуктов.",
+          mn: "Далайн үнэр хүчтэй далайн хоол. Шинэ далайн хоолны амтанд дуртай зочдод тохиромжтой."
+        },
+        tags: ["rawTag", "seafoodTag"]
+      }
+    ];
+
+    const extraMenuItems = [
+      {
+        title: {
+          ko: "우럭탕수",
+          en: "Fried Rockfish with Sweet & Sour Sauce",
+          ja: "ウロクの甘酢あんかけ",
+          zh: "糖醋韩式岩鱼",
+          vi: "Cá rockfish chiên sốt chua ngọt",
+          ru: "Жареная рыба в кисло-сладком соусе",
+          mn: "Амтат исгэлэн соустай шарсан загас"
+        },
+        price: {
+          ko: "30,000원",
+          en: "30,000 KRW",
+          ja: "30,000ウォン",
+          zh: "30,000韩元",
+          vi: "30,000 KRW",
+          ru: "30,000 KRW",
+          mn: "30,000 KRW"
+        },
+        desc: {
+          ko: "바삭하게 튀긴 우럭에 새콤달콤한 소스를 곁들인 수림횟집 대표 익힌 메뉴입니다.",
+          en: "Crispy fried rockfish with sweet and sour sauce. One of Soorim’s signature cooked dishes.",
+          ja: "カリッと揚げたウロクに甘酸っぱいソースをかけた代表的な加熱料理です。",
+          zh: "炸得酥脆的韩式岩鱼搭配酸甜酱，是水林代表熟食菜单。",
+          vi: "Cá chiên giòn ăn cùng sốt chua ngọt. Một món chín đại diện của Soorim.",
+          ru: "Хрустящая жареная рыба с кисло-сладким соусом. Одно из фирменных готовых блюд Soorim.",
+          mn: "Шарж шаржигнуулсан загасыг амтат исгэлэн соустай өгдөг Soorim-ийн онцлох болгосон хоол."
+        },
+        tags: ["cookedTag", "signatureTag", "recommendTag"]
+      },
+      {
+        title: {
+          ko: "가리비찜 5마리",
+          en: "Steamed Scallops 5 pcs",
+          ja: "ホタテ蒸し 5個",
+          zh: "蒸扇贝 5个",
+          vi: "Sò điệp hấp 5 con",
+          ru: "Гребешки на пару 5 шт.",
+          mn: "Жигнэсэн хясаа 5ш"
+        },
+        price: {
+          ko: "20,000원",
+          en: "20,000 KRW",
+          ja: "20,000ウォン",
+          zh: "20,000韩元",
+          vi: "20,000 KRW",
+          ru: "20,000 KRW",
+          mn: "20,000 KRW"
+        },
+        desc: {
+          ko: "따뜻하게 쪄서 제공되는 가리비 메뉴입니다. 회를 못 드시는 분도 함께 즐기기 좋습니다.",
+          en: "Warm steamed scallops. A good option for guests who do not eat raw food.",
+          ja: "温かく蒸して提供するホタテメニューです。刺身が苦手な方にもおすすめです。",
+          zh: "温热蒸制的扇贝。不吃生食的客人也适合享用。",
+          vi: "Sò điệp được hấp nóng. Phù hợp cho khách không ăn đồ sống.",
+          ru: "Тёплые гребешки на пару. Подходит гостям, которые не едят сырое.",
+          mn: "Халуунаар жигнэсэн хясаа. Түүхий хоол иддэггүй зочдод тохиромжтой."
+        },
+        tags: ["cookedTag", "seafoodTag"]
+      },
+      {
+        title: {
+          ko: "새우튀김 5마리",
+          en: "Fried Shrimp 5 pcs",
+          ja: "エビフライ 5尾",
+          zh: "炸虾 5只",
+          vi: "Tôm chiên 5 con",
+          ru: "Жареные креветки 5 шт.",
+          mn: "Шарсан сам хорхой 5ш"
+        },
+        price: {
+          ko: "4,000원",
+          en: "4,000 KRW",
+          ja: "4,000ウォン",
+          zh: "4,000韩元",
+          vi: "4,000 KRW",
+          ru: "4,000 KRW",
+          mn: "4,000 KRW"
+        },
+        desc: {
+          ko: "바삭하게 튀긴 새우 메뉴입니다. 아이와 외국인 손님도 부담 없이 먹기 좋습니다.",
+          en: "Crispy fried shrimp. Easy to enjoy for kids and foreign guests.",
+          ja: "カリッと揚げたエビメニューです。お子様や外国人のお客様にも食べやすいです。",
+          zh: "酥脆炸虾。儿童和外国客人也容易接受。",
+          vi: "Tôm chiên giòn, dễ ăn cho trẻ em và khách nước ngoài.",
+          ru: "Хрустящие жареные креветки. Легко понравится детям и иностранным гостям.",
+          mn: "Шаржигнуур шарсан сам хорхой. Хүүхэд болон гадаад зочдод идэхэд амар."
+        },
+        tags: ["cookedTag", "kidsTag"]
+      },
+      {
+        title: {
+          ko: "연어구이",
+          en: "Grilled Salmon",
+          ja: "鮭焼き",
+          zh: "烤三文鱼",
+          vi: "Cá hồi nướng",
+          ru: "Жареный лосось",
+          mn: "Шарсан яргай загас"
+        },
+        price: {
+          ko: "10,000원",
+          en: "10,000 KRW",
+          ja: "10,000ウォン",
+          zh: "10,000韩元",
+          vi: "10,000 KRW",
+          ru: "10,000 KRW",
+          mn: "10,000 KRW"
+        },
+        desc: {
+          ko: "구운 연어 메뉴입니다. 날 음식을 드시지 않는 분께도 추천합니다.",
+          en: "Grilled salmon. Recommended for guests who do not eat raw food.",
+          ja: "焼いた鮭のメニューです。生ものが苦手な方にもおすすめです。",
+          zh: "烤三文鱼。推荐给不吃生食的客人。",
+          vi: "Cá hồi nướng. Gợi ý cho khách không ăn đồ sống.",
+          ru: "Жареный лосось. Рекомендуется гостям, которые не едят сырое.",
+          mn: "Шарсан яргай загас. Түүхий хоол иддэггүй зочдод санал болгоно."
+        },
+        tags: ["cookedTag"]
+      },
+      {
+        title: {
+          ko: "꽁치구이",
+          en: "Grilled Pacific Saury",
+          ja: "サンマ焼き",
+          zh: "烤秋刀鱼",
+          vi: "Cá thu đao nướng",
+          ru: "Жареная сайра",
+          mn: "Шарсан сайра загас"
+        },
+        price: {
+          ko: "3,000원",
+          en: "3,000 KRW",
+          ja: "3,000ウォン",
+          zh: "3,000韩元",
+          vi: "3,000 KRW",
+          ru: "3,000 KRW",
+          mn: "3,000 KRW"
+        },
+        desc: {
+          ko: "간단하게 곁들이기 좋은 구운 생선 메뉴입니다.",
+          en: "A simple grilled fish side dish.",
+          ja: "気軽に追加しやすい焼き魚メニューです。",
+          zh: "适合简单搭配的烤鱼菜单。",
+          vi: "Món cá nướng ăn kèm đơn giản.",
+          ru: "Простое блюдо из жареной рыбы для дополнения к заказу.",
+          mn: "Дагалдаж идэхэд тохиромжтой энгийн шарсан загас."
+        },
+        tags: ["cookedTag"]
+      },
+      {
+        title: {
+          ko: "새우장 5마리",
+          en: "Soy-marinated Shrimp 5 pcs",
+          ja: "エビ醤油漬け 5尾",
+          zh: "酱油腌虾 5只",
+          vi: "Tôm ngâm xì dầu 5 con",
+          ru: "Креветки в соевом маринаде 5 шт.",
+          mn: "Шар буурцагны соустай сам хорхой 5ш"
+        },
+        price: {
+          ko: "10,000원",
+          en: "10,000 KRW",
+          ja: "10,000ウォン",
+          zh: "10,000韩元",
+          vi: "10,000 KRW",
+          ru: "10,000 KRW",
+          mn: "10,000 KRW"
+        },
+        desc: {
+          ko: "간장 양념에 숙성한 새우 메뉴입니다.",
+          en: "Shrimp marinated in soy sauce seasoning.",
+          ja: "醤油だれに漬けたエビメニューです。",
+          zh: "用酱油调味腌制的虾。",
+          vi: "Tôm được ngâm trong nước tương gia vị.",
+          ru: "Креветки, маринованные в соевом соусе.",
+          mn: "Шар буурцагны амтлагчид дарсан сам хорхой."
+        },
+        tags: ["rawTag", "soyTag"]
+      },
+      {
+        title: {
+          ko: "공기밥",
+          en: "Rice",
+          ja: "ご飯",
+          zh: "米饭",
+          vi: "Cơm trắng",
+          ru: "Рис",
+          mn: "Будаа"
+        },
+        price: {
+          ko: "1,000원",
+          en: "1,000 KRW",
+          ja: "1,000ウォン",
+          zh: "1,000韩元",
+          vi: "1,000 KRW",
+          ru: "1,000 KRW",
+          mn: "1,000 KRW"
+        }
+      },
+      {
+        title: {
+          ko: "초밥알",
+          en: "Sushi Rice",
+          ja: "寿司飯",
+          zh: "寿司饭",
+          vi: "Cơm sushi",
+          ru: "Рис для суши",
+          mn: "Сүши будаа"
+        },
+        price: {
+          ko: "3,000원",
+          en: "3,000 KRW",
+          ja: "3,000ウォン",
+          zh: "3,000韩元",
+          vi: "3,000 KRW",
+          ru: "3,000 KRW",
+          mn: "3,000 KRW"
+        },
+        desc: {
+          ko: "회와 함께 초밥처럼 드실 수 있는 밥입니다.",
+          en: "Rice that can be eaten with sashimi like sushi.",
+          ja: "刺身と一緒に寿司のように食べられるご飯です。",
+          zh: "可以和生鱼片一起像寿司一样食用的米饭。",
+          vi: "Cơm có thể ăn cùng sashimi như sushi.",
+          ru: "Рис, который можно есть с сашими как суши.",
+          mn: "Сашимитай хамт сүши шиг идэж болох будаа."
+        }
+      },
+      {
+        title: {
+          ko: "국수사리",
+          en: "Extra Noodles",
+          ja: "追加麺",
+          zh: "追加面条",
+          vi: "Mì thêm",
+          ru: "Доп. лапша",
+          mn: "Нэмэлт гоймон"
+        },
+        price: {
+          ko: "1,000원",
+          en: "1,000 KRW",
+          ja: "1,000ウォン",
+          zh: "1,000韩元",
+          vi: "1,000 KRW",
+          ru: "1,000 KRW",
+          mn: "1,000 KRW"
+        }
+      }
+    ];
+
+    function getExtraText(value, lang) {
+      return getAnyText(value, lang);
+    }
+
+    function renderMenuCards(listEl, menus, text, lang) {
+      if (!listEl) return;
+
+      listEl.innerHTML = menus.map((menu) => {
+        const tags = (menu.tags || []).map((tagKey) => {
+          const className = tagKey === "rawTag" ? "menu-tag raw" :
+                            tagKey === "cookedTag" ? "menu-tag cooked" :
+                            "menu-tag";
+          return `<span class="${className}">${text[tagKey]}</span>`;
+        }).join("");
+
+        const descHtml = menu.desc ? `<p class="menu-desc">${getExtraText(menu.desc, lang)}</p>` : "";
+        const tagsHtml = tags ? `<div class="menu-tags">${tags}</div>` : "";
+        const noticeHtml = menu.notice ? `<div class="notice-box">${getExtraText(menu.notice, lang)}</div>` : "";
+
+        return `
+          <article class="menu-card">
+            <div class="menu-head">
+              <h3 class="menu-name">${getExtraText(menu.title, lang)}</h3>
+              <div class="menu-price">${getExtraText(menu.price, lang)}</div>
+            </div>
+            ${descHtml}
+            ${tagsHtml}
+            ${noticeHtml}
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderExtraSections(lang) {
+      const text = getLanguageBlock(extraTexts, lang);
+
+      const seafoodTitleEl = document.getElementById("extra-seafood-title-text");
+      const extraMenuTitleEl = document.getElementById("extra-menu-title-text");
+      const seafoodNoticeEl = document.getElementById("extra-seafood-notice-text");
+      const extraMenuNoticeEl = document.getElementById("extra-menu-notice-text");
+
+      if (seafoodTitleEl) seafoodTitleEl.textContent = text.seafoodTitle;
+      if (extraMenuTitleEl) extraMenuTitleEl.textContent = text.extraMenuTitle;
+      if (seafoodNoticeEl) seafoodNoticeEl.textContent = text.seafoodNotice;
+      if (extraMenuNoticeEl) extraMenuNoticeEl.textContent = text.extraMenuNotice;
+
+      renderMenuCards(document.getElementById("extra-seafood-list"), extraSeafoodMenus, text, lang);
+      renderMenuCards(document.getElementById("extra-menu-list"), extraMenuItems, text, lang);
+    }
+
+    const infoTexts = {
+      ko: {
+        orderTitle: "주문 전 안내",
+        orderNote: "메뉴를 고르기 전 확인해 주세요.",
+        orderBox: `
+          날 음식을 드시지 못하는 분께는 <strong>생우럭 매운탕 / 지리탕</strong>, <strong>우럭탕수</strong>, <strong>돈까스 정식</strong>을 추천합니다.<br><br>
+          생선회, 산낙지 등 일부 메뉴는 날것으로 제공됩니다. 산낙지는 접시 위에서 움직일 수 있으니 천천히 꼭꼭 씹어 드세요.<br><br>
+          <strong>모든 코스 메뉴는 2인 이상 주문 가능합니다.</strong> 추가 해산물과 추가 메뉴는 단독 주문이 불가합니다.<br><br>
+          사진은 대표 이미지이며 실제 구성은 계절, 재료 수급, 주문 인원에 따라 달라질 수 있습니다.<br><br>
+          <strong>1인 1주문을 부탁드립니다.</strong>
+        `,
+        drinkTitle: "주류 및 음료",
+        drinkNote: "주류는 종류별로 접었다 펼칠 수 있습니다.",
+        drinkNotice: "주류 주문 시 신분증 확인이 필요할 수 있습니다.",
+        footerTitle: "수림횟집",
+        footerItems: [
+          "해운대 수림횟집 메뉴판입니다.",
+          "사진은 대표 이미지이며 실제 구성은 계절, 재료 수급, 주문 인원에 따라 달라질 수 있습니다.",
+          "모든 코스 메뉴는 2인 이상 주문 가능합니다.",
+          "추가 해산물과 추가 메뉴는 단독 주문이 불가합니다.",
+          "날 음식을 드시지 못하는 분께는 생우럭 매운탕 / 지리탕, 우럭탕수, 돈까스 정식, 새우튀김, 가리비찜을 추천합니다.",
+          "1인 1주문을 부탁드립니다."
+        ]
+      },
+
+      en: {
+        orderTitle: "Before Ordering",
+        orderNote: "Please check before choosing your menu.",
+        orderBox: `
+          If you do not eat raw food, we recommend <strong>fresh rockfish spicy stew / clear soup</strong>, <strong>fried rockfish with sweet & sour sauce</strong>, or <strong>kids pork cutlet set</strong>.<br><br>
+          Some dishes include raw fish, live octopus, or raw seafood. Live octopus may still move on the plate. Please chew slowly and carefully.<br><br>
+          <strong>All course menus require a minimum order for 2 people.</strong> Extra seafood and extra menu items cannot be ordered alone.<br><br>
+          Photos are for reference only. Actual dishes may vary depending on season, ingredient availability, and number of guests.<br><br>
+          <strong>We kindly ask each guest to order at least one item.</strong>
+        `,
+        drinkTitle: "Drinks",
+        drinkNote: "Drink menus can be opened by category.",
+        drinkNotice: "ID may be required when ordering alcohol.",
+        footerTitle: "Soorim Seafood Restaurant",
+        footerItems: [
+          "This is the menu for Soorim Seafood Restaurant in Haeundae.",
+          "Photos are for reference only. Actual dishes may vary depending on season, ingredients, and number of guests.",
+          "All course menus require a minimum order for 2 people.",
+          "Extra seafood and extra menu items cannot be ordered alone.",
+          "If you do not eat raw food, we recommend clear fish soup, fried rockfish, pork cutlet, fried shrimp, or steamed scallops.",
+          "We kindly ask each guest to order at least one item."
+        ]
+      },
+
+      ja: {
+        orderTitle: "注文前のご案内",
+        orderNote: "メニューを選ぶ前にご確認ください。",
+        orderBox: `
+          生ものが苦手な方には、<strong>生ウロク辛鍋 / 澄ましスープ</strong>、<strong>ウロクの甘酢あんかけ</strong>、<strong>お子様とんかつ定食</strong>をおすすめします。<br><br>
+          刺身、活きダコなど一部メニューは生で提供されます。活きダコは皿の上で動くことがありますので、ゆっくりよく噛んでお召し上がりください。<br><br>
+          <strong>すべてのコースメニューは2名様以上から注文可能です。</strong> 追加海鮮と追加メニューは単品注文できません。<br><br>
+          写真はイメージです。実際の内容は季節、食材の仕入れ、注文人数により異なる場合があります。<br><br>
+          <strong>お一人様一品以上のご注文をお願いいたします。</strong>
+        `,
+        drinkTitle: "お酒 / 飲み物",
+        drinkNote: "種類別に開いて確認できます。",
+        drinkNotice: "お酒のご注文時に身分証の確認が必要な場合があります。",
+        footerTitle: "海雲台スリム海鮮料理店",
+        footerItems: [
+          "海雲台スリム海鮮料理店のメニューです。",
+          "写真はイメージです。実際の内容は季節、食材、人数により異なる場合があります。",
+          "すべてのコースメニューは2名様以上から注文可能です。",
+          "追加海鮮と追加メニューは単品注文できません。",
+          "生ものが苦手な方には、澄ましスープ、ウロクの甘酢あんかけ、とんかつ、エビフライ、ホタテ蒸しをおすすめします。",
+          "お一人様一品以上のご注文をお願いいたします。"
+        ]
+      },
+
+      zh: {
+        orderTitle: "点餐前指南",
+        orderNote: "选择菜单前请先确认。",
+        orderBox: `
+          如果您不吃生食，推荐选择<strong>鲜韩式岩鱼辣汤 / 清汤</strong>、<strong>糖醋韩式岩鱼</strong>或<strong>儿童炸猪排套餐</strong>。<br><br>
+          部分菜单包含生鱼片、活章鱼等生食。活章鱼上桌后可能还会移动，请慢慢充分咀嚼后食用。<br><br>
+          <strong>所有套餐菜单需2人以上点餐。</strong> 追加海鲜和追加菜单不可单独点餐。<br><br>
+          图片仅供参考。实际菜品可能会根据季节、食材供应和用餐人数有所不同。<br><br>
+          <strong>请每位客人至少点一份菜单。</strong>
+        `,
+        drinkTitle: "酒水 / 饮料",
+        drinkNote: "酒水菜单可按分类展开查看。",
+        drinkNotice: "点酒时可能需要确认身份证件。",
+        footerTitle: "水林生鱼片店",
+        footerItems: [
+          "这是海云台水林生鱼片店菜单。",
+          "图片仅供参考，实际内容可能因季节、食材和人数而不同。",
+          "所有套餐菜单需2人以上点餐。",
+          "追加海鲜和追加菜单不可单独点餐。",
+          "如果不吃生食，推荐清汤、糖醋韩式岩鱼、炸猪排、炸虾或蒸扇贝。",
+          "请每位客人至少点一份菜单。"
+        ]
+      },
+
+      vi: {
+        orderTitle: "Hướng dẫn trước khi gọi món",
+        orderNote: "Vui lòng xem trước khi chọn món.",
+        orderBox: `
+          Nếu quý khách không ăn đồ sống, chúng tôi gợi ý <strong>canh cá rockfish cay / canh trong</strong>, <strong>cá chiên sốt chua ngọt</strong> hoặc <strong>set thịt heo chiên cho trẻ em</strong>.<br><br>
+          Một số món có cá sống, bạch tuộc sống hoặc hải sản sống. Bạch tuộc sống có thể còn động đậy trên đĩa. Vui lòng nhai chậm và kỹ.<br><br>
+          <strong>Tất cả set món cần gọi từ 2 người trở lên.</strong> Hải sản thêm và món thêm không thể gọi riêng.<br><br>
+          Hình ảnh chỉ mang tính tham khảo. Món thực tế có thể thay đổi theo mùa, nguyên liệu và số lượng khách.<br><br>
+          <strong>Rất mong mỗi khách gọi ít nhất một món.</strong>
+        `,
+        drinkTitle: "Đồ uống",
+        drinkNote: "Có thể mở từng nhóm đồ uống để xem.",
+        drinkNotice: "Có thể cần kiểm tra giấy tờ khi gọi đồ uống có cồn.",
+        footerTitle: "Nhà hàng hải sản Soorim",
+        footerItems: [
+          "Đây là thực đơn của nhà hàng Soorim tại Haeundae.",
+          "Hình ảnh chỉ mang tính tham khảo. Món thực tế có thể thay đổi theo mùa, nguyên liệu và số lượng khách.",
+          "Tất cả set món cần gọi từ 2 người trở lên.",
+          "Hải sản thêm và món thêm không thể gọi riêng.",
+          "Nếu không ăn đồ sống, chúng tôi gợi ý canh trong, cá chiên sốt chua ngọt, thịt heo chiên, tôm chiên hoặc sò điệp hấp.",
+          "Rất mong mỗi khách gọi ít nhất một món."
+        ]
+      },
+
+      fil: {
+        orderTitle: "Bago Umorder",
+        orderNote: "Paki-check muna bago pumili ng menu.",
+        orderBox: `
+          Kung hindi kayo kumakain ng raw food, inirerekomenda namin ang <strong>fresh rockfish spicy stew / clear soup</strong>, <strong>fried rockfish with sweet & sour sauce</strong>, o <strong>kids pork cutlet set</strong>.<br><br>
+          May ilang menu na may raw fish, live octopus, o raw seafood. Ang live octopus ay maaaring gumalaw pa sa plato. Pakiusap nguyain nang mabagal at mabuti.<br><br>
+          <strong>Ang lahat ng course menu ay minimum 2 tao.</strong> Ang extra seafood at extra menu items ay hindi puwedeng i-order nang hiwalay.<br><br>
+          Ang mga larawan ay reference lamang. Maaaring magbago ang aktwal na pagkain depende sa season, availability ng ingredients, at bilang ng guests.<br><br>
+          <strong>Pakiusap, bawat guest ay umorder ng kahit isang item.</strong>
+        `,
+        drinkTitle: "Drinks",
+        drinkNote: "Maaaring buksan ang drink menu ayon sa category.",
+        drinkNotice: "Maaaring kailanganin ang ID kapag umorder ng alcohol.",
+        footerTitle: "Soorim Seafood Restaurant",
+        footerItems: [
+          "Ito ang menu ng Soorim Seafood Restaurant sa Haeundae.",
+          "Ang mga larawan ay reference lamang. Maaaring magbago ang aktwal na pagkain depende sa season, ingredients, at bilang ng guests.",
+          "Ang lahat ng course menu ay minimum 2 tao.",
+          "Hindi puwedeng i-order nang hiwalay ang extra seafood at extra menu items.",
+          "Kung hindi kayo kumakain ng raw food, inirerekomenda namin ang clear fish soup, fried rockfish, pork cutlet, fried shrimp, o steamed scallops.",
+          "Pakiusap, bawat guest ay umorder ng kahit isang item."
+        ]
+      },
+
+      ru: {
+        orderTitle: "Перед заказом",
+        orderNote: "Пожалуйста, ознакомьтесь перед выбором блюд.",
+        orderBox: `
+          Если вы не едите сырые блюда, рекомендуем <strong>рыбный суп / прозрачный суп</strong>, <strong>жареную рыбу в кисло-сладком соусе</strong> или <strong>детский сет с тонкацу</strong>.<br><br>
+          Некоторые блюда содержат сырую рыбу, живого осьминога или сырые морепродукты. Живой осьминог может двигаться на тарелке. Пожалуйста, ешьте медленно и тщательно пережевывайте.<br><br>
+          <strong>Все сеты заказываются минимум на 2 человек.</strong> Дополнительные морепродукты и дополнительные блюда нельзя заказать отдельно.<br><br>
+          Фотографии приведены для примера. Фактическая подача может отличаться в зависимости от сезона, наличия ингредиентов и количества гостей.<br><br>
+          <strong>Просим каждого гостя заказать хотя бы одно блюдо.</strong>
+        `,
+        drinkTitle: "Напитки",
+        drinkNote: "Меню напитков можно открыть по категориям.",
+        drinkNotice: "При заказе алкоголя может потребоваться удостоверение личности.",
+        footerTitle: "Ресторан морепродуктов Soorim",
+        footerItems: [
+          "Это меню ресторана Soorim в Хэундэ.",
+          "Фотографии приведены для примера. Блюда могут отличаться по сезону, ингредиентам и количеству гостей.",
+          "Все сеты заказываются минимум на 2 человек.",
+          "Дополнительные морепродукты и дополнительные блюда нельзя заказать отдельно.",
+          "Если вы не едите сырое, рекомендуем прозрачный суп, жареную рыбу, тонкацу, жареные креветки или гребешки на пару.",
+          "Просим каждого гостя заказать хотя бы одно блюдо."
+        ]
+      },
+
+      mn: {
+        orderTitle: "Захиалахаас өмнө",
+        orderNote: "Меню сонгохоос өмнө уншина уу.",
+        orderBox: `
+          Хэрэв та түүхий хоол иддэггүй бол <strong>загасны шөл / тунгалаг шөл</strong>, <strong>амтат исгэлэн соустай шарсан загас</strong>, эсвэл <strong>хүүхдийн тонкацу сет</strong>-ийг санал болгож байна.<br><br>
+          Зарим хоол түүхий загас, амьд наймаалж, түүхий далайн хоол агуулна. Амьд наймаалж таваг дээр хөдөлж болзошгүй. Удаан, сайн зажилж иднэ үү.<br><br>
+          <strong>Бүх сет менюг 2 хүнээс дээш захиална.</strong> Нэмэлт далайн хоол болон нэмэлт менюг дангаар захиалах боломжгүй.<br><br>
+          Зураг нь жишээ зураг. Бодит хоол нь улирал, орц, хүний тооноос шалтгаалан өөр байж болно.<br><br>
+          <strong>Нэг хүн нэгээс дээш хоол захиалахыг хүсье.</strong>
+        `,
+        drinkTitle: "Ундаа",
+        drinkNote: "Ундааны менюг төрлөөр нь нээж үзнэ үү.",
+        drinkNotice: "Архи захиалах үед бичиг баримт шалгаж магадгүй.",
+        footerTitle: "Soorim далайн хоолны ресторан",
+        footerItems: [
+          "Энэ бол Haeundae Soorim рестораны меню.",
+          "Зураг нь жишээ зураг. Бодит хоол улирал, орц, хүний тооноос хамааран өөр байж болно.",
+          "Бүх сет менюг 2 хүнээс дээш захиална.",
+          "Нэмэлт далайн хоол болон нэмэлт менюг дангаар захиалах боломжгүй.",
+          "Түүхий хоол иддэггүй бол тунгалаг шөл, шарсан загас, тонкацу, шарсан сам хорхой, жигнэсэн хясаа санал болгож байна.",
+          "Нэг хүн нэгээс дээш хоол захиалахыг хүсье."
+        ]
+      }
+    };
+
+    const drinkGroups = [
+      {
+        open: true,
+        title: {
+          ko: "음료 / 무알콜",
+          en: "Soft Drinks / Non-alcoholic",
+          ja: "ソフトドリンク / ノンアルコール",
+          zh: "饮料 / 无酒精",
+          vi: "Nước uống / Không cồn",
+          ru: "Напитки / Безалкогольное",
+          mn: "Ундаа / Спиртгүй"
+        },
+        items: [
+          { name: { ko: "탄산음료", en: "Soft Drink", ja: "炭酸飲料", zh: "碳酸饮料", vi: "Nước ngọt có gas", ru: "Газированный напиток", mn: "Хийжүүлсэн ундаа" }, price: "2,000" },
+          { name: { ko: "토닉워터", en: "Tonic Water", ja: "トニックウォーター", zh: "汤力水", vi: "Tonic water", ru: "Тоник", mn: "Тоник ус" }, price: "2,000" },
+          { name: { ko: "카스 0.0 무알콜", en: "Cass 0.0 Non-alcoholic Beer", ja: "Cass 0.0 ノンアルコール", zh: "Cass 0.0 无酒精啤酒", vi: "Bia không cồn Cass 0.0", ru: "Cass 0.0 безалкогольное пиво", mn: "Cass 0.0 спиртгүй шар айраг" }, price: "4,000" }
+        ]
+      },
+      {
+        title: {
+          ko: "소주 / 맥주",
+          en: "Soju / Beer",
+          ja: "焼酎 / ビール",
+          zh: "烧酒 / 啤酒",
+          vi: "Soju / Bia",
+          ru: "Соджу / Пиво",
+          mn: "Сожу / Шар айраг"
+        },
+        items: [
+          { name: { ko: "소주: 참이슬 / 진로 / 좋은데이 / 대선 / 새로 / 참이슬C", en: "Soju: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", ja: "焼酎: チャミスル / ジンロ / ジョウンデイ / デソン / セロ / チャミスルC", zh: "烧酒: 真露 / Jinro / Good Day / Daesun / Saero / Chamisul C", vi: "Soju: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", ru: "Соджу: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", mn: "Сожу: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C" }, price: "5,000" },
+          { name: { ko: "맥주: 카스 / 테라 / 크러시 / 켈리", en: "Beer: Cass / Terra / Krush / Kelly", ja: "ビール: Cass / Terra / Krush / Kelly", zh: "啤酒: Cass / Terra / Krush / Kelly", vi: "Bia: Cass / Terra / Krush / Kelly", ru: "Пиво: Cass / Terra / Krush / Kelly", mn: "Шар айраг: Cass / Terra / Krush / Kelly" }, price: "5,000" }
+        ]
+      },
+      {
+        title: {
+          ko: "전통주 / 기타 주류",
+          en: "Korean Liquor / Other Alcohol",
+          ja: "韓国酒 / その他",
+          zh: "韩国酒 / 其他酒类",
+          vi: "Rượu Hàn / Rượu khác",
+          ru: "Корейский алкоголь / Другое",
+          mn: "Солонгос архи / Бусад"
+        },
+        items: [
+          { name: { ko: "화요 25도", en: "Hwayo 25%", ja: "火尧 25度", zh: "火尧 25度", vi: "Hwayo 25 độ", ru: "Hwayo 25%", mn: "Hwayo 25%" }, price: "25,000" },
+          { name: { ko: "화요 41도", en: "Hwayo 41%", ja: "火尧 41度", zh: "火尧 41度", vi: "Hwayo 41 độ", ru: "Hwayo 41%", mn: "Hwayo 41%" }, price: "40,000" },
+          { name: { ko: "일품진로", en: "Ilpoom Jinro", ja: "一品眞露", zh: "一品真露", vi: "Ilpoom Jinro", ru: "Ilpoom Jinro", mn: "Ilpoom Jinro" }, price: "25,000" },
+          { name: { ko: "청하 / 별빛청하", en: "Cheongha / Starlight Cheongha", ja: "清河 / 星光清河", zh: "清河 / 星光清河", vi: "Cheongha / Starlight Cheongha", ru: "Cheongha / Starlight Cheongha", mn: "Cheongha / Starlight Cheongha" }, price: "6,000" },
+          { name: { ko: "백세주", en: "Baekseju", ja: "百歳酒", zh: "百岁酒", vi: "Baekseju", ru: "Baekseju", mn: "Baekseju" }, price: "8,000" },
+          { name: { ko: "막걸리", en: "Makgeolli", ja: "マッコリ", zh: "马格利米酒", vi: "Makgeolli", ru: "Макколи", mn: "Макколи" }, price: "5,000" },
+          { name: { ko: "보해복분자", en: "Bokbunja Raspberry Wine", ja: "覆盆子酒", zh: "覆盆子酒", vi: "Rượu phúc bồn tử", ru: "Ежевичное вино Bokbunja", mn: "Бокбунжа дарс" }, price: "18,000" }
+        ]
+      },
+      {
+        title: {
+          ko: "사케",
+          en: "Sake",
+          ja: "日本酒",
+          zh: "清酒",
+          vi: "Rượu sake",
+          ru: "Саке",
+          mn: "Сакэ"
+        },
+        items: [
+          { name: { ko: "간바레오또상", en: "Ganbare Otosan", ja: "がんばれお父さん", zh: "Ganbare Otosan", vi: "Ganbare Otosan", ru: "Ganbare Otosan", mn: "Ganbare Otosan" }, price: "35,000" },
+          { name: { ko: "하쿠츠루마루", en: "Hakutsuru Maru", ja: "白鶴まる", zh: "白鹤丸", vi: "Hakutsuru Maru", ru: "Hakutsuru Maru", mn: "Hakutsuru Maru" }, price: "35,000" },
+          { name: { ko: "라쿠엔유즈슈", en: "Rakuen Yuzu-shu", ja: "楽園ゆず酒", zh: "乐园柚子酒", vi: "Rakuen Yuzu-shu", ru: "Rakuen Yuzu-shu", mn: "Rakuen Yuzu-shu" }, price: "35,000" },
+          { name: { ko: "준마이다이긴조", en: "Junmai Daiginjo", ja: "純米大吟醸", zh: "纯米大吟酿", vi: "Junmai Daiginjo", ru: "Junmai Daiginjo", mn: "Junmai Daiginjo" }, price: "80,000" },
+          { name: { ko: "닷사이39", en: "Dassai 39", ja: "獺祭39", zh: "獭祭39", vi: "Dassai 39", ru: "Dassai 39", mn: "Dassai 39" }, price: "130,000" }
+        ]
+      }
+    ];
+
+    function getInfoText(value, lang) {
+      return getAnyText(value, lang);
+    }
+
+    function renderInfoSections(lang) {
+      const text = getLanguageBlock(infoTexts, lang);
+
+      const orderTitleEl = document.getElementById("order-guide-title-text");
+      const orderNoteEl = document.getElementById("order-guide-note-text");
+      const orderBoxEl = document.getElementById("order-guide-box-text");
+
+      if (orderTitleEl) orderTitleEl.textContent = text.orderTitle;
+      if (orderNoteEl) orderNoteEl.textContent = text.orderNote;
+      if (orderBoxEl) orderBoxEl.innerHTML = text.orderBox;
+
+      const drinkTitleEl = document.getElementById("drink-title-text");
+      const drinkNoteEl = document.getElementById("drink-note-text");
+      const drinkNoticeEl = document.getElementById("drink-notice-text");
+      const drinkListEl = document.getElementById("drink-list");
+
+      if (drinkTitleEl) drinkTitleEl.textContent = text.drinkTitle;
+      if (drinkNoteEl) drinkNoteEl.textContent = text.drinkNote;
+      if (drinkNoticeEl) drinkNoticeEl.textContent = text.drinkNotice;
+
+      if (drinkListEl) {
+        drinkListEl.innerHTML = drinkGroups.map((group) => {
+          const items = group.items.map((item) => {
+            return `
+              <div class="drink-group">
+                <h3 class="drink-title">${getInfoText(item.name, lang)}</h3>
+                <p class="drink-text"><strong>${item.price} KRW</strong></p>
+              </div>
+            `;
+          }).join("");
+
+          return `
+            <details ${group.open ? "open" : ""}>
+              <summary>${getInfoText(group.title, lang)}</summary>
+              <div class="details-content">
+                ${items}
+              </div>
+            </details>
+          `;
+        }).join("");
+      }
+
+      const footerTitleEl = document.getElementById("footer-title-text");
+      const footerListEl = document.getElementById("footer-list-text");
+
+      if (footerTitleEl) footerTitleEl.textContent = text.footerTitle;
+      if (footerListEl) {
+        footerListEl.innerHTML = text.footerItems.map((item) => {
+          return `<li>${item}</li>`;
+        }).join("");
+      }
+    }
+
+    const googleReviewUrl = "https://www.google.com/search?sca_esv=09ded882b0027700&si=AL3DRZFIhG6pAqfNLal55wUTwygCG0fClF3UxiOmgw9Hq7nbWa6Qk-weUi5uM4sXlTfnFATiccFpqMTFxpkCaUH5tWF-wvfwnLkcdv9ZumG39xo0EgSlZRWiE5j0-sHPe2udCrgx0uZv&q=%EC%88%98%EB%A6%BC%ED%9A%9F%EC%A7%91+%EB%A6%AC%EB%B7%B0&sa=X&ved=2ahUKEwi4x7KuiZ-UAxXbtVYBHfZdNDMQ0bkNegQIIhAH&biw=1920&bih=911&dpr=1";
+
+    const naverReviewUrl = "https://m.place.naver.com/restaurant/16547341/review/visitor";
+
+    const modalTexts = {
+      ko: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "리뷰 이벤트",
+        eventDesc: "참여하실 리뷰 이벤트를 선택해 주세요.",
+
+        naverTitle: "네이버 영수증 리뷰",
+        naverShort: "영수증 리뷰 이벤트는 추후 준비 예정입니다.",
+        naverDesc: "네이버 영수증 리뷰 이벤트는 추후 준비 예정입니다.",
+
+        googleTitle: "구글 리뷰 이벤트",
+        googleShort: "사진 리뷰 작성 시 라라스윗 아이스크림 제공",
+        googleLead: "구글 리뷰를 남겨주시면 라라스윗 아이스크림을 드립니다.",
+
+        stepTitle: "참여 방법",
+        step1: "아래 버튼을 눌러 구글 리뷰 페이지에 접속해 주세요.",
+        step2: "사진을 최소 1장 이상 첨부해 주세요.",
+        step3: "리뷰 작성 후 직원에게 보여주세요.",
+
+        benefitLabel: "리뷰 혜택",
+        benefitText: "라라스윗 아이스크림 1개 (5,000원 상당)",
+        note: "리뷰 1건당 아이스크림 1개가 제공됩니다.",
+
+        buttonText: "구글 리뷰 하러가기",
+        backText: "← 이벤트 선택으로 돌아가기"
+      },
+
+      en: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "Review Event",
+        eventDesc: "Please choose a review event.",
+
+        naverTitle: "Naver Receipt Review",
+        naverShort: "The Naver receipt review event will be prepared later.",
+        naverDesc: "The Naver receipt review event will be prepared later.",
+
+        googleTitle: "Google Review Event",
+        googleShort: "Photo review required · Lalasweet ice cream",
+        googleLead: "Leave us a Google review and receive a Lalasweet ice cream.",
+
+        stepTitle: "How to participate",
+        step1: "Tap the button below to open our Google review page.",
+        step2: "Please attach at least 1 photo.",
+        step3: "After posting your review, show it to our staff.",
+
+        benefitLabel: "Review Benefit",
+        benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
+        note: "1 ice cream is provided for each review.",
+
+        buttonText: "Write a Google Review",
+        backText: "← Back to event selection"
+      },
+
+      ja: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "レビューイベント",
+        eventDesc: "参加するレビューイベントを選んでください。",
+
+        naverTitle: "NAVERレシートレビュー",
+        naverShort: "NAVERレシートレビューイベントは後日準備予定です。",
+        naverDesc: "NAVERレシートレビューイベントは後日準備予定です。",
+
+        googleTitle: "Googleレビューイベント",
+        googleShort: "写真付きレビューでララスイートアイスクリーム提供",
+        googleLead: "Googleレビューを残していただくと、ララスイートアイスクリームを差し上げます。",
+
+        stepTitle: "参加方法",
+        step1: "下のボタンからGoogleレビュー画面を開いてください。",
+        step2: "写真を最低1枚以上添付してください。",
+        step3: "レビュー投稿後、スタッフにお見せください。",
+
+        benefitLabel: "レビュー特典",
+        benefitText: "ララスイートアイスクリーム1個（5,000ウォン相当）",
+        note: "レビュー1件につきアイスクリーム1個を差し上げます。",
+
+        buttonText: "Googleレビューを書く",
+        backText: "← イベント選択に戻る"
+      },
+
+      zh: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "评价活动",
+        eventDesc: "请选择要参加的评价活动。",
+
+        naverTitle: "Naver 小票评价",
+        naverShort: "Naver 小票评价活动稍后准备。",
+        naverDesc: "Naver 小票评价活动稍后准备。",
+
+        googleTitle: "Google 评价活动",
+        googleShort: "上传照片评价即可获得 Lalasweet 冰淇淋",
+        googleLead: "留下 Google 评价即可获赠 Lalasweet 冰淇淋。",
+
+        stepTitle: "参与方法",
+        step1: "请点击下方按钮进入 Google 评价页面。",
+        step2: "请至少上传1张照片。",
+        step3: "评价发布后，请出示给工作人员确认。",
+
+        benefitLabel: "评价福利",
+        benefitText: "Lalasweet 冰淇淋1个（价值5,000韩元）",
+        note: "每条评价赠送1个冰淇淋。",
+
+        buttonText: "去写 Google 评价",
+        backText: "← 返回活动选择"
+      },
+
+      zhTw: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "評論活動",
+        eventDesc: "請選擇要參加的評論活動。",
+
+        naverTitle: "Naver 發票評論",
+        naverShort: "Naver 發票評論活動稍後準備。",
+        naverDesc: "Naver 發票評論活動稍後準備。",
+
+        googleTitle: "Google 評論活動",
+        googleShort: "上傳照片評論即可獲得 Lalasweet 冰淇淋",
+        googleLead: "留下 Google 評論即可獲贈 Lalasweet 冰淇淋。",
+
+        stepTitle: "參與方法",
+        step1: "請點擊下方按鈕進入 Google 評論頁面。",
+        step2: "請至少上傳1張照片。",
+        step3: "評論發布後，請出示給工作人員確認。",
+
+        benefitLabel: "評論福利",
+        benefitText: "Lalasweet 冰淇淋1個（價值5,000韓元）",
+        note: "每則評論贈送1個冰淇淋。",
+
+        buttonText: "去寫 Google 評論",
+        backText: "← 返回活動選擇"
+      },
+
+      vi: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "Sự kiện đánh giá",
+        eventDesc: "Vui lòng chọn sự kiện đánh giá.",
+
+        naverTitle: "Đánh giá hóa đơn Naver",
+        naverShort: "Sự kiện đánh giá hóa đơn Naver sẽ được chuẩn bị sau.",
+        naverDesc: "Sự kiện đánh giá hóa đơn Naver sẽ được chuẩn bị sau.",
+
+        googleTitle: "Sự kiện đánh giá Google",
+        googleShort: "Đánh giá có ảnh · Nhận kem Lalasweet",
+        googleLead: "Để lại đánh giá Google và nhận kem Lalasweet.",
+
+        stepTitle: "Cách tham gia",
+        step1: "Nhấn nút bên dưới để mở trang đánh giá Google.",
+        step2: "Vui lòng đính kèm ít nhất 1 ảnh.",
+        step3: "Sau khi đăng đánh giá, vui lòng cho nhân viên xem.",
+
+        benefitLabel: "Ưu đãi đánh giá",
+        benefitText: "1 kem Lalasweet (trị giá 5,000 KRW)",
+        note: "Mỗi đánh giá được tặng 1 cây kem.",
+
+        buttonText: "Viết đánh giá Google",
+        backText: "← Quay lại chọn sự kiện"
+      },
+
+      fil: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "Review Event",
+        eventDesc: "Pumili ng review event.",
+
+        naverTitle: "Naver Receipt Review",
+        naverShort: "Ihahanda mamaya ang Naver receipt review event.",
+        naverDesc: "Ihahanda mamaya ang Naver receipt review event.",
+
+        googleTitle: "Google Review Event",
+        googleShort: "Photo review · Lalasweet ice cream",
+        googleLead: "Mag-iwan ng Google review at makatanggap ng Lalasweet ice cream.",
+
+        stepTitle: "How to join",
+        step1: "I-tap ang button sa ibaba para buksan ang Google review page.",
+        step2: "Mag-upload ng kahit 1 photo.",
+        step3: "Pagkatapos mag-post ng review, ipakita ito sa staff.",
+
+        benefitLabel: "Review Benefit",
+        benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
+        note: "1 ice cream para sa bawat review.",
+
+        buttonText: "Write a Google Review",
+        backText: "← Back to event selection"
+      },
+
+      ru: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "Акция за отзыв",
+        eventDesc: "Выберите акцию для отзыва.",
+
+        naverTitle: "Отзыв Naver по чеку",
+        naverShort: "Акция для отзывов Naver по чеку будет подготовлена позже.",
+        naverDesc: "Акция для отзывов Naver по чеку будет подготовлена позже.",
+
+        googleTitle: "Акция за отзыв Google",
+        googleShort: "Отзыв с фото · мороженое Lalasweet",
+        googleLead: "Оставьте отзыв в Google и получите мороженое Lalasweet.",
+
+        stepTitle: "Как участвовать",
+        step1: "Нажмите кнопку ниже, чтобы открыть страницу отзыва Google.",
+        step2: "Пожалуйста, прикрепите минимум 1 фото.",
+        step3: "После публикации отзыва покажите его сотруднику.",
+
+        benefitLabel: "Бонус за отзыв",
+        benefitText: "1 мороженое Lalasweet (стоимостью 5,000 KRW)",
+        note: "За 1 отзыв предоставляется 1 мороженое.",
+
+        buttonText: "Написать отзыв Google",
+        backText: "← Вернуться к выбору акции"
+      },
+
+      mn: {
+        eventButton: "EVENT",
+        wifiTitle: "Wi-Fi",
+
+        eventTitle: "Сэтгэгдлийн эвент",
+        eventDesc: "Оролцох сэтгэгдлийн эвентээ сонгоно уу.",
+
+        naverTitle: "Naver баримтын сэтгэгдэл",
+        naverShort: "Naver баримтын сэтгэгдлийн эвент дараа бэлэн болно.",
+        naverDesc: "Naver баримтын сэтгэгдлийн эвент дараа бэлэн болно.",
+
+        googleTitle: "Google сэтгэгдлийн эвент",
+        googleShort: "Зурагтай сэтгэгдэл · Lalasweet зайрмаг",
+        googleLead: "Google сэтгэгдэл үлдээвэл Lalasweet зайрмаг өгнө.",
+
+        stepTitle: "Оролцох арга",
+        step1: "Доорх товчийг дарж Google сэтгэгдлийн хуудсыг нээнэ үү.",
+        step2: "Дор хаяж 1 зураг хавсаргана уу.",
+        step3: "Сэтгэгдэл нийтэлсний дараа ажилтанд үзүүлнэ үү.",
+
+        benefitLabel: "Сэтгэгдлийн урамшуулал",
+        benefitText: "Lalasweet зайрмаг 1ш (5,000 KRW үнэ бүхий)",
+        note: "1 сэтгэгдэлд 1 зайрмаг өгнө.",
+
+        buttonText: "Google сэтгэгдэл бичих",
+        backText: "← Эвент сонголт руу буцах"
+      }
+    };
+
+    const naverEventTexts = {
+      ko: {
+        title: "네이버 영수증 리뷰",
+        short: "네이버 아이디 필요 · 영수증 리뷰 작성 시 라라스윗 아이스크림 제공",
+        lead: "네이버 영수증 리뷰를 남겨주시면 라라스윗 아이스크림을 드립니다.",
+        stepTitle: "참여 방법",
+        step1: "계산 후 영수증을 받거나 직원에게 영수증을 요청해 주세요.",
+        step2: "아래 버튼을 눌러 네이버 리뷰 페이지에 접속해 주세요.",
+        step3: "리뷰 → 리뷰쓰기 → 영수증을 선택해 주세요.",
+        step4: "영수증 사진을 촬영해 인증해 주세요.",
+        step5: "음식 사진을 최소 1장 이상 첨부해 주세요.",
+        step6: "리뷰 작성 후 직원에게 보여주세요.",
+        benefitLabel: "리뷰 혜택",
+        benefitText: "라라스윗 아이스크림 1개 (5,000원 상당)",
+        note: "리뷰 1건당 아이스크림 1개가 제공됩니다. 영수증이 더 필요하신 경우 직원에게 문의해 주세요.",
+        buttonText: "네이버 리뷰 하러가기"
+      },
+
+      en: {
+        title: "Naver Receipt Review",
+        short: "Naver account required · Receipt review · Lalasweet ice cream",
+        lead: "Leave a Naver receipt review and receive a Lalasweet ice cream.",
+        stepTitle: "How to participate",
+        step1: "Please receive your receipt after payment.",
+        step2: "Tap the button below to open our Naver review page.",
+        step3: "Select Review → Write Review → Receipt.",
+        step4: "Take a photo of your receipt to verify it.",
+        step5: "Please attach at least 1 food photo.",
+        step6: "After posting your review, show it to our staff.",
+        benefitLabel: "Review Benefit",
+        benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
+        note: "1 ice cream is provided for each review. If you need an additional receipt, please ask our staff.",
+        buttonText: "Write a Naver Review"
+      },
+
+      ja: {
+        title: "NAVERレシートレビュー",
+        short: "NAVERアカウント必要 · レシートレビューでアイスクリーム提供",
+        lead: "NAVERレシートレビューを残していただくと、ララスイートアイスクリームを差し上げます。",
+        stepTitle: "参加方法",
+        step1: "お会計後、レシートをお受け取りください。",
+        step2: "下のボタンからNAVERレビュー画面を開いてください。",
+        step3: "レビュー → レビューを書く → レシートを選択してください。",
+        step4: "レシートの写真を撮影して認証してください。",
+        step5: "料理写真を最低1枚以上添付してください。",
+        step6: "レビュー投稿後、スタッフにお見せください。",
+        benefitLabel: "レビュー特典",
+        benefitText: "ララスイートアイスクリーム1個（5,000ウォン相当）",
+        note: "レビュー1件につきアイスクリーム1個を差し上げます。追加のレシートが必要な場合はスタッフにお問い合わせください。",
+        buttonText: "NAVERレビューを書く"
+      },
+
+      zh: {
+        title: "Naver 小票评价",
+        short: "需要 Naver 账号 · 完成小票评价即可获得冰淇淋",
+        lead: "留下 Naver 小票评价即可获赠 Lalasweet 冰淇淋。",
+        stepTitle: "参与方法",
+        step1: "结账后请领取小票。",
+        step2: "请点击下方按钮进入 Naver 评价页面。",
+        step3: "选择 评价 → 写评价 → 小票。",
+        step4: "拍摄小票照片进行认证。",
+        step5: "请至少上传1张食物照片。",
+        step6: "评价发布后，请出示给工作人员确认。",
+        benefitLabel: "评价福利",
+        benefitText: "Lalasweet 冰淇淋1个（价值5,000韩元）",
+        note: "每条评价赠送1个冰淇淋。如需更多小票，请咨询工作人员。",
+        buttonText: "去写 Naver 评价"
+      },
+
+      zhTw: {
+        title: "Naver 發票評論",
+        short: "需要 Naver 帳號 · 完成發票評論即可獲得冰淇淋",
+        lead: "留下 Naver 發票評論即可獲贈 Lalasweet 冰淇淋。",
+        stepTitle: "參與方法",
+        step1: "結帳後請領取發票或收據。",
+        step2: "請點擊下方按鈕進入 Naver 評論頁面。",
+        step3: "選擇 評論 → 寫評論 → 發票/收據。",
+        step4: "拍攝發票或收據照片進行認證。",
+        step5: "請至少上傳1張食物照片。",
+        step6: "評論發布後，請出示給工作人員確認。",
+        benefitLabel: "評論福利",
+        benefitText: "Lalasweet 冰淇淋1個（價值5,000韓元）",
+        note: "每則評論贈送1個冰淇淋。如需更多發票或收據，請詢問工作人員。",
+        buttonText: "去寫 Naver 評論"
+      },
+
+      vi: {
+        title: "Đánh giá hóa đơn Naver",
+        short: "Cần tài khoản Naver · Đánh giá hóa đơn · Nhận kem",
+        lead: "Để lại đánh giá hóa đơn Naver và nhận kem Lalasweet.",
+        stepTitle: "Cách tham gia",
+        step1: "Vui lòng nhận hóa đơn sau khi thanh toán.",
+        step2: "Nhấn nút bên dưới để mở trang đánh giá Naver.",
+        step3: "Chọn Đánh giá → Viết đánh giá → Hóa đơn.",
+        step4: "Chụp ảnh hóa đơn để xác nhận.",
+        step5: "Vui lòng đính kèm ít nhất 1 ảnh món ăn.",
+        step6: "Sau khi đăng đánh giá, vui lòng cho nhân viên xem.",
+        benefitLabel: "Ưu đãi đánh giá",
+        benefitText: "1 kem Lalasweet (trị giá 5,000 KRW)",
+        note: "Mỗi đánh giá được tặng 1 cây kem. Nếu cần thêm hóa đơn, vui lòng hỏi nhân viên.",
+        buttonText: "Viết đánh giá Naver"
+      },
+
+      fil: {
+        title: "Naver Receipt Review",
+        short: "Naver account required · Receipt review · Ice cream",
+        lead: "Mag-iwan ng Naver receipt review at makatanggap ng Lalasweet ice cream.",
+        stepTitle: "How to join",
+        step1: "Kunin ang receipt pagkatapos magbayad.",
+        step2: "I-tap ang button sa ibaba para buksan ang Naver review page.",
+        step3: "Piliin ang Review → Write Review → Receipt.",
+        step4: "Kunan ng photo ang receipt para ma-verify.",
+        step5: "Mag-upload ng kahit 1 food photo.",
+        step6: "Pagkatapos mag-post ng review, ipakita ito sa staff.",
+        benefitLabel: "Review Benefit",
+        benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
+        note: "1 ice cream para sa bawat review. Kung kailangan ng dagdag na receipt, magtanong sa staff.",
+        buttonText: "Write a Naver Review"
+      },
+
+      ru: {
+        title: "Отзыв Naver по чеку",
+        short: "Нужен аккаунт Naver · отзыв по чеку · мороженое",
+        lead: "Оставьте отзыв Naver по чеку и получите мороженое Lalasweet.",
+        stepTitle: "Как участвовать",
+        step1: "Пожалуйста, получите чек после оплаты.",
+        step2: "Нажмите кнопку ниже, чтобы открыть страницу отзыва Naver.",
+        step3: "Выберите Отзыв → Написать отзыв → Чек.",
+        step4: "Сфотографируйте чек для подтверждения.",
+        step5: "Пожалуйста, прикрепите минимум 1 фото еды.",
+        step6: "После публикации отзыва покажите его сотруднику.",
+        benefitLabel: "Бонус за отзыв",
+        benefitText: "1 мороженое Lalasweet (стоимостью 5,000 KRW)",
+        note: "За 1 отзыв предоставляется 1 мороженое. Если нужен дополнительный чек, пожалуйста, спросите сотрудника.",
+        buttonText: "Написать отзыв Naver"
+      },
+
+      mn: {
+        title: "Naver баримтын сэтгэгдэл",
+        short: "Naver бүртгэл хэрэгтэй · баримтын сэтгэгдэл · зайрмаг",
+        lead: "Naver баримтын сэтгэгдэл үлдээвэл Lalasweet зайрмаг өгнө.",
+        stepTitle: "Оролцох арга",
+        step1: "Төлбөр хийсний дараа баримтаа авна уу.",
+        step2: "Доорх товчийг дарж Naver сэтгэгдлийн хуудсыг нээнэ үү.",
+        step3: "Review → Write Review → Receipt хэсгийг сонгоно уу.",
+        step4: "Баримтын зургийг авч баталгаажуулна уу.",
+        step5: "Дор хаяж 1 хоолны зураг хавсаргана уу.",
+        step6: "Сэтгэгдэл нийтэлсний дараа ажилтанд үзүүлнэ үү.",
+        benefitLabel: "Сэтгэгдлийн урамшуулал",
+        benefitText: "Lalasweet зайрмаг 1ш (5,000 KRW үнэ бүхий)",
+        note: "1 сэтгэгдэлд 1 зайрмаг өгнө. Нэмэлт баримт хэрэгтэй бол ажилтнаас асууна уу.",
+        buttonText: "Naver сэтгэгдэл бичих"
+      }
+    };
+
+    let currentEventLang = "ko";
+
+    function getCurrentEventText() {
+      return getLanguageBlock(modalTexts, currentEventLang);
+    }
+
+    function showEventChoices() {
+      const text = getCurrentEventText();
+      const naverText = getLanguageBlock(naverEventTexts, currentEventLang);
+
+      const eventTitleEl = document.getElementById("event-modal-title-text");
+      const eventDescEl = document.getElementById("event-modal-desc-text");
+      const eventListEl = document.getElementById("event-list-text");
+
+      if (eventTitleEl) eventTitleEl.textContent = text.eventTitle;
+      if (eventDescEl) eventDescEl.textContent = text.eventDesc;
+
+      if (eventListEl) {
+        eventListEl.innerHTML = `
+          <div class="event-choice-grid">
+            <button class="event-choice-btn" type="button" onclick="showEventDetail('naver')">
+              <span class="event-choice-title">${naverText.title}</span>
+              <span class="event-choice-sub">${naverText.short}</span>
+            </button>
+
+            <button class="event-choice-btn" type="button" onclick="showEventDetail('google')">
+              <span class="event-choice-title">${text.googleTitle}</span>
+              <span class="event-choice-sub">${text.googleShort}</span>
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function showEventDetail(type) {
+      const text = getCurrentEventText();
+
+      const eventTitleEl = document.getElementById("event-modal-title-text");
+      const eventDescEl = document.getElementById("event-modal-desc-text");
+      const eventListEl = document.getElementById("event-list-text");
+
+      if (!eventListEl) return;
+
+      if (type === "naver") {
+        const naverText = getLanguageBlock(naverEventTexts, currentEventLang);
+
+        if (eventTitleEl) eventTitleEl.textContent = naverText.title;
+        if (eventDescEl) eventDescEl.textContent = naverText.lead;
+
+        eventListEl.innerHTML = `
+          <div class="event-item">
+            <strong>${naverText.stepTitle}</strong>
+
+            <ol class="event-steps">
+              <li>${naverText.step1}</li>
+              <li>${naverText.step2}</li>
+              <li>${naverText.step3}</li>
+              <li>${naverText.step4}</li>
+              <li>${naverText.step5}</li>
+              <li>${naverText.step6}</li>
+            </ol>
+
+            <div class="event-gift-box">
+              ${naverText.benefitLabel}: ${naverText.benefitText}
+            </div>
+
+            <div class="event-small-note">
+              ${naverText.note}
+            </div>
+
+            <a class="event-review-btn" href="${naverReviewUrl}" target="_blank" rel="noopener noreferrer">
+              ${naverText.buttonText}
+            </a>
+
+            <button class="event-back-btn" type="button" onclick="showEventChoices()">
+              ${text.backText}
+            </button>
+          </div>
+        `;
+
+        return;
+      }
+
+      if (eventTitleEl) eventTitleEl.textContent = text.googleTitle;
+      if (eventDescEl) eventDescEl.textContent = text.googleLead;
+
+      eventListEl.innerHTML = `
+        <div class="event-item">
+          <strong>${text.stepTitle}</strong>
+
+          <ol class="event-steps">
+            <li>${text.step1}</li>
+            <li>${text.step2}</li>
+            <li>${text.step3}</li>
+          </ol>
+
+          <div class="event-gift-box">
+            ${text.benefitLabel}: ${text.benefitText}
+          </div>
+
+          <div class="event-small-note">
+            ${text.note}
+          </div>
+
+          <a class="event-review-btn" href="${googleReviewUrl}" target="_blank" rel="noopener noreferrer">
+            ${text.buttonText}
+          </a>
+
+          <button class="event-back-btn" type="button" onclick="showEventChoices()">
+            ${text.backText}
+          </button>
+        </div>
+      `;
+    }
+
+    function renderModals(lang) {
+      currentEventLang = lang;
+
+      const text = getCurrentEventText();
+
+      const eventBtnEl = document.getElementById("event-btn-text");
+      const wifiTitleEl = document.getElementById("wifi-modal-title-text");
+
+      if (eventBtnEl) eventBtnEl.textContent = text.eventButton;
+      if (wifiTitleEl) wifiTitleEl.textContent = text.wifiTitle;
+
+      showEventChoices();
+    }
+
+    const aboutTexts = {
+      ko: {
+        button: "About 수림",
+        title: "수림횟집 소개",
+        lead: "해운대 수림횟집은 같은 자리에서 14년째 운영을 이어오고 있는 해운대 대표 횟집입니다.",
+        items: [
+          "매일 제공받는 신선한 생선과 해산물만을 사용합니다.",
+          "많은 고객님들의 사랑 덕분에 재료 회전율이 빠르며, 매일 신선한 재료를 사용할 수 있도록 노력하고 있습니다.",
+          "어떤 횟감이라도 크고 좋은 원물을 사용하기 위해 항상 최선을 다하고 있습니다.",
+          "바다향 가득한 해산물이 기본 제공되어 활어회와 함께 즐기실 수 있습니다.",
+          "약 170명까지 수용 가능한 대형 매장으로, 홀과 개별룸이 마련되어 있어 단체 회식, 가족 모임, 여행 식사에 좋습니다.",
+          "수림횟집의 물회는 직접 개발한 수제 소스로 만듭니다. 다양한 과일을 직접 갈아 설탕 사용량을 줄이고, 충분한 숙성으로 조화로운 맛을 냅니다.",
+          "별미인 우럭탕수는 활어 상태의 우럭을 통째로 튀겨 부드러운 식감을 살리고, 직접 만든 탕수 소스로 풍미를 더했습니다."
+        ],
+        quote: "저희는 ‘한 끼 식사가 여행의 기억을 좌우한다’고 생각합니다. 해운대를 찾은 고객님의 소중한 시간이 맛있는 음식과 친절한 서비스로 좋은 추억이 될 수 있도록 항상 고민하고 노력하겠습니다."
+      },
+
+      en: {
+        button: "About Soorim",
+        title: "About Soorim",
+        lead: "Soorim Seafood Restaurant has been serving guests in the same place in Haeundae for 14 years.",
+        items: [
+          "We use fresh fish and seafood delivered every day.",
+          "Thanks to our guests, ingredients turn over quickly, which helps us serve fresher seafood every day.",
+          "We always try to use large, high-quality fish for the best sashimi experience.",
+          "Seafood full of ocean flavor is served together with our live fish sashimi.",
+          "Our spacious restaurant can welcome about 170 guests, with both hall seating and private rooms for groups, families, and travelers.",
+          "Our signature mulhoe is made with our own handmade sauce. We blend various fruits, reduce sugar, and age the sauce for a balanced taste.",
+          "Our special fried rockfish is made by frying a whole fresh rockfish, then serving it with our house-made sweet and sour sauce."
+        ],
+        quote: "We believe that one good meal can shape the memory of a trip. We will keep working hard so your time in Haeundae becomes a warm and delicious memory."
+      },
+
+      ja: {
+        button: "About Soorim",
+        title: "海雲台スリム海鮮料理店について",
+        lead: "海雲台スリム海鮮料理店は、同じ場所で14年間営業を続けている海雲台の代表的な刺身店です。",
+        items: [
+          "毎日仕入れる新鮮な魚と海鮮だけを使用しています。",
+          "多くのお客様にご来店いただくことで食材の回転が早く、毎日新鮮な食材を使えるよう努めています。",
+          "どの魚も大きく良い原物を使うため、常に最善を尽くしています。",
+          "海の香り豊かな海鮮を活魚刺身と一緒にお楽しみいただけます。",
+          "約170名まで利用できる大型店舗で、ホール席と個室があり、団体会食や家族の集まりにも適しています。",
+          "シグネチャーメニューのムルフェ（冷たい辛味刺身スープ）は、自家製ソースで作ります。さまざまな果物を直接すり、砂糖を控え、熟成させて調和のある味に仕上げています。",
+          "名物のウロク甘酢あんかけは、活魚のウロクを丸ごと揚げ、自家製ソースで風味を引き立てています。"
+        ],
+        quote: "私たちは「一食の食事が旅の記憶を左右する」と考えています。海雲台での大切な時間が、おいしい料理と親切なサービスで良い思い出になるよう努力してまいります。"
+      },
+
+      zh: {
+        button: "About Soorim",
+        title: "关于水林",
+        lead: "海云台水林生鱼片店在同一地点经营已有14年，是海云台具有代表性的生鱼片餐厅。",
+        items: [
+          "我们每天使用新鲜送达的鱼和海鲜。",
+          "因为顾客的喜爱，食材周转很快，这也是我们能每天使用新鲜食材的重要原因。",
+          "无论是哪种鱼，我们都努力选用品质好、规格大的原料。",
+          "充满海洋风味的海鲜会与活鱼生鱼片一起提供。",
+          "本店最多可容纳约170人，设有大厅和包间，适合团体聚餐、家庭聚会和旅行用餐。",
+          "水林的招牌水会使用自家研发的手工酱汁。我们直接研磨多种水果，减少糖的使用，并通过充分熟成做出协调的味道。",
+          "特色糖醋韩式岩鱼使用活鱼整条油炸，口感柔软，并搭配自制糖醋酱提升风味。"
+        ],
+        quote: "我们相信，一顿饭会影响一次旅行的记忆。希望来到海云台的客人，能通过美味的食物和亲切的服务留下美好的回忆。"
+      },
+
+      vi: {
+        button: "About Soorim",
+        title: "Giới thiệu Soorim",
+        lead: "Nhà hàng hải sản Soorim đã hoạt động tại cùng một địa điểm ở Haeundae trong 14 năm.",
+        items: [
+          "Chúng tôi chỉ sử dụng cá và hải sản tươi được giao mỗi ngày.",
+          "Nhờ sự yêu mến của khách hàng, nguyên liệu được luân chuyển nhanh, giúp chúng tôi phục vụ hải sản tươi mỗi ngày.",
+          "Chúng tôi luôn cố gắng chọn nguyên liệu cá lớn và chất lượng tốt.",
+          "Các món hải sản mang đậm hương vị biển được phục vụ cùng sashimi cá sống.",
+          "Nhà hàng có sức chứa khoảng 170 khách, có khu vực sảnh và phòng riêng, phù hợp cho đoàn, gia đình và khách du lịch.",
+          "Món mulhoe đặc trưng của Soorim được làm bằng sốt thủ công do chúng tôi phát triển. Chúng tôi xay nhiều loại trái cây, giảm lượng đường và ủ sốt để tạo vị hài hòa.",
+          "Món cá rockfish chiên sốt chua ngọt được làm từ cá tươi nguyên con, chiên giòn và dùng cùng sốt tự làm."
+        ],
+        quote: "Chúng tôi tin rằng một bữa ăn ngon có thể quyết định ký ức của một chuyến đi. Chúng tôi luôn cố gắng để thời gian của quý khách tại Haeundae trở thành một kỷ niệm đẹp."
+      },
+
+      fil: {
+        button: "About Soorim",
+        title: "About Soorim",
+        lead: "Ang Soorim Seafood Restaurant ay nagsisilbi sa parehong lugar sa Haeundae sa loob ng 14 na taon.",
+        items: [
+          "Gumagamit kami ng sariwang isda at seafood na dumarating araw-araw.",
+          "Dahil sa pagmamahal ng aming mga customer, mabilis ang ikot ng ingredients kaya mas sariwa ang naihahain namin araw-araw.",
+          "Palagi kaming nagsisikap gumamit ng malalaki at de-kalidad na isda para sa pinakamagandang sashimi experience.",
+          "Ang seafood na puno ng lasa ng dagat ay inihahain kasama ng live fish sashimi.",
+          "Maluwag ang restaurant at kayang tumanggap ng humigit-kumulang 170 guests, may hall seating at private rooms para sa groups, families, at travelers.",
+          "Ang signature mulhoe ng Soorim ay gawa sa sariling handmade sauce. Iba’t ibang prutas ang ginagamit namin, binabawasan ang asukal, at pinapahinog ang sauce para maging balanced ang lasa.",
+          "Ang special fried rockfish ay gawa sa buong sariwang rockfish at inihahain kasama ng house-made sweet and sour sauce."
+        ],
+        quote: "Naniniwala kami na ang isang masarap na pagkain ay maaaring maging mahalagang alaala ng isang biyahe. Patuloy kaming magsisikap para maging masarap at mainit ang alaala ninyo sa Haeundae."
+      },
+
+      ru: {
+        button: "About Soorim",
+        title: "О ресторане Soorim",
+        lead: "Ресторан морепродуктов Soorim работает на одном и том же месте в Хэундэ уже 14 лет.",
+        items: [
+          "Мы используем только свежую рыбу и морепродукты, которые получаем каждый день.",
+          "Благодаря нашим гостям продукты быстро обновляются, поэтому мы можем ежедневно подавать более свежие ингредиенты.",
+          "Мы стараемся использовать крупную и качественную рыбу для лучшего сашими.",
+          "Морепродукты с ярким морским вкусом подаются вместе с живой рыбой для сашими.",
+          "Наш просторный ресторан вмещает около 170 гостей, есть зал и отдельные комнаты для групп, семей и путешественников.",
+          "Наш фирменный мульхве готовится с домашним соусом. Мы измельчаем разные фрукты, уменьшаем количество сахара и выдерживаем соус для сбалансированного вкуса.",
+          "Фирменная жареная рыба готовится из цельной свежей рыбы и подается с нашим кисло-сладким соусом."
+        ],
+        quote: "Мы верим, что один хороший прием пищи может повлиять на память о путешествии. Мы стараемся, чтобы ваше время в Хэундэ осталось теплым и вкусным воспоминанием."
+      },
+
+      mn: {
+        button: "About Soorim",
+        title: "Soorim рестораны тухай",
+        lead: "Soorim далайн хоолны ресторан нь Haeundae-д нэг байршилдаа 14 жил үйл ажиллагаа явуулж байна.",
+        items: [
+          "Бид өдөр бүр ирдэг шинэ загас, далайн хоолыг ашигладаг.",
+          "Зочдын хайр, дэмжлэгийн ачаар орцын эргэлт хурдан байдаг тул өдөр бүр шинэ орц хэрэглэх боломжтой.",
+          "Сашимид зориулж том, чанартай загас ашиглахыг үргэлж хичээдэг.",
+          "Далайн үнэртэй шинэ далайн хоолыг амьд загасны сашимитай хамт амтлах боломжтой.",
+          "Манай ресторан ойролцоогоор 170 хүн хүлээн авах боломжтой, заал болон тусдаа өрөөнүүдтэй тул бүлэг, гэр бүл, аялагчдад тохиромжтой.",
+          "Soorim-ийн онцлох мулхве нь өөрсдийн хийсэн соустай. Бид олон төрлийн жимсийг нунтаглаж, элсэн чихрийн хэмжээг багасгаж, соусыг амраан тэнцвэртэй амт гаргадаг.",
+          "Онцлох шарсан загас нь шинэ загасыг бүхлээр нь шарж, өөрсдийн амтат исгэлэн соустай өгдөг."
+        ],
+        quote: "Нэг удаагийн хоол аяллын дурсамжийг өөрчилж чадна гэж бид итгэдэг. Haeundae дахь таны цаг хугацаа амттай хоол, найрсаг үйлчилгээгээр сайхан дурсамж болоосой гэж бид үргэлж хичээнэ."
+      }
+    };
+
+    function renderAboutModal(lang) {
+      const text = getLanguageBlock(aboutTexts, lang);
+
+      const philosophyTitles = {
+        ko: "운영 철학",
+        en: "Our Philosophy",
+        ja: "運営哲学",
+        zh: "经营理念",
+        vi: "Triết lý vận hành",
+        fil: "Our Philosophy",
+        ru: "Наша философия",
+        mn: "Үйл ажиллагааны философи"
+      };
+
+      const btnEl = document.getElementById("about-soorim-btn-text");
+      const titleEl = document.getElementById("about-modal-title-text");
+      const philosophyTitleEl = document.getElementById("about-philosophy-title-text");
+      const leadEl = document.getElementById("about-lead-text");
+      const listEl = document.getElementById("about-list-text");
+      const quoteEl = document.getElementById("about-quote-text");
+
+      if (btnEl) btnEl.textContent = text.button;
+      if (titleEl) titleEl.textContent = text.title;
+      if (philosophyTitleEl) philosophyTitleEl.textContent = philosophyTitles[lang] || philosophyTitles.ko;
+      if (leadEl) leadEl.textContent = text.lead;
+      if (listEl) {
+        listEl.innerHTML = text.items.map((item) => {
+          return `<li>${item}</li>`;
+        }).join("");
+      }
+      if (quoteEl) quoteEl.textContent = text.quote;
+    }
+
+    function toTraditionalChinese(text) {
+      if (!text) return text;
+
+      const map = {
+        "简": "簡", "体": "體", "汉": "漢", "语": "語",
+        "点": "點", "单": "單", "导": "導", "门": "門",
+        "云": "雲", "国": "國", "韩": "韓", "馆": "館",
+        "鱼": "魚", "鲜": "鮮", "汤": "湯", "饮": "飲",
+        "饭": "飯", "虾": "蝦", "贝": "貝", "鲍": "鮑",
+        "鲷": "鯛", "鲽": "鰈", "鳕": "鱈", "鲻": "鯔",
+        "鲈": "鱸", "酱": "醬", "鸡": "雞", "麦": "麥",
+        "面": "麵", "条": "條", "烧": "燒", "热": "熱",
+        "气": "氣", "这": "這", "个": "個", "为": "為",
+        "与": "與", "时": "時", "后": "後", "发": "發",
+        "现": "現", "处": "處", "动": "動", "请": "請",
+        "实": "實", "际": "際", "会": "會", "变": "變",
+        "应": "應", "图": "圖", "仅": "僅", "参": "參",
+        "数": "數", "须": "須", "价": "價", "开": "開",
+        "类": "類", "证": "證", "评": "評", "谢": "謝",
+        "礼": "禮", "准": "準", "备": "備", "详": "詳",
+        "欢": "歡", "经": "經", "营": "營", "历": "歷",
+        "统": "統", "丰": "豐", "尝": "嘗", "亲": "親",
+        "间": "間", "进": "進", "节": "節", "级": "級",
+        "综": "綜", "种": "種", "样": "樣", "较": "較",
+        "软": "軟", "转": "轉", "带": "帶", "选": "選",
+        "优": "優", "质": "質", "爱": "愛", "忆": "憶",
+        "调": "調", "制": "製", "额": "額", "产": "產",
+        "岁": "歲", "项": "項", "众": "眾", "龙": "龍",
+        "乐": "樂", "双": "雙", "称": "稱", "练": "練",
+        "钟": "鐘", "复": "複", "里": "裡"
+      };
+
+      let converted = text.replace(/[简体汉语点单导门云国韩馆鱼鲜汤饮饭虾贝鲍鲷鲽鳕鲻鲈酱鸡麦面条烧热气这个为与时后发现处动请实际会变应图仅参数须价开类证评谢礼准备详欢经营历统丰尝亲间进节级综种样较软转带选优质爱忆调制额产岁项众龙乐双称练钟复里]/g, (char) => {
+        return map[char] || char;
+      });
+
+      const phraseMap = [
+        ["水林生魚片店", "水林海鮮料理店"],
+        ["海雲台水林海鮮料理店菜單", "海雲台水林海鮮料理店菜單"],
+        ["韓式岩魚", "韓式岩魚"],
+        ["鮮韓式岩魚", "鮮韓式岩魚"],
+        ["糖醋韓式岩魚", "糖醋韓式岩魚"],
+        ["清湯", "清魚湯"],
+        ["韓式冷辣生魚湯", "韓式冰涼辣味生魚湯"],
+        ["小票評價", "發票評論"],
+        ["評論活動", "評論活動"],
+        ["點餐指南", "點餐說明"],
+        ["午餐特選", "午餐特餐"]
+      ];
+
+      phraseMap.forEach(([from, to]) => {
+        converted = converted.split(from).join(to);
+      });
+
+      return converted;
+    }
+
+    function convertVisibleTextToTraditionalChinese() {
+      const roots = [
+        document.querySelector(".page"),
+        document.getElementById("wifi-modal"),
+        document.getElementById("event-modal"),
+        document.getElementById("about-modal")
+      ].filter(Boolean);
+
+      roots.forEach((root) => {
+        const walker = document.createTreeWalker(
+          root,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode(node) {
+              const parent = node.parentElement;
+
+              if (!parent) return NodeFilter.FILTER_REJECT;
+              if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+              if (parent.closest(".language-bar")) return NodeFilter.FILTER_REJECT;
+
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+
+        const textNodes = [];
+
+        while (walker.nextNode()) {
+          textNodes.push(walker.currentNode);
+        }
+
+        textNodes.forEach((node) => {
+          node.nodeValue = toTraditionalChinese(node.nodeValue);
+        });
+      });
+    }
+
+    function applyLanguage(lang) {
+      const renderLang = lang === "zhTw" ? "zh" : lang;
+      const selectedTexts = translations[renderLang] || translations.ko;
+
+      renderFeatured(renderLang);
+      renderCourse(renderLang);
+      renderSashimi(renderLang);
+      renderMeal(renderLang);
+      renderLunchKids(renderLang);
+      renderExtraSections(renderLang);
+      renderInfoSections(renderLang);
+      renderModals(renderLang);
+      renderAboutModal(renderLang);
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+
+        if (selectedTexts[key]) {
+          element.textContent = selectedTexts[key];
+        }
+      });
+
+      document.querySelectorAll(".lang-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === lang);
+      });
+
+      if (lang === "zhTw") {
+        convertVisibleTextToTraditionalChinese();
+      }
+
+      document.documentElement.lang = lang === "zhTw" ? "zh-Hant" : (lang === "fil" ? "fil" : renderLang);
+      localStorage.setItem("soorim-menu-lang", lang);
+    }
+
+    document.querySelectorAll(".lang-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        applyLanguage(button.dataset.lang);
+      });
+    });
+
+    function enableDragScroll(selector) {
+      const scrollAreas = document.querySelectorAll(selector);
+
+      scrollAreas.forEach((area) => {
+        let isDown = false;
+        let startX = 0;
+        let startScrollLeft = 0;
+        let moved = false;
+
+        area.dataset.dragMoved = "0";
+
+        area.addEventListener("dragstart", (event) => {
+          event.preventDefault();
+        });
+
+        area.addEventListener("mousedown", (event) => {
+          if (event.button !== 0) return;
+
+          isDown = true;
+          moved = false;
+          startX = event.pageX;
+          startScrollLeft = area.scrollLeft;
+          area.dataset.dragMoved = "0";
+          area.classList.add("dragging");
+        });
+
+        window.addEventListener("mousemove", (event) => {
+          if (!isDown) return;
+
+          const moveX = event.pageX - startX;
+
+          if (Math.abs(moveX) > 4) {
+            moved = true;
+            area.dataset.dragMoved = "1";
+            area.scrollLeft = startScrollLeft - moveX;
+            event.preventDefault();
+          }
+        });
+
+        window.addEventListener("mouseup", () => {
+          if (!isDown) return;
+
+          isDown = false;
+          area.classList.remove("dragging");
+
+          if (moved) {
+            setTimeout(() => {
+              area.dataset.dragMoved = "0";
+            }, 180);
+          } else {
+            area.dataset.dragMoved = "0";
+          }
+        });
+
+        area.addEventListener("click", (event) => {
+          if (area.dataset.dragMoved === "1") {
+            event.preventDefault();
+            event.stopPropagation();
+            area.dataset.dragMoved = "0";
+          }
+        }, true);
+      });
+    }
+
+    enableDragScroll(".language-bar");
+    enableDragScroll(".quick-nav");
+
+    const savedLang = localStorage.getItem("soorim-menu-lang") || "ko";
+    applyLanguage(savedLang);
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function openInfoModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add("show");
+      }
+    }
+
+    function closeInfoModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove("show");
+      }
+    }
+
+    function closeModalByBg(event, modalId) {
+      if (event.target.id === modalId) {
+        closeInfoModal(modalId);
+      }
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        document.querySelectorAll(".info-modal.show").forEach((modal) => {
+          modal.classList.remove("show");
+        });
+      }
+    });
+
+    const quickNavEl = document.querySelector(".quick-nav");
+    const quickLinks = Array.from(document.querySelectorAll(".quick-link"));
+
+    const navItems = quickLinks
+      .map((link) => {
+        const targetId = link.getAttribute("href").replace("#", "");
+        const section = document.getElementById(targetId);
+
+        return {
+          link,
+          section,
+          id: targetId
+        };
+      })
+      .filter((item) => item.section);
+
+    let currentActiveSectionId = "";
+
+    function centerQuickNavLink(activeLink) {
+      if (!quickNavEl || !activeLink) return;
+      if (quickNavEl.classList.contains("dragging")) return;
+
+      const navRect = quickNavEl.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+
+      const targetLeft =
+        quickNavEl.scrollLeft +
+        (linkRect.left - navRect.left) -
+        (quickNavEl.clientWidth / 2) +
+        (activeLink.clientWidth / 2);
+
+      quickNavEl.scrollTo({
+        left: targetLeft,
+        behavior: "smooth"
+      });
+    }
+
+    function setActiveQuickLink(sectionId, shouldCenter = true) {
+      currentActiveSectionId = sectionId;
+
+      quickLinks.forEach((link) => {
+        const linkTargetId = link.getAttribute("href").replace("#", "");
+        link.classList.toggle("active", linkTargetId === sectionId);
+      });
+
+      const activeLink = quickLinks.find((link) => {
+        return link.getAttribute("href").replace("#", "") === sectionId;
+      });
+
+      if (shouldCenter) {
+        centerQuickNavLink(activeLink);
+      }
+    }
+
+    function updateActiveQuickLink() {
+      const checkLine = window.scrollY + 120;
+      let currentItem = navItems[0];
+
+      navItems.forEach((item) => {
+        if (item.section.offsetTop <= checkLine) {
+          currentItem = item;
+        }
+      });
+
+      if (currentItem && currentItem.id !== currentActiveSectionId) {
+        setActiveQuickLink(currentItem.id, true);
+      }
+    }
+
+    window.addEventListener("scroll", updateActiveQuickLink, { passive: true });
+    window.addEventListener("load", updateActiveQuickLink);
+    updateActiveQuickLink();
+
+    quickLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        if (quickNavEl && quickNavEl.dataset.dragMoved === "1") {
+          quickNavEl.dataset.dragMoved = "0";
+          return;
+        }
+
+        const targetId = link.getAttribute("href").replace("#", "");
+        const targetSection = document.getElementById(targetId);
+
+        if (!targetSection) return;
+
+        const navHeight = document.querySelector(".quick-nav-wrap")?.offsetHeight || 0;
+        const targetTop =
+          targetSection.getBoundingClientRect().top +
+          window.pageYOffset -
+          navHeight -
+          8;
+
+        window.scrollTo({
+          top: targetTop,
+          behavior: "smooth"
+        });
+
+        history.replaceState(null, "", `#${targetId}`);
+        setActiveQuickLink(targetId, true);
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      const photo = event.target.closest(".main-photo, .featured-card img");
+
+      if (photo) {
+        photo.classList.toggle("photo-expanded");
+      }
+    });
+  </script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("./service-worker.js", { scope: "./" })
+        .catch((error) => {
+          console.warn("Menu service worker registration failed:", error);
+        });
+    });
+  }
+</script>
+</body>
+</html>
