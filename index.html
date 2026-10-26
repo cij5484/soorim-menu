@@ -781,65 +781,6 @@
       line-height: 1.4;
     }
 
-    /* 담기 버튼 */
-
-    .add-btn {
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      border: 1px solid #cfe0d6;
-      background: var(--brand-soft);
-      color: var(--brand);
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transition: transform 0.12s ease, background 0.12s ease;
-    }
-
-    .add-btn:active {
-      transform: scale(0.92);
-    }
-
-    .add-btn[data-count]:not([data-count="0"]) {
-      background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .add-btn[data-count]:not([data-count="0"])::before {
-      content: attr(data-count);
-    }
-
-    .add-btn[data-count]:not([data-count="0"]) span {
-      display: none;
-    }
-
-    .price-action {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .single-price-row {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .single-price-row .menu-price {
-      margin-right: auto;
-    }
-
     /* ---------- 주류 ---------- */
 
     details {
@@ -1048,65 +989,6 @@
       transform: translateY(0);
     }
 
-    body.has-cart .top-button {
-      bottom: calc(84px + env(safe-area-inset-bottom));
-    }
-
-    .cart-bar {
-      position: fixed;
-      left: 50%;
-      bottom: calc(14px + env(safe-area-inset-bottom));
-      z-index: 45;
-      width: min(calc(100% - 28px), 520px);
-      transform: translate(-50%, 140%);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 10px 10px 16px;
-      border: 0;
-      border-radius: 18px;
-      background: var(--brand);
-      color: #fff;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: transform 0.25s ease;
-      text-align: left;
-    }
-
-    body.has-cart .cart-bar {
-      transform: translate(-50%, 0);
-    }
-
-    .cart-count {
-      min-width: 26px;
-      height: 26px;
-      padding: 0 7px;
-      border-radius: 999px;
-      background: #fff;
-      color: var(--brand);
-      font-size: 14px;
-      font-weight: 900;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .cart-bar-label {
-      flex: 1 1 auto;
-      font-size: 15px;
-      font-weight: 800;
-      line-height: 1.25;
-    }
-
-    .cart-bar-total {
-      font-size: 15px;
-      font-weight: 900;
-      white-space: nowrap;
-      padding: 8px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.14);
-    }
-
     /* ---------- 팝업 · 시트 ---------- */
 
     body.modal-open {
@@ -1245,135 +1127,6 @@
     .lang-btn.active::after {
       content: "✓";
       font-weight: 900;
-    }
-
-    /* 주문 메모 */
-
-    .cart-guide {
-      margin: 0 0 12px;
-      padding: 11px 13px;
-      border-radius: var(--radius-sm);
-      background: var(--brand-soft);
-      color: var(--brand);
-      font-size: 13.5px;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .cart-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .cart-item {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 6px 10px;
-      align-items: center;
-      padding: 12px;
-      border-radius: var(--radius-sm);
-      background: #fff;
-      border: 1px solid var(--line);
-    }
-
-    .cart-ko {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: -0.3px;
-      line-height: 1.3;
-    }
-
-    .cart-ko small {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--ink-2);
-    }
-
-    .cart-local {
-      display: block;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--ink-3);
-    }
-
-    .cart-price {
-      grid-column: 1;
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--price);
-    }
-
-    .qty {
-      grid-column: 2;
-      grid-row: 1 / span 2;
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      border-radius: 999px;
-      background: #f3ece1;
-      padding: 3px;
-    }
-
-    .qty button {
-      width: 34px;
-      height: 34px;
-      border: 0;
-      border-radius: 999px;
-      background: #fff;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .qty output {
-      min-width: 28px;
-      text-align: center;
-      font-size: 17px;
-      font-weight: 900;
-    }
-
-    .cart-total-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin: 14px 2px 4px;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .cart-total-row strong {
-      font-size: 22px;
-      color: var(--price);
-    }
-
-    .cart-note {
-      margin: 4px 2px 12px;
-      font-size: 12px;
-      color: var(--ink-3);
-      font-weight: 600;
-    }
-
-    .cart-empty {
-      padding: 26px 10px;
-      text-align: center;
-      color: var(--ink-3);
-      font-weight: 700;
-    }
-
-    .cart-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .cart-actions .pill-btn {
-      flex: 1 1 auto;
-      justify-content: center;
-      min-height: 46px;
-      font-size: 14px;
-    }
-
-    body.staff-view .cart-ko {
-      font-size: 24px;
     }
 
     /* 사진 크게 보기 */
@@ -1940,29 +1693,11 @@
     </div>
   </div>
 
-  <div class="info-modal sheet" id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-modal-title-text" aria-hidden="true" onclick="closeModalByBg(event, 'cart-modal')">
-    <div class="info-modal-card">
-      <div class="info-modal-head">
-        <h2 class="info-modal-title" id="cart-modal-title-text">주문 메모</h2>
-        <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('cart-modal')">×</button>
-      </div>
-
-      <p class="cart-guide" id="cart-guide-text"></p>
-      <div id="cart-content"></div>
-    </div>
-  </div>
-
   <div class="info-modal lightbox" id="photo-modal" role="dialog" aria-modal="true" aria-label="Photo" aria-hidden="true" onclick="closeInfoModal('photo-modal')">
     <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('photo-modal')">×</button>
     <img id="photo-modal-img" src="" alt="">
     <div class="lightbox-caption" id="photo-modal-caption"></div>
   </div>
-
-  <button class="cart-bar" id="cart-bar" type="button" onclick="openCart()" aria-haspopup="dialog">
-    <span class="cart-count" id="cart-count">0</span>
-    <span class="cart-bar-label" id="cart-bar-label">주문 메모 보기</span>
-    <span class="cart-bar-total" id="cart-bar-total">0원</span>
-  </button>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -2211,15 +1946,6 @@
         statusBreak: "브레이크타임 · {t} 재오픈",
         statusLast: "주문 마감 · {t} 영업 종료",
         statusClosed: "영업 종료 · {t} 오픈",
-        add: "주문 메모에 담기",
-        added: "주문 메모에 담았어요",
-        cartTitle: "주문 메모",
-        cartBar: "주문 메모 보기",
-        cartGuide: "드시고 싶은 메뉴를 담은 뒤 이 화면을 직원에게 보여주세요. 주문은 직원이 받습니다.",
-        cartEmpty: "담은 메뉴가 없습니다. 메뉴 옆 + 버튼을 눌러 담아 보세요.",
-        total: "합계",
-        cartNote: "참고용 금액입니다. 코스는 2인 이상, 인원수만큼 담아 주세요.",
-        clear: "모두 비우기",
         seeMenu: "메뉴 보기 ›",
         won: "{n}원"
       },
@@ -2250,15 +1976,6 @@
         statusBreak: "Break time · Reopens {t}",
         statusLast: "Last order passed · Closes {t}",
         statusClosed: "Closed · Opens {t}",
-        add: "Add to order list",
-        added: "Added to your order list",
-        cartTitle: "My Order List",
-        cartBar: "View order list",
-        cartGuide: "Add the dishes you want, then show this screen to our staff. Staff will take your order.",
-        cartEmpty: "Your list is empty. Tap the + button next to a dish to add it.",
-        total: "Total",
-        cartNote: "For reference only. Courses are for 2 or more people — add one per person.",
-        clear: "Clear all",
         seeMenu: "See menu ›",
         won: "{n} KRW"
       },
@@ -2289,15 +2006,6 @@
         statusBreak: "休憩中・{t}から再開",
         statusLast: "オーダー終了・{t}閉店",
         statusClosed: "営業時間外・{t}開店",
-        add: "注文メモに追加",
-        added: "注文メモに追加しました",
-        cartTitle: "注文メモ",
-        cartBar: "注文メモを見る",
-        cartGuide: "食べたいメニューを追加して、この画面をスタッフにお見せください。ご注文はスタッフが承ります。",
-        cartEmpty: "まだ何もありません。メニュー横の＋ボタンで追加できます。",
-        total: "合計",
-        cartNote: "金額は目安です。コースは2名様から、人数分を追加してください。",
-        clear: "すべて削除",
         seeMenu: "メニューを見る ›",
         won: "{n}ウォン"
       },
@@ -2328,15 +2036,6 @@
         statusBreak: "休息中 · {t} 重新营业",
         statusLast: "已停止点餐 · {t} 打烊",
         statusClosed: "已打烊 · {t} 开门",
-        add: "加入点餐清单",
-        added: "已加入点餐清单",
-        cartTitle: "点餐清单",
-        cartBar: "查看点餐清单",
-        cartGuide: "选好想吃的菜后，请把这个页面出示给店员，由店员为您下单。",
-        cartEmpty: "清单是空的。点击菜品旁的 + 按钮即可加入。",
-        total: "合计",
-        cartNote: "金额仅供参考。套餐2人起点，请按人数加入。",
-        clear: "全部清空",
         seeMenu: "查看菜单 ›",
         won: "{n}韩元"
       },
@@ -2367,15 +2066,6 @@
         statusBreak: "休息中 · {t} 重新營業",
         statusLast: "已停止點餐 · {t} 打烊",
         statusClosed: "已打烊 · {t} 開門",
-        add: "加入點餐清單",
-        added: "已加入點餐清單",
-        cartTitle: "點餐清單",
-        cartBar: "查看點餐清單",
-        cartGuide: "選好想吃的餐點後，請將此畫面出示給店員，由店員為您點餐。",
-        cartEmpty: "清單是空的。點選餐點旁的 + 按鈕即可加入。",
-        total: "合計",
-        cartNote: "金額僅供參考。套餐2人起點，請依人數加入。",
-        clear: "全部清除",
         seeMenu: "查看菜單 ›",
         won: "{n}韓元"
       },
@@ -2406,15 +2096,6 @@
         statusBreak: "Đang nghỉ · Mở lại {t}",
         statusLast: "Đã ngừng gọi món · Đóng cửa {t}",
         statusClosed: "Đã đóng cửa · Mở cửa {t}",
-        add: "Thêm vào danh sách",
-        added: "Đã thêm vào danh sách",
-        cartTitle: "Danh sách gọi món",
-        cartBar: "Xem danh sách",
-        cartGuide: "Hãy thêm các món bạn muốn rồi đưa màn hình này cho nhân viên. Nhân viên sẽ ghi món cho bạn.",
-        cartEmpty: "Danh sách trống. Bấm nút + bên cạnh món ăn để thêm.",
-        total: "Tổng",
-        cartNote: "Giá chỉ để tham khảo. Set món từ 2 người, vui lòng thêm theo số người.",
-        clear: "Xóa tất cả",
         seeMenu: "Xem món ›",
         won: "{n} KRW"
       },
@@ -2445,15 +2126,6 @@
         statusBreak: "Break time · Bukas ulit {t}",
         statusLast: "Tapos na ang order · Sarado {t}",
         statusClosed: "Sarado · Bubukas {t}",
-        add: "Idagdag sa listahan",
-        added: "Naidagdag sa listahan",
-        cartTitle: "Listahan ng Order",
-        cartBar: "Tingnan ang listahan",
-        cartGuide: "Idagdag ang mga gusto ninyong pagkain, tapos ipakita ang screen na ito sa staff. Ang staff ang kukuha ng order ninyo.",
-        cartEmpty: "Wala pang laman. Pindutin ang + sa tabi ng pagkain para idagdag.",
-        total: "Kabuuan",
-        cartNote: "Para gabay lang ang presyo. Ang course ay para sa 2 o higit pang tao — isa bawat tao.",
-        clear: "Burahin lahat",
         seeMenu: "Tingnan ›",
         won: "{n} KRW"
       },
@@ -2484,15 +2156,6 @@
         statusBreak: "Перерыв · Откроемся в {t}",
         statusLast: "Заказы не принимаются · Закрытие в {t}",
         statusClosed: "Закрыто · Откроемся в {t}",
-        add: "Добавить в список",
-        added: "Добавлено в список",
-        cartTitle: "Мой список заказа",
-        cartBar: "Открыть список",
-        cartGuide: "Добавьте блюда, которые хотите заказать, и покажите этот экран официанту. Заказ примет сотрудник.",
-        cartEmpty: "Список пуст. Нажмите + рядом с блюдом, чтобы добавить его.",
-        total: "Итого",
-        cartNote: "Сумма ориентировочная. Сеты — от 2 человек, добавьте по одному на человека.",
-        clear: "Очистить",
         seeMenu: "К меню ›",
         won: "{n} KRW"
       },
@@ -2523,15 +2186,6 @@
         statusBreak: "Завсарлага · {t}-д дахин нээнэ",
         statusLast: "Захиалга дууссан · {t}-д хаана",
         statusClosed: "Хаалттай · {t}-д нээнэ",
-        add: "Жагсаалтад нэмэх",
-        added: "Жагсаалтад нэмлээ",
-        cartTitle: "Захиалгын жагсаалт",
-        cartBar: "Жагсаалт харах",
-        cartGuide: "Идэх хоолоо нэмээд энэ дэлгэцийг ажилтанд үзүүлнэ үү. Захиалгыг ажилтан авна.",
-        cartEmpty: "Жагсаалт хоосон байна. Хоолны хажууд байгаа + товчийг дарж нэмнэ үү.",
-        total: "Нийт",
-        cartNote: "Үнэ нь лавлах зорилготой. Сет меню 2 хүнээс дээш, хүний тоогоор нэмнэ үү.",
-        clear: "Бүгдийг устгах",
         seeMenu: "Меню харах ›",
         won: "{n} KRW"
       }
@@ -2721,141 +2375,6 @@
       toastTimer = setTimeout(() => toast.classList.remove("show"), 1600);
     }
 
-    // ===== 주문 메모 =====
-    // 손님이 고른 메뉴를 한국어로 정리해 직원에게 보여주는 화면입니다. (실제 주문 기능은 아님)
-    const orderables = {};
-    let cart = loadCart();
-
-    function loadCart() {
-      try {
-        return JSON.parse(sessionStorage.getItem("soorim-cart") || "{}") || {};
-      } catch (error) {
-        return {};
-      }
-    }
-
-    function saveCart() {
-      try {
-        sessionStorage.setItem("soorim-cart", JSON.stringify(cart));
-      } catch (error) {}
-    }
-
-    // key: 메뉴 고유값, ko/koOption: 직원용 한국어 이름, local/localOption: 손님 언어 이름, price: 숫자
-    function addButton(key, item) {
-      orderables[key] = item;
-      const count = cart[key] || 0;
-      const label = `${ui().add}: ${stripTags(item.local)}${item.localOption ? " " + stripTags(item.localOption) : ""}`;
-      return `<button class="add-btn" type="button" data-add="${escapeAttr(key)}" data-count="${count}" aria-label="${escapeAttr(label)}"><span aria-hidden="true">+</span></button>`;
-    }
-
-    function addToCart(key) {
-      if (!orderables[key]) return;
-      cart[key] = (cart[key] || 0) + 1;
-      saveCart();
-      updateCartUi();
-      showToast(ui().added);
-    }
-
-    function changeQty(key, delta) {
-      cart[key] = Math.max(0, (cart[key] || 0) + delta);
-      if (!cart[key]) delete cart[key];
-      saveCart();
-      updateCartUi();
-      renderCartContent();
-    }
-
-    function clearCart() {
-      cart = {};
-      saveCart();
-      updateCartUi();
-      renderCartContent();
-    }
-
-    function getCartLines() {
-      return Object.entries(cart)
-        .filter(([key, qty]) => qty > 0 && orderables[key])
-        .map(([key, qty]) => ({ key, qty, ...orderables[key] }));
-    }
-
-    function updateCartUi() {
-      const lines = getCartLines();
-      const count = lines.reduce((sum, line) => sum + line.qty, 0);
-      const total = lines.reduce((sum, line) => sum + line.qty * line.price, 0);
-
-      document.body.classList.toggle("has-cart", count > 0);
-      const countEl = document.getElementById("cart-count");
-      const totalEl = document.getElementById("cart-bar-total");
-      const labelEl = document.getElementById("cart-bar-label");
-      if (countEl) countEl.textContent = count;
-      if (totalEl) totalEl.textContent = formatWon(total);
-      if (labelEl) labelEl.textContent = ui().cartBar;
-
-      document.querySelectorAll(".add-btn[data-add]").forEach((button) => {
-        button.dataset.count = cart[button.dataset.add] || 0;
-      });
-    }
-
-    function renderCartContent() {
-      const text = ui();
-      const contentEl = document.getElementById("cart-content");
-      const titleEl = document.getElementById("cart-modal-title-text");
-      const guideEl = document.getElementById("cart-guide-text");
-      if (titleEl) titleEl.textContent = text.cartTitle;
-      if (guideEl) guideEl.textContent = text.cartGuide;
-      if (!contentEl) return;
-
-      const lines = getCartLines();
-
-      if (!lines.length) {
-        contentEl.innerHTML = `<div class="cart-empty">${text.cartEmpty}</div>`;
-        return;
-      }
-
-      const total = lines.reduce((sum, line) => sum + line.qty * line.price, 0);
-      const showLocal = currentLang !== "ko";
-
-      contentEl.innerHTML = `
-        <div class="cart-list">
-          ${lines.map((line) => `
-            <div class="cart-item">
-              <div class="cart-ko" lang="ko">
-                ${line.ko}${line.koOption ? ` <small>${line.koOption}</small>` : ""}
-                ${showLocal ? `<span class="cart-local" lang="${htmlLangCodes[currentLang]}">${stripTags(line.local)}${line.localOption ? " · " + stripTags(line.localOption) : ""}</span>` : ""}
-              </div>
-              <div class="qty">
-                <button type="button" aria-label="−" onclick="changeQty('${escapeAttr(line.key)}', -1)">−</button>
-                <output>${line.qty}</output>
-                <button type="button" aria-label="+" onclick="changeQty('${escapeAttr(line.key)}', 1)">+</button>
-              </div>
-              <div class="cart-price">${formatWon(line.price * line.qty)}</div>
-            </div>
-          `).join("")}
-        </div>
-
-        <div class="cart-total-row">
-          <span>${text.total}</span>
-          <strong>${formatWon(total)}</strong>
-        </div>
-        <p class="cart-note">${text.cartNote}</p>
-
-        <div class="cart-actions">
-          <button class="pill-btn" type="button" onclick="clearCart()">${text.clear}</button>
-        </div>
-      `;
-    }
-
-    function openCart() {
-      renderCartContent();
-      openInfoModal("cart-modal");
-    }
-
-    document.addEventListener("click", (event) => {
-      const button = event.target.closest(".add-btn[data-add]");
-      if (button) {
-        addToCart(button.dataset.add);
-      }
-    });
-
     // ===== 사진 크게 보기 =====
     function openPhoto(src, caption) {
       const img = document.getElementById("photo-modal-img");
@@ -2881,12 +2400,11 @@
     };
 
     // 메뉴 카드 안의 "가격 줄"을 담기 버튼과 함께 만듭니다.
-    function priceRows(rows, makeKey, makeItem) {
-      return rows.map((row, index) => `
+    function priceRows(rows) {
+      return rows.map((row) => `
         <div class="size-price-row">
           <span class="size-name">${row.label}</span>
           <span class="size-price">${row.price}</span>
-          ${addButton(makeKey(index), makeItem(index))}
         </div>
       `).join("");
     }
@@ -3679,7 +3197,7 @@
       if (changeEl) changeEl.textContent = sectionText.change;
       if (!listEl) return;
 
-      listEl.innerHTML = courseMenus.map((menu, menuIndex) => {
+      listEl.innerHTML = courseMenus.map((menu) => {
         const bestBadge = menu.best ? `<span class="small-badge best-badge">★ BEST</span>` : "";
         const itemsText = getCourseText(menu.items, lang);
         const courseItems = splitCourseItems(itemsText);
@@ -3695,16 +3213,7 @@
           <article class="menu-card">
             <div class="menu-head">
               <h3 class="menu-name">${getCourseText(menu.title, lang)} ${bestBadge}</h3>
-              <div class="price-action">
-                <div class="menu-price">${getCourseText(menu.price, lang)}</div>
-                ${addButton(`course-${menuIndex}`, {
-                  ko: getCourseText(menu.title, "ko"),
-                  koOption: "",
-                  local: getCourseText(menu.title, lang),
-                  localOption: "",
-                  price: parseWon(getCourseText(menu.price, "ko"))
-                })}
-              </div>
+              <div class="menu-price">${getCourseText(menu.price, lang)}</div>
             </div>
             <p class="menu-desc">${getCourseText(menu.desc, lang)}</p>
             <div class="menu-tags">${tags}</div>
@@ -4071,24 +3580,13 @@
       if (noticeEl) noticeEl.textContent = sectionText.notice;
       if (!listEl) return;
 
-      listEl.innerHTML = sashimiMenus.map((menu, menuIndex) => {
+      listEl.innerHTML = sashimiMenus.map((menu) => {
         const tags = menu.tags.map((tagKey) => {
           const className = tagKey === "rawTag" ? "menu-tag raw" : "menu-tag";
           return `<span class="${className}">${sectionText[tagKey]}</span>`;
         }).join("");
 
-        const koRows = getAnyArray(menu.prices, "ko");
-        const prices = priceRows(
-          getAnyArray(menu.prices, lang).map((row) => ({ label: row[0], price: row[1] })),
-          (index) => `sashimi-${menuIndex}-${index}`,
-          (index) => ({
-            ko: getSashimiText(menu.title, "ko"),
-            koOption: koRows[index][0],
-            local: getSashimiText(menu.title, lang),
-            localOption: getAnyArray(menu.prices, lang)[index][0],
-            price: parseWon(koRows[index][1])
-          })
-        );
+        const prices = priceRows(getAnyArray(menu.prices, lang).map((row) => ({ label: row[0], price: row[1] })));
 
         return `
           <article class="menu-card">
@@ -4380,8 +3878,7 @@
       if (titleEl) titleEl.textContent = sectionText.title;
       if (!listEl) return;
 
-      listEl.innerHTML = mealMenus.map((menu, menuIndex) => {
-        const koTitle = getMealText(menu.title, "ko");
+      listEl.innerHTML = mealMenus.map((menu) => {
         const localTitle = getMealText(menu.title, lang);
         const bestBadge = menu.best ? ` <span class="small-badge best-badge">${sectionText.bestTag}</span>` : "";
 
@@ -4397,13 +3894,7 @@
         let priceHtml = "";
 
         if (menu.type === "sizes") {
-          const koRows = getAnyArray(menu.prices, "ko");
-          const localRows = getAnyArray(menu.prices, lang);
-          const prices = priceRows(
-            localRows.map((row) => ({ label: row[0], price: row[1] })),
-            (index) => `meal-${menuIndex}-${index}`,
-            (index) => ({ ko: koTitle, koOption: koRows[index][0], local: localTitle, localOption: localRows[index][0], price: parseWon(koRows[index][1]) })
-          );
+          const prices = priceRows(getAnyArray(menu.prices, lang).map((row) => ({ label: row[0], price: row[1] })));
           priceHtml = `<div class="size-price-list">${prices}</div>`;
         }
 
@@ -4411,16 +3902,12 @@
           priceHtml = `
             <div class="menu-head">
               <h3 class="menu-name">${localTitle}${bestBadge}</h3>
-              <div class="price-action">
-                <div class="menu-price">${getMealText(menu.price, lang)}</div>
-                ${addButton(`meal-${menuIndex}`, { ko: koTitle, koOption: "", local: localTitle, localOption: "", price: parseWon(getMealText(menu.price, "ko")) })}
-              </div>
+              <div class="menu-price">${getMealText(menu.price, lang)}</div>
             </div>
           `;
         }
 
         if (menu.type === "options") {
-          const koOptions = getAnyArray(menu.options, "ko");
           const options = getAnyArray(menu.options, lang).map((row, index) => {
             return `
               <div class="option-row">
@@ -4429,7 +3916,6 @@
                   <span class="option-desc">${row[1]}</span>
                 </div>
                 <span class="option-price">${row[2]}</span>
-                ${addButton(`meal-${menuIndex}-${index}`, { ko: koTitle, koOption: koOptions[index][0], local: localTitle, localOption: row[0], price: parseWon(koOptions[index][2]) })}
               </div>
             `;
           }).join("");
@@ -4673,15 +4159,12 @@
       if (kidsTitleEl) kidsTitleEl.textContent = text.kidsTitle;
 
       if (lunchListEl) {
-        lunchListEl.innerHTML = lunchMenus.map((menu, menuIndex) => {
+        lunchListEl.innerHTML = lunchMenus.map((menu) => {
           return `
             <article class="menu-card">
               <div class="menu-head">
                 <h3 class="menu-name">${getLunchKidsText(menu.title, lang)}</h3>
-                <div class="price-action">
-                  <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
-                  ${addButton(`lunch-${menuIndex}`, { ko: getLunchKidsText(menu.title, "ko"), koOption: "", local: getLunchKidsText(menu.title, lang), localOption: "", price: parseWon(getLunchKidsText(menu.price, "ko")) })}
-                </div>
+                <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
               </div>
               <p class="menu-desc">${getLunchKidsText(menu.desc, lang)}</p>
               <div class="menu-tags">
@@ -4697,15 +4180,12 @@
       }
 
       if (kidsListEl) {
-        kidsListEl.innerHTML = kidsMenus.map((menu, menuIndex) => {
+        kidsListEl.innerHTML = kidsMenus.map((menu) => {
           return `
             <article class="menu-card">
               <div class="menu-head">
                 <h3 class="menu-name">${getLunchKidsText(menu.title, lang)}</h3>
-                <div class="price-action">
-                  <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
-                  ${addButton(`kids-${menuIndex}`, { ko: getLunchKidsText(menu.title, "ko"), koOption: "", local: getLunchKidsText(menu.title, lang), localOption: "", price: parseWon(getLunchKidsText(menu.price, "ko")) })}
-                </div>
+                <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
               </div>
               <p class="menu-desc">${getLunchKidsText(menu.desc, lang)}</p>
               <div class="menu-tags">
@@ -5413,26 +4893,17 @@
     function renderMenuCards(listEl, menus, text, lang) {
       if (!listEl) return;
 
-      listEl.innerHTML = menus.map((menu, menuIndex) => {
-        const keyBase = `${listEl.id}-${menuIndex}`;
-        const koTitle = getExtraText(menu.title, "ko");
+      listEl.innerHTML = menus.map((menu) => {
         const localTitle = getExtraText(menu.title, lang);
         const koParts = splitPriceText(getExtraText(menu.price, "ko"));
         const localParts = splitPriceText(getExtraText(menu.price, lang));
         const isMultiPrice = koParts.length > 1 && koParts.length === localParts.length;
         const priceHtml = isMultiPrice
-          ? `<div class="size-price-list">${priceRows(
-              localParts,
-              (index) => `${keyBase}-${index}`,
-              (index) => ({ ko: koTitle, koOption: koParts[index].label, local: localTitle, localOption: localParts[index].label, price: parseWon(koParts[index].price) })
-            )}</div>`
+          ? `<div class="size-price-list">${priceRows(localParts)}</div>`
           : "";
         const headPrice = isMultiPrice
           ? ""
-          : `<div class="price-action">
-              <div class="menu-price">${getExtraText(menu.price, lang)}</div>
-              ${addButton(keyBase, { ko: koTitle, koOption: "", local: localTitle, localOption: "", price: parseWon(getExtraText(menu.price, "ko")) })}
-            </div>`;
+          : `<div class="menu-price">${getExtraText(menu.price, lang)}</div>`;
 
         const tags = (menu.tags || []).map((tagKey) => {
           const className = tagKey === "rawTag" ? "menu-tag raw" :
@@ -5807,7 +5278,6 @@
               <div class="drink-group">
                 <h3 class="drink-title">${getInfoText(item.name, lang)}</h3>
                 <p class="drink-text"><strong>${formatWon(price, lang)}</strong></p>
-                ${addButton(`drink-${groupIndex}-${itemIndex}`, { ko: getInfoText(item.name, "ko"), koOption: "", local: getInfoText(item.name, lang), localOption: "", price })}
               </div>
             `;
           }).join("");
@@ -6561,9 +6031,6 @@
 
       const currentLangEl = document.getElementById("lang-current");
       if (currentLangEl) currentLangEl.textContent = ui().langName;
-
-      updateCartUi();
-      renderCartContent();
 
       document.documentElement.lang = htmlLangCodes[lang];
       saveLanguage(lang);
