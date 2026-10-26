@@ -2,7 +2,12 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="해운대 수림횟집 모바일 메뉴판 · Soorim Haeundae sashimi & seafood menu in 9 languages" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="수림횟집 메뉴판 · Soorim Menu" />
+  <meta property="og:description" content="해운대 수림횟집 코스 · 사시미 · 물회 · 식사 메뉴 (한국어, English, 日本語, 中文 외)" />
+  <meta property="og:image" content="https://cij5484.github.io/soorim-menu/images/b-course.JPG" />
 
   <title>수림횟집 메뉴판</title>
 
@@ -11,7 +16,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="수림 메뉴" />
-  <link rel="apple-touch-icon" href="./icons/menu-icon.svg" />
+  <link rel="icon" href="./icons/menu-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
 
   <link rel="preload" as="image" href="images/b-course.JPG" fetchpriority="high">
 
@@ -47,7 +53,7 @@
 
     .hero {
       position: relative;
-      padding: 28px 18px 20px;
+      padding: calc(28px + env(safe-area-inset-top)) 18px 20px;
       background: linear-gradient(135deg, #17322b, #0f1f1b);
       color: #fff;
       overflow: hidden;
@@ -569,6 +575,8 @@
 
     .compact-title-row {
       align-items: center;
+      flex-wrap: wrap;
+      row-gap: 8px;
       margin-bottom: 10px;
     }
 
@@ -580,7 +588,8 @@
       color: #fff;
       font-size: 12px;
       font-weight: 900;
-      white-space: nowrap;
+      max-width: 100%;
+      line-height: 1.35;
       box-shadow: 0 4px 12px rgba(23, 50, 43, 0.18);
     }
 
@@ -1115,7 +1124,7 @@
     }
 
     .footer {
-      padding: 28px 16px 40px;
+      padding: 28px 16px calc(40px + env(safe-area-inset-bottom));
       background: #17322b;
       color: #fff;
     }
@@ -1140,7 +1149,7 @@
     .top-button {
       position: fixed;
       right: 16px;
-      bottom: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
       width: 46px;
       height: 46px;
       border-radius: 999px;
@@ -1152,6 +1161,20 @@
       box-shadow: 0 6px 18px rgba(0,0,0,0.25);
       cursor: pointer;
       z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .top-button.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    body.modal-open {
+      overflow: hidden;
     }
 
     .main-photo,
@@ -1229,18 +1252,18 @@
         </button>
       </div>
 
-      <p class="store-subtitle" data-i18n="storeSubtitle">사시미 & 해산물 전문점</p>
+      <p class="store-subtitle" data-i18n="storeSubtitle">생선회 & 해산물 전문점</p>
       
       <div class="language-bar">
-        <button class="lang-btn active" data-lang="ko">한국어</button>
-        <button class="lang-btn" data-lang="en">English</button>
-        <button class="lang-btn" data-lang="ja">日本語</button>
-        <button class="lang-btn" data-lang="zh">简体中文</button>
-        <button class="lang-btn" data-lang="zhTw">繁體中文</button>
-        <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
-        <button class="lang-btn" data-lang="fil">Filipino</button>
-        <button class="lang-btn" data-lang="ru">Русский</button>
-        <button class="lang-btn" data-lang="mn">Монгол</button>
+        <button type="button" class="lang-btn active" data-lang="ko">한국어</button>
+        <button type="button" class="lang-btn" data-lang="en">English</button>
+        <button type="button" class="lang-btn" data-lang="ja">日本語</button>
+        <button type="button" class="lang-btn" data-lang="zh">简体中文</button>
+        <button type="button" class="lang-btn" data-lang="zhTw">繁體中文</button>
+        <button type="button" class="lang-btn" data-lang="vi">Tiếng Việt</button>
+        <button type="button" class="lang-btn" data-lang="fil">Filipino</button>
+        <button type="button" class="lang-btn" data-lang="ru">Русский</button>
+        <button type="button" class="lang-btn" data-lang="mn">Монгол</button>
       </div>
     </header>
 
@@ -1386,22 +1409,22 @@
 
   </div>
 
-  <div class="info-modal" id="wifi-modal" onclick="closeModalByBg(event, 'wifi-modal')">
+  <div class="info-modal" id="wifi-modal" role="dialog" aria-modal="true" aria-labelledby="wifi-modal-title-text" aria-hidden="true" onclick="closeModalByBg(event, 'wifi-modal')">
     <div class="info-modal-card">
       <div class="info-modal-head">
         <h2 class="info-modal-title" id="wifi-modal-title-text">Wi-Fi</h2>
-        <button class="info-close-btn" type="button" onclick="closeInfoModal('wifi-modal')">×</button>
+        <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('wifi-modal')">×</button>
       </div>
 
       <img class="wifi-qr-large" src="images/wifi-qr.JPG" alt="와이파이 QR">
     </div>
   </div>
 
-  <div class="info-modal" id="event-modal" onclick="closeModalByBg(event, 'event-modal')">
+  <div class="info-modal" id="event-modal" role="dialog" aria-modal="true" aria-labelledby="event-modal-title-text" aria-hidden="true" onclick="closeModalByBg(event, 'event-modal')">
     <div class="info-modal-card">
       <div class="info-modal-head">
         <h2 class="info-modal-title" id="event-modal-title-text">리뷰 이벤트</h2>
-        <button class="info-close-btn" type="button" onclick="closeInfoModal('event-modal')">×</button>
+        <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('event-modal')">×</button>
       </div>
 
       <p class="modal-desc" id="event-modal-desc-text">
@@ -1412,11 +1435,11 @@
     </div>
   </div>
 
-  <div class="info-modal" id="about-modal" onclick="closeModalByBg(event, 'about-modal')">
+  <div class="info-modal" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="about-modal-title-text" aria-hidden="true" onclick="closeModalByBg(event, 'about-modal')">
       <div class="info-modal-card about-modal-card">
       <div class="info-modal-head">
         <h2 class="info-modal-title" id="about-modal-title-text">About Soorim</h2>
-        <button class="info-close-btn" type="button" onclick="closeInfoModal('about-modal')">×</button>
+        <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('about-modal')">×</button>
       </div>
 
         <div class="about-body">
@@ -1435,7 +1458,7 @@
     </div>
   </div>
 
-  <button class="top-button" onclick="scrollToTop()">↑</button>
+  <button class="top-button" id="top-button" type="button" aria-label="Back to top" onclick="scrollToTop()">↑</button>
 
   <script>
     if ("scrollRestoration" in history) {
@@ -1474,7 +1497,7 @@
         storeName: "Soorim",
         storeSubtitle: "Sashimi & Seafood Restaurant",
         mainTitle: "B Course",
-        mainDesc: "Soorim’s signature course menu. Enjoy premium assorted sashimi and a variety of seafood dishes.",
+        mainDesc: "Soorim’s signature course · A popular choice featuring premium assorted sashimi and a variety of seafood.",
 
         navOrderGuide: "Order Guide",
         navFeatured: "Signature",
@@ -1489,10 +1512,10 @@
       },
 
       ja: {
-        storeName: "スリム",
+        storeName: "スーリム",
         storeSubtitle: "刺身・海鮮料理店",
         mainTitle: "Bコース",
-        mainDesc: "海雲台スリム海鮮料理店の代表コースです。高級盛り合わせ刺身とさまざまな海鮮料理を一緒に楽しめます。",
+        mainDesc: "スーリムの代表コース · 上刺身盛り合わせと多彩な海鮮を一緒に楽しめる人気メニューです。",
 
         navOrderGuide: "注文案内",
         navFeatured: "代表メニュー",
@@ -1544,20 +1567,20 @@
 
       fil: {
         storeName: "Soorim",
-        storeSubtitle: "Sashimi & Seafood Restaurant",
+        storeSubtitle: "Sashimi at Seafood Restaurant",
         mainTitle: "B Course",
-        mainDesc: "Signature course ng Soorim. May premium assorted sashimi at iba’t ibang seafood dishes.",
+        mainDesc: "Signature course ng Soorim · Patok na menu kung saan sabay ninyong matitikman ang premium assorted sashimi at iba’t ibang seafood.",
 
-        navOrderGuide: "Gabay sa Order",
+        navOrderGuide: "Paano Umorder",
         navFeatured: "Signature",
-        navCourse: "Courses",
+        navCourse: "Mga Course",
         navSashimi: "Sashimi",
-        navMeal: "Meals",
-        navLunch: "Lunch",
-        navKids: "Kids",
-        navExtraSeafood: "Extra Seafood",
-        navExtraMenu: "Extras",
-        navDrink: "Drinks"
+        navMeal: "Mga Meal",
+        navLunch: "Lunch Special",
+        navKids: "Pambata",
+        navExtraSeafood: "Dagdag Seafood",
+        navExtraMenu: "Dagdag Menu",
+        navDrink: "Inumin"
       },
 
       ru: {
@@ -1598,8 +1621,10 @@
     };
 
 
+    // 해당 언어에 없는 문구는 영어(번체는 간체) → 한국어 순으로 채웁니다.
     function getLanguageBlock(blocks, lang) {
-      return blocks[lang] || (lang === "zhTw" ? blocks.zh : null) || (lang === "fil" ? blocks.en : null) || blocks.ko || blocks.en || {};
+      const chain = lang === "ko" ? ["ko"] : ["ko", "en", lang === "zhTw" ? "zh" : null, lang];
+      return Object.assign({}, ...chain.filter(Boolean).map((key) => blocks[key] || {}));
     }
 
     function getAnyText(value, lang) {
@@ -1624,7 +1649,7 @@
       },
       ja: {
         title: "代表メニュー",
-        photoHint: "写真をタップすると全体写真が表示されます。"
+        photoHint: "写真をタップすると拡大表示されます。"
       },
       zh: {
         title: "招牌菜单",
@@ -1636,7 +1661,7 @@
       },
       fil: {
         title: "Signature Menu",
-        photoHint: "I-tap ang larawan para makita ang buong photo."
+        photoHint: "I-tap ang larawan para makita ito nang buo."
       },
       ru: {
         title: "Популярные блюда",
@@ -1681,8 +1706,8 @@
         cooked: "加熱料理",
         recommend: "おすすめ",
         signatureMenu: "代表メニュー",
-        popularMeal: "人気食事",
-        lunchSpecial: "ランチ",
+        popularMeal: "人気の食事",
+        lunchSpecial: "ランチ特選",
         meal: "食事",
         kids: "お子様",
         sashimi: "刺身",
@@ -1717,15 +1742,15 @@
       fil: {
         best: "★ BEST",
         signatureCourse: "Signature Course",
-        cooked: "Cooked",
-        recommend: "Recommended",
+        cooked: "Luto",
+        recommend: "Rekomendado",
         signatureMenu: "Signature",
-        popularMeal: "Popular Meal",
+        popularMeal: "Patok na Meal",
         lunchSpecial: "Lunch Special",
         meal: "Meal",
-        kids: "Kids",
+        kids: "Pambata",
         sashimi: "Sashimi",
-        experience: "Experience"
+        experience: "Must-Try"
       },
       ru: {
         best: "★ BEST",
@@ -1763,6 +1788,7 @@
         title: {
           ko: "B코스",
           en: "B Course",
+          fil: "B Course",
           ja: "Bコース",
           zh: "B套餐",
           vi: "Set B",
@@ -1772,6 +1798,7 @@
         price: {
           ko: "1인 70,000원",
           en: "70,000 KRW / person",
+          fil: "70,000 KRW / tao",
           ja: "1名 70,000ウォン",
           zh: "每人 70,000韩元",
           vi: "70,000 KRW / người",
@@ -1780,8 +1807,9 @@
         },
         desc: {
           ko: "고급모듬회, 모듬해물, 맛보기 물회, 우럭탕수, 산낙지, 가리비찜, 매운탕이 포함된 수림횟집 대표 코스입니다.",
-          en: "Soorim’s signature course with premium assorted sashimi, seafood, mulhoe tasting, fried rockfish, live octopus, steamed scallops, and spicy fish stew.",
-          ja: "高級盛り合わせ刺身、海鮮、味見用ムルフェ、ウロク酢豚、活きテナガダコ、ホタテ蒸し、辛い魚鍋が含まれる代表コースです。",
+          en: "Soorim’s signature course with premium assorted sashimi, assorted seafood, mini mulhoe, sweet & sour fried rockfish, live octopus, steamed scallops, and spicy fish stew.",
+          fil: "Signature course ng Soorim na may premium assorted sashimi, assorted seafood, pantikim na mulhoe, sweet & sour na rockfish, sannakji (buhay na octopus), steamed scallops, at maanghang na fish stew.",
+          ja: "上刺身盛り合わせ、海鮮盛り合わせ、ミニムルフェ、クロソイの甘酢あんかけ、サンナクチ（活きテナガダコ）、ホタテ蒸し、メウンタン（辛い魚鍋）が付いた、スーリムの代表コースです。",
           zh: "水林招牌套餐，包含高级综合生鱼片、综合海鲜、品尝水会、糖醋韩式岩鱼、活章鱼、蒸扇贝和辣鱼汤。",
           vi: "Set đại diện gồm sashimi cao cấp, hải sản, mulhoe ăn thử, cá chiên sốt chua ngọt, bạch tuộc sống, sò điệp hấp và canh cá cay.",
           ru: "Фирменный сет с премиальным ассорти сашими, морепродуктами, пробным мульхве, жареной рыбой, живым осьминогом, гребешками и острым рыбным супом.",
@@ -1794,8 +1822,9 @@
         badgeKeys: ["cooked", "recommend"],
         title: {
           ko: "생우럭 매운탕 / 지리탕",
-          en: "Fresh Rockfish Spicy Stew / Clear Soup",
-          ja: "生ウロク辛鍋 / 澄ましスープ",
+          en: "Fresh Rockfish Spicy Stew / Mild Clear Soup",
+          fil: "Sariwang Rockfish – Maanghang na Stew / Malinaw na Sabaw",
+          ja: "活クロソイのメウンタン / ちり鍋",
           zh: "鲜韩式岩鱼辣汤 / 清汤",
           vi: "Canh cá rockfish cay / canh trong",
           ru: "Суп из свежей рыбы / прозрачный суп",
@@ -1803,8 +1832,9 @@
         },
         price: {
           ko: "소(1~2인) 30,000원 / 중(2~3인) 50,000원 / 대(3~4인) 70,000원",
-          en: "Small 30,000 / Medium 50,000 / Large 70,000 KRW",
-          ja: "小 30,000 / 中 50,000 / 大 70,000ウォン",
+          en: "Small (1–2) 30,000 / Medium (2–3) 50,000 / Large (3–4) 70,000 KRW",
+          fil: "Maliit (1–2 tao) 30,000 KRW / Katamtaman (2–3 tao) 50,000 KRW / Malaki (3–4 tao) 70,000 KRW",
+          ja: "小(1〜2名) 30,000ウォン / 中(2〜3名) 50,000ウォン / 大(3〜4名) 70,000ウォン",
           zh: "小 30,000 / 中 50,000 / 大 70,000韩元",
           vi: "Nhỏ 30,000 / Vừa 50,000 / Lớn 70,000 KRW",
           ru: "Мал. 30,000 / Сред. 50,000 / Бол. 70,000 KRW",
@@ -1812,8 +1842,9 @@
         },
         desc: {
           ko: "날 음식을 드시지 못하는 분들께 추천하는 대표 메뉴입니다. 얼큰한 매운탕 또는 맑은 지리탕으로 즐길 수 있습니다.",
-          en: "Recommended for guests who do not eat raw food. Choose spicy stew or a mild, clear soup.",
-          ja: "生ものが苦手な方におすすめです。辛い鍋、または辛くない澄ましスープを選べます。",
+          en: "Our top pick for guests who don’t eat raw food. Choose a hearty spicy fish stew or a mild, clear soup.",
+          fil: "Rekomendado para sa mga hindi kumakain ng hilaw. Puwedeng piliin ang maanghang na fish stew o ang malinaw at hindi maanghang na sabaw.",
+          ja: "生ものが苦手な方におすすめの代表メニューです。ピリッと辛いメウンタン、または澄んだ辛くないちり鍋からお選びいただけます。",
           zh: "推荐给不吃生食的客人。可选择辣鱼汤或不辣的清汤。",
           vi: "Gợi ý cho khách không ăn đồ sống. Có thể chọn canh cay hoặc canh trong không cay.",
           ru: "Подходит гостям, которые не едят сырые блюда. Можно выбрать острый суп или мягкий прозрачный суп.",
@@ -1826,8 +1857,9 @@
         badgeKeys: ["cooked", "signatureMenu"],
         title: {
           ko: "우럭탕수",
-          en: "Fried Rockfish with Sweet & Sour Sauce",
-          ja: "ウロクの甘酢あんかけ",
+          en: "Sweet & Sour Fried Rockfish",
+          fil: "Sweet & Sour na Rockfish",
+          ja: "クロソイの甘酢あんかけ",
           zh: "糖醋韩式岩鱼",
           vi: "Cá rockfish chiên sốt chua ngọt",
           ru: "Жареная рыба в кисло-сладком соусе",
@@ -1836,6 +1868,7 @@
         price: {
           ko: "30,000원",
           en: "30,000 KRW",
+          fil: "30,000 KRW",
           ja: "30,000ウォン",
           zh: "30,000韩元",
           vi: "30,000 KRW",
@@ -1844,8 +1877,9 @@
         },
         desc: {
           ko: "바삭하게 튀긴 우럭에 새콤달콤한 소스를 곁들인 메뉴입니다. 회를 못 드시는 분들도 부담 없이 즐기기 좋습니다.",
-          en: "Crispy fried rockfish with sweet and sour sauce. A good cooked option for guests who do not eat sashimi.",
-          ja: "カリッと揚げたウロクに甘酸っぱいソースをかけた料理です。刺身が苦手な方にもおすすめです。",
+          en: "Crispy fried whole rockfish with a sweet and sour sauce. A great cooked option even if you don’t eat sashimi.",
+          fil: "Malutong na pritong buong rockfish na may matamis-asim na sauce. Swak din para sa mga hindi kumakain ng sashimi.",
+          ja: "カリッと揚げたクロソイに甘酸っぱいあんをかけた一品です。刺身が苦手な方にも気軽にお楽しみいただけます。",
           zh: "炸得酥脆的韩式岩鱼搭配酸甜酱。不吃生鱼片的客人也可以轻松享用。",
           vi: "Cá chiên giòn ăn cùng sốt chua ngọt. Phù hợp cho khách không ăn sashimi.",
           ru: "Хрустящая жареная рыба с кисло-сладким соусом. Хороший вариант для тех, кто не ест сашими.",
@@ -1859,7 +1893,8 @@
         title: {
           ko: "물회",
           en: "Mulhoe (Cold Spicy Sashimi Soup)",
-          ja: "ムルフェ（冷たい辛味刺身スープ）",
+          fil: "Mulhoe (Malamig na Maanghang na Sashimi Soup)",
+          ja: "ムルフェ（冷たい刺身の甘辛スープ）",
           zh: "韩式冷辣生鱼汤",
           vi: "Mulhoe",
           ru: "Мульхве",
@@ -1867,8 +1902,9 @@
         },
         price: {
           ko: "일반 20,000원",
-          en: "From 20,000 KRW",
-          ja: "20,000ウォンから",
+          en: "Regular 20,000 KRW",
+          fil: "Regular 20,000 KRW",
+          ja: "基本 20,000ウォン",
           zh: "20,000韩元起",
           vi: "Từ 20,000 KRW",
           ru: "от 20,000 KRW",
@@ -1876,11 +1912,11 @@
         },
         desc: {
           ko: "차갑고 매콤달콤한 물회 소스에 생선회와 채소를 함께 먹는 수림횟집 인기 메뉴입니다. 다양한 과일을 갈아 넣어 직접 개발한 특제 소스를 사용합니다.",
-          en: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits.",
-          ja: "冷たく甘辛いムルフェソースに刺身と野菜を混ぜて食べる人気メニューです。さまざまな果物をすり入れて開発した自家製特製ソースを使用しています。",
+          en: "A Soorim favorite: raw fish and vegetables in a chilled, sweet-and-spicy mulhoe broth, made with our own special sauce of freshly ground fruits.",
+          ja: "冷たく甘辛いムルフェのソースに刺身と野菜を合わせて食べる、スーリムの人気メニューです。さまざまな果物をすりおろして入れた、自家製の特製ソースを使っています。",
           zh: "将生鱼片和蔬菜与冰凉酸甜微辣的水会酱汁一起拌食的人气菜单。酱汁为本店使用多种水果研磨后研发的特制酱汁。",
           vi: "Món cá sống lạnh vị ngọt cay nhẹ, ăn cùng rau và sốt mulhoe đặc biệt của Soorim được xay từ nhiều loại trái cây.",
-          fil: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits.",
+          fil: "Patok na menu ng Soorim: sashimi at gulay sa malamig, matamis at maanghang na mulhoe sauce. Gawa ang espesyal na sauce namin mula sa iba’t ibang prutas na dinurog, at kami mismo ang bumuo ng recipe.",
           ru: "Популярное холодное сладко-острое блюдо из сырой рыбы и овощей с фирменным соусом Soorim, приготовленным с измельченными фруктами.",
           mn: "Түүхий загас, ногоо, жимсээр хийсэн Soorim-ийн тусгай соустай, хүйтэн, чихэрлэг халуун ногоотой алдартай хоол."
         }
@@ -1891,7 +1927,8 @@
         badgeKeys: ["lunchSpecial"],
         title: {
           ko: "회정식",
-          en: "Lunch Sashimi Set",
+          en: "Sashimi Set Meal",
+          fil: "Sashimi Set Meal",
           ja: "刺身定食",
           zh: "生鱼片午餐套餐",
           vi: "Set sashimi bữa trưa",
@@ -1901,6 +1938,7 @@
         price: {
           ko: "1인 35,000원",
           en: "35,000 KRW / person",
+          fil: "35,000 KRW / tao",
           ja: "1名 35,000ウォン",
           zh: "每人 35,000韩元",
           vi: "35,000 KRW / người",
@@ -1909,8 +1947,9 @@
         },
         desc: {
           ko: "모듬회, 모듬해물, 맛보기 물회, 매운탕 또는 지리탕, 공기밥이 포함된 점심 대표 메뉴입니다.",
-          en: "Lunch set with assorted sashimi, seafood, mulhoe tasting, fish stew or clear soup, and rice.",
-          ja: "盛り合わせ刺身、海鮮、味見用ムルフェ、魚鍋または澄ましスープ、ご飯が含まれるランチメニューです。",
+          en: "Our signature lunch with assorted sashimi, assorted seafood, mini mulhoe, spicy fish stew or mild clear soup, and a bowl of rice.",
+          fil: "Signature na pang-lunch na may assorted sashimi, assorted seafood, pantikim na mulhoe, maanghang na fish stew o malinaw na sabaw, at kanin.",
+          ja: "刺身盛り合わせ、海鮮盛り合わせ、ミニムルフェ、メウンタンまたはちり鍋、ご飯が付いたランチの代表メニューです。",
           zh: "包含综合生鱼片、综合海鲜、品尝水会、鱼汤或清汤和米饭的午餐套餐。",
           vi: "Set trưa gồm sashimi tổng hợp, hải sản, mulhoe ăn thử, canh cá hoặc canh trong và cơm.",
           ru: "Обеденный сет с ассорти сашими, морепродуктами, пробным мульхве, рыбным супом или прозрачным супом и рисом.",
@@ -1924,6 +1963,7 @@
         title: {
           ko: "회덮밥",
           en: "Sashimi Rice Bowl",
+          fil: "Sashimi Rice Bowl (Hoedeopbap)",
           ja: "刺身ビビンバ",
           zh: "生鱼片拌饭",
           vi: "Cơm trộn cá sống",
@@ -1932,8 +1972,9 @@
         },
         price: {
           ko: "일반 17,000원",
-          en: "From 17,000 KRW",
-          ja: "17,000ウォンから",
+          en: "Regular 17,000 KRW",
+          fil: "Regular 17,000 KRW",
+          ja: "基本 17,000ウォン",
           zh: "17,000韩元起",
           vi: "Từ 17,000 KRW",
           ru: "от 17,000 KRW",
@@ -1941,8 +1982,9 @@
         },
         desc: {
           ko: "생선회와 채소를 밥과 함께 비벼 먹는 식사 메뉴입니다. 매운탕은 지리탕으로 변경 가능합니다.",
-          en: "A rice bowl mixed with raw fish, vegetables, rice, and red chili-vinegar sauce. Fish stew can be changed to clear soup.",
-          ja: "刺身、野菜、ご飯、赤い酢コチュジャンを混ぜて食べる食事メニューです。魚鍋は澄ましスープに変更できます。",
+          en: "Raw fish and vegetables to mix with rice. The included spicy fish stew can be swapped for a mild clear soup.",
+          fil: "Sashimi at gulay na hinahalo sa kanin bago kainin. Puwedeng palitan ng malinaw na sabaw ang maanghang na fish stew.",
+          ja: "刺身と野菜をご飯と混ぜて食べる食事メニューです。メウンタンは辛くないちり鍋に変更できます。",
           zh: "将生鱼片、蔬菜、米饭和红色辣醋酱拌在一起食用。鱼汤可换成清汤。",
           vi: "Món cơm trộn cá sống, rau và sốt đỏ chua cay. Canh cá có thể đổi sang canh trong.",
           ru: "Блюдо с рисом, сырой рыбой, овощами и красным соусом. Рыбный суп можно заменить на прозрачный суп.",
@@ -1955,8 +1997,9 @@
         badgeKeys: ["kids", "cooked"],
         title: {
           ko: "돈까스 정식",
-          en: "Kids Pork Cutlet Set",
-          ja: "お子様とんかつ定食",
+          en: "Pork Cutlet Set",
+          fil: "Tonkatsu Set (Pork Cutlet)",
+          ja: "とんかつ定食",
           zh: "儿童炸猪排套餐",
           vi: "Set cơm thịt heo chiên cho trẻ em",
           ru: "Детский сет с тонкацу",
@@ -1965,6 +2008,7 @@
         price: {
           ko: "10,000원",
           en: "10,000 KRW",
+          fil: "10,000 KRW",
           ja: "10,000ウォン",
           zh: "10,000韩元",
           vi: "10,000 KRW",
@@ -1973,8 +2017,9 @@
         },
         desc: {
           ko: "등심 돈까스, 샐러드, 후리가케 밥으로 구성된 어린이 메뉴입니다.",
-          en: "Kids menu with pork cutlet, salad, and rice with furikake.",
-          ja: "ロースとんかつ、サラダ、ふりかけご飯の子供向けメニューです。",
+          en: "A kids’ set with pork loin cutlet, salad, and furikake rice.",
+          fil: "Pambatang menu na may pork loin tonkatsu, salad, at kanin na may furikake.",
+          ja: "ロースとんかつ、サラダ、ふりかけご飯のお子様メニューです。",
           zh: "儿童菜单，包含炸猪排、沙拉和拌饭调味料米饭。",
           vi: "Món trẻ em gồm thịt heo chiên, salad và cơm rắc furikake.",
           ru: "Детское меню со свиной котлетой, салатом и рисом с фурикакэ.",
@@ -1988,6 +2033,7 @@
         title: {
           ko: "참돔 사시미",
           en: "Red Sea Bream Sashimi",
+          fil: "Red Sea Bream Sashimi",
           ja: "真鯛の刺身",
           zh: "真鲷生鱼片",
           vi: "Sashimi cá tráp đỏ",
@@ -1996,8 +2042,9 @@
         },
         price: {
           ko: "소(2인) 120,000원",
-          en: "Small 120,000 KRW",
-          ja: "小 120,000ウォン",
+          en: "Small (2 people) 120,000 KRW",
+          fil: "Maliit (2 tao) 120,000 KRW",
+          ja: "小(2名) 120,000ウォン",
           zh: "小 120,000韩元",
           vi: "Nhỏ 120,000 KRW",
           ru: "Мал. 120,000 KRW",
@@ -2005,8 +2052,9 @@
         },
         desc: {
           ko: "담백하고 고급스러운 맛의 참돔 사시미입니다. 모듬해물, 맛보기 물회, 매운탕이 포함됩니다.",
-          en: "Premium white fish sashimi with a clean and delicate taste. Includes seafood, mulhoe tasting, and fish stew.",
-          ja: "淡白で上品な味の真鯛刺身です。海鮮、味見用ムルフェ、魚鍋が含まれます。",
+          en: "Red sea bream sashimi with a clean, refined flavor. Includes assorted seafood, mini mulhoe, and spicy fish stew.",
+          fil: "Red sea bream sashimi na magaan at sosyal ang lasa. Kasama na ang assorted seafood, pantikim na mulhoe, at maanghang na fish stew.",
+          ja: "淡白で上品な味わいの真鯛の刺身です。海鮮盛り合わせ、ミニムルフェ、メウンタンが付きます。",
           zh: "味道清淡高级的真鲷生鱼片。包含综合海鲜、品尝水会和鱼汤。",
           vi: "Sashimi cá trắng cao cấp, vị thanh và tinh tế. Bao gồm hải sản, mulhoe ăn thử và canh cá.",
           ru: "Премиальное сашими из белой рыбы с чистым нежным вкусом. Включает морепродукты, пробный мульхве и рыбный суп.",
@@ -2020,7 +2068,8 @@
         title: {
           ko: "산낙지",
           en: "Live Octopus",
-          ja: "活きテナガダコ",
+          fil: "Sannakji (Buhay na Octopus)",
+          ja: "サンナクチ（活きテナガダコ）",
           zh: "活章鱼",
           vi: "Bạch tuộc sống",
           ru: "Живой осьминог",
@@ -2029,6 +2078,7 @@
         price: {
           ko: "소 30,000원 / 중 50,000원",
           en: "Small 30,000 / Medium 50,000 KRW",
+          fil: "Maliit 30,000 KRW / Katamtaman 50,000 KRW",
           ja: "小 30,000 / 中 50,000ウォン",
           zh: "小 30,000 / 中 50,000韩元",
           vi: "Nhỏ 30,000 / Vừa 50,000 KRW",
@@ -2037,8 +2087,9 @@
         },
         desc: {
           ko: "주문 후 손질되어 제공되며, 접시 위에서 움직일 수 있습니다. 천천히 꼭꼭 씹어 드세요.",
-          en: "Freshly prepared after ordering. The pieces may still move on the plate. Please chew carefully.",
-          ja: "注文後に調理され、皿の上で動くことがあります。ゆっくりよく噛んでお召し上がりください。",
+          en: "Prepared to order and may still be moving on the plate. Please chew slowly and thoroughly.",
+          fil: "Hinihiwa ito pagka-order, kaya puwede pa itong gumalaw sa plato. Nguyain nang dahan-dahan at mabuti.",
+          ja: "ご注文後にさばいてお出しするため、お皿の上で動くことがあります。ゆっくりよく噛んでお召し上がりください。",
           zh: "点餐后现处理，上桌后可能还会移动。请慢慢充分咀嚼后食用。",
           vi: "Được sơ chế sau khi gọi món. Miếng bạch tuộc có thể còn chuyển động trên đĩa. Vui lòng nhai kỹ.",
           ru: "Готовится после заказа. Кусочки могут двигаться на тарелке. Пожалуйста, тщательно пережевывайте.",
@@ -2093,14 +2144,14 @@
       en: {
         title: "Soorim Courses",
         important: "Minimum order: 2 people · All course prices are per person.",
-        change: "The spicy fish stew included in the course can be changed to non-spicy clear fish soup.",
+        change: "The fish stew included in each course is spicy. It can be swapped for a mild, non-spicy clear soup.",
         rawTag: "Includes raw food",
         cookedTag: "Includes cooked dishes"
       },
       ja: {
-        title: "スリム コース",
-        important: "2名様以上注文可能 · すべてのコースは1名様価格です。",
-        change: "コースに含まれる辛い魚鍋は、辛くない澄ましスープに変更できます。",
+        title: "スーリムのコース",
+        important: "2名様からご注文いただけます · コース料金はすべて1名様の価格です。",
+        change: "コースのメウンタンは辛口です。辛くないちり鍋に変更できます。",
         rawTag: "生もの含む",
         cookedTag: "加熱料理含む"
       },
@@ -2119,11 +2170,11 @@
         cookedTag: "Có món chín"
       },
       fil: {
-        title: "Soorim Courses",
-        important: "Minimum order: 2 people · Presyo ay bawat tao.",
-        change: "Ang spicy fish stew sa course ay puwedeng palitan ng non-spicy clear fish soup.",
-        rawTag: "May raw food",
-        cookedTag: "May cooked dishes"
+        title: "Mga Course ng Soorim",
+        important: "Minimum na 2 tao bawat order · Ang presyo ng lahat ng course ay bawat tao.",
+        change: "Maanghang ang fish stew na kasama sa course. Puwede itong palitan ng malinaw na sabaw na hindi maanghang.",
+        rawTag: "May hilaw na pagkain",
+        cookedTag: "May lutong pagkain"
       },
       ru: {
         title: "Сеты Soorim",
@@ -2146,6 +2197,7 @@
         title: {
           ko: "A코스",
           en: "A Course",
+          fil: "A Course",
           ja: "Aコース",
           zh: "A套餐",
           vi: "Set A",
@@ -2155,6 +2207,7 @@
         price: {
           ko: "50,000원",
           en: "50,000 KRW",
+          fil: "50,000 KRW",
           ja: "50,000ウォン",
           zh: "50,000韩元",
           vi: "50,000 KRW",
@@ -2163,8 +2216,9 @@
         },
         desc: {
           ko: "수림횟집의 기본 코스입니다. 모듬회와 해산물, 맛보기 물회, 매운탕 또는 지리탕을 함께 즐길 수 있습니다.",
-          en: "A basic Soorim course with assorted sashimi, seafood, mulhoe tasting, and spicy fish stew or clear fish soup.",
-          ja: "盛り合わせ刺身、海鮮、味見用ムルフェ、辛い魚鍋または澄ましスープを楽しめる基本コースです。",
+          en: "Soorim’s basic course with assorted sashimi, assorted seafood, mini mulhoe, and spicy fish stew or mild clear soup.",
+          fil: "Basic na course ng Soorim. Kasama ang assorted sashimi, seafood, pantikim na mulhoe, at maanghang na fish stew o malinaw na sabaw.",
+          ja: "スーリムの基本コースです。刺身盛り合わせ、海鮮、ミニムルフェ、メウンタンまたはちり鍋をお楽しみいただけます。",
           zh: "水林的基础套餐，包含综合生鱼片、海鲜、品尝水会、辣鱼汤或清汤。",
           vi: "Set cơ bản gồm sashimi tổng hợp, hải sản, mulhoe ăn thử, canh cá cay hoặc canh trong.",
           ru: "Базовый сет с ассорти сашими, морепродуктами, пробным мульхве и острым или прозрачным рыбным супом.",
@@ -2172,8 +2226,9 @@
         },
         items: {
           ko: "구성: 모듬회 + 모듬해물 + 맛보기 물회 + 매운탕",
-          en: "Includes: assorted sashimi + seafood + mulhoe tasting + fish stew",
-          ja: "内容: 盛り合わせ刺身 + 海鮮 + 味見用ムルフェ + 魚鍋",
+          en: "Includes: assorted sashimi + assorted seafood + mini mulhoe + spicy fish stew",
+          fil: "Kasama: assorted sashimi + assorted seafood + pantikim na mulhoe + maanghang na fish stew",
+          ja: "内容: 刺身盛り合わせ + 海鮮盛り合わせ + ミニムルフェ + メウンタン",
           zh: "内容: 综合生鱼片 + 综合海鲜 + 品尝水会 + 鱼汤",
           vi: "Bao gồm: sashimi tổng hợp + hải sản + mulhoe ăn thử + canh cá",
           ru: "Состав: ассорти сашими + морепродукты + пробный мульхве + рыбный суп",
@@ -2185,6 +2240,7 @@
         title: {
           ko: "B코스",
           en: "B Course",
+          fil: "B Course",
           ja: "Bコース",
           zh: "B套餐",
           vi: "Set B",
@@ -2194,6 +2250,7 @@
         price: {
           ko: "70,000원",
           en: "70,000 KRW",
+          fil: "70,000 KRW",
           ja: "70,000ウォン",
           zh: "70,000韩元",
           vi: "70,000 KRW",
@@ -2202,8 +2259,9 @@
         },
         desc: {
           ko: "수림횟집 대표 코스입니다. 회, 해산물, 우럭탕수, 산낙지, 가리비찜, 매운탕 또는 지리탕까지 다양하게 즐길 수 있습니다.",
-          en: "Soorim’s signature course with sashimi, seafood, fried rockfish, live octopus, steamed scallops, and fish stew or clear soup.",
-          ja: "刺身、海鮮、ウロク酢豚、活きテナガダコ、ホタテ蒸し、魚鍋または澄ましスープを楽しめる代表コースです。",
+          en: "Soorim’s signature course with sashimi, seafood, sweet & sour fried rockfish, live octopus, steamed scallops, and spicy fish stew or mild clear soup.",
+          fil: "Signature course ng Soorim. Masasarapan kayo sa sashimi, seafood, sweet & sour na rockfish, sannakji, steamed scallops, at maanghang na fish stew o malinaw na sabaw.",
+          ja: "スーリムの代表コースです。刺身、海鮮、クロソイの甘酢あんかけ、サンナクチ、ホタテ蒸し、メウンタンまたはちり鍋まで、多彩にお楽しみいただけます。",
           zh: "水林招牌套餐，可享用生鱼片、海鲜、糖醋韩式岩鱼、活章鱼、蒸扇贝、鱼汤或清汤。",
           vi: "Set đại diện gồm sashimi, hải sản, cá chiên sốt chua ngọt, bạch tuộc sống, sò điệp hấp và canh cá.",
           ru: "Фирменный сет с сашими, морепродуктами, жареной рыбой, живым осьминогом, гребешками и рыбным супом.",
@@ -2211,8 +2269,9 @@
         },
         items: {
           ko: "구성: 고급모듬회 + 모듬해물 + 맛보기 물회 + 우럭탕수 + 산낙지 + 가리비찜 + 매운탕",
-          en: "Includes: premium assorted sashimi + seafood + mulhoe tasting + fried rockfish + live octopus + steamed scallops + fish stew",
-          ja: "内容: 高級盛り合わせ刺身 + 海鮮 + 味見用ムルフェ + ウロク酢豚 + 活きテナガダコ + ホタテ蒸し + 魚鍋",
+          en: "Includes: premium assorted sashimi + assorted seafood + mini mulhoe + sweet & sour fried rockfish + live octopus + steamed scallops + spicy fish stew",
+          fil: "Kasama: premium assorted sashimi + assorted seafood + pantikim na mulhoe + sweet & sour na rockfish + sannakji + steamed scallops + maanghang na fish stew",
+          ja: "内容: 上刺身盛り合わせ + 海鮮盛り合わせ + ミニムルフェ + クロソイの甘酢あんかけ + サンナクチ + ホタテ蒸し + メウンタン",
           zh: "内容: 高级综合生鱼片 + 综合海鲜 + 品尝水会 + 糖醋韩式岩鱼 + 活章鱼 + 蒸扇贝 + 鱼汤",
           vi: "Bao gồm: sashimi cao cấp + hải sản + mulhoe ăn thử + cá chiên sốt chua ngọt + bạch tuộc sống + sò điệp hấp + canh cá",
           ru: "Состав: премиальное ассорти сашими + морепродукты + пробный мульхве + жареная рыба + живой осьминог + гребешки + рыбный суп",
@@ -2225,6 +2284,7 @@
         title: {
           ko: "C코스",
           en: "C Course",
+          fil: "C Course",
           ja: "Cコース",
           zh: "C套餐",
           vi: "Set C",
@@ -2234,6 +2294,7 @@
         price: {
           ko: "90,000원",
           en: "90,000 KRW",
+          fil: "90,000 KRW",
           ja: "90,000ウォン",
           zh: "90,000韩元",
           vi: "90,000 KRW",
@@ -2242,8 +2303,9 @@
         },
         desc: {
           ko: "최고급 모듬회와 계절회를 포함한 프리미엄 코스입니다. 매운탕은 맵지 않은 지리탕으로 변경 가능합니다.",
-          en: "A premium course with top-grade assorted sashimi and seasonal sashimi. Spicy fish stew can be changed to clear fish soup.",
-          ja: "最高級盛り合わせ刺身と季節の刺身を含むプレミアムコースです。魚鍋は澄ましスープに変更できます。",
+          en: "A premium course with top-grade assorted sashimi and seasonal sashimi. The spicy fish stew can be swapped for a mild, non-spicy clear soup.",
+          fil: "Premium na course na may top-grade assorted sashimi at seasonal sashimi. Puwedeng palitan ng malinaw na sabaw na hindi maanghang ang maanghang na fish stew.",
+          ja: "特上刺身盛り合わせと季節の刺身が入ったプレミアムコースです。メウンタンは辛くないちり鍋に変更できます。",
           zh: "高级套餐，包含最高级综合生鱼片和季节生鱼片。辣鱼汤可换成清汤。",
           vi: "Set cao cấp gồm sashimi tổng hợp hạng cao và sashimi theo mùa. Canh cay có thể đổi sang canh trong.",
           ru: "Премиальный сет с лучшим ассорти сашими и сезонным сашими. Острый суп можно заменить на прозрачный суп.",
@@ -2251,8 +2313,9 @@
         },
         items: {
           ko: "구성: 최고급모듬회 + 계절회 + 모듬해물 + 맛보기 물회 + 우럭탕수 + 산낙지 + 가리비찜 + 매운탕",
-          en: "Includes: top-grade assorted sashimi + seasonal sashimi + seafood + mulhoe tasting + fried rockfish + live octopus + steamed scallops + fish stew",
-          ja: "内容: 最高級盛り合わせ刺身 + 季節の刺身 + 海鮮 + 味見用ムルフェ + ウロク酢豚 + 活きテナガダコ + ホタテ蒸し + 魚鍋",
+          en: "Includes: top-grade assorted sashimi + seasonal sashimi + assorted seafood + mini mulhoe + sweet & sour fried rockfish + live octopus + steamed scallops + spicy fish stew",
+          fil: "Kasama: top-grade assorted sashimi + seasonal sashimi + assorted seafood + pantikim na mulhoe + sweet & sour na rockfish + sannakji + steamed scallops + maanghang na fish stew",
+          ja: "内容: 特上刺身盛り合わせ + 季節の刺身 + 海鮮盛り合わせ + ミニムルフェ + クロソイの甘酢あんかけ + サンナクチ + ホタテ蒸し + メウンタン",
           zh: "内容: 最高级综合生鱼片 + 季节生鱼片 + 综合海鲜 + 品尝水会 + 糖醋韩式岩鱼 + 活章鱼 + 蒸扇贝 + 鱼汤",
           vi: "Bao gồm: sashimi cao cấp nhất + sashimi theo mùa + hải sản + mulhoe ăn thử + cá chiên sốt chua ngọt + bạch tuộc sống + sò điệp hấp + canh cá",
           ru: "Состав: лучшее ассорти сашими + сезонное сашими + морепродукты + пробный мульхве + жареная рыба + живой осьминог + гребешки + рыбный суп",
@@ -2317,29 +2380,29 @@
       },
       en: {
         title: "Sashimi",
-        included: "Includes seafood · mulhoe tasting · fish stew",
-        change: "The included spicy fish stew can be changed to non-spicy clear fish soup.",
-        notice: "Please ask our staff for the fish stew after finishing your sashimi. It takes about 10 minutes to prepare.",
+        included: "Includes assorted seafood · mini mulhoe · spicy fish stew",
+        change: "The included fish stew is spicy. It can be swapped for a mild, non-spicy clear soup.",
+        notice: "After your sashimi, please be sure to ask our staff for the fish stew. It takes about 10 minutes to cook.",
         rawTag: "Raw food",
         premiumTag: "Premium",
-        mildTag: "Mild taste",
+        mildTag: "Mild & clean",
         chewyTag: "Chewy texture",
         seasonalTag: "Seasonal",
-        boneTag: "Thin-sliced with bones",
-        strongTextureTag: "Strong texture"
+        boneTag: "Bone-in slices",
+        strongTextureTag: "Firm texture"
       },
       ja: {
         title: "単品刺身",
-        included: "海鮮 · 味見用ムルフェ · 魚鍋付き",
-        change: "含まれる辛い魚鍋は、辛くない澄ましスープに変更できます。",
-        notice: "刺身を召し上がった後、魚鍋をスタッフにお申し付けください。調理に約10分かかります。",
+        included: "海鮮盛り合わせ · ミニムルフェ · メウンタン付き",
+        change: "付属のメウンタンは辛口です。辛くないちり鍋に変更できます。",
+        notice: "刺身を召し上がった後、メウンタンを必ずスタッフにお申し付けください。調理には約10分かかります。",
         rawTag: "生もの",
         premiumTag: "プレミアム",
-        mildTag: "淡白な味",
-        chewyTag: "弾力のある食感",
+        mildTag: "あっさり",
+        chewyTag: "弾力ある食感",
         seasonalTag: "季節メニュー",
         boneTag: "骨ごと薄切り",
-        strongTextureTag: "食感強め"
+        strongTextureTag: "歯ごたえ強め"
       },
       zh: {
         title: "单品生鱼片",
@@ -2369,16 +2432,16 @@
       },
       fil: {
         title: "Sashimi",
-        included: "May kasamang seafood · mulhoe tasting · fish stew",
-        change: "Ang kasamang spicy fish stew ay puwedeng palitan ng non-spicy clear fish soup.",
-        notice: "Pagkatapos kumain ng sashimi, pakiusap humingi sa staff ng fish stew. Mga 10 minuto ang pagluluto.",
-        rawTag: "Raw food",
+        included: "Kasama ang assorted seafood · pantikim na mulhoe · maanghang na fish stew",
+        change: "Maanghang ang kasamang fish stew. Puwede itong palitan ng malinaw na sabaw na hindi maanghang.",
+        notice: "Pagkatapos ng sashimi, huwag kalimutang sabihan ang staff para sa fish stew. Mga 10 minuto ang pagluluto nito.",
+        rawTag: "Hilaw",
         premiumTag: "Premium",
-        mildTag: "Mild taste",
-        chewyTag: "Chewy texture",
-        seasonalTag: "Seasonal",
-        boneTag: "Thin-sliced with bones",
-        strongTextureTag: "Strong texture"
+        mildTag: "Magaan na lasa",
+        chewyTag: "Chewy",
+        seasonalTag: "Pana-panahon",
+        boneTag: "Hiniwa na may buto",
+        strongTextureTag: "Firm at chewy"
       },
       ru: {
         title: "Сашими",
@@ -2413,6 +2476,7 @@
         title: {
           ko: "참돔",
           en: "Red Sea Bream",
+          fil: "Red Sea Bream",
           ja: "真鯛",
           zh: "真鲷",
           vi: "Cá tráp đỏ",
@@ -2421,8 +2485,9 @@
         },
         desc: {
           ko: "담백하고 고급스러운 맛의 흰살 생선 사시미입니다. 처음 방문한 손님께도 추천하기 좋은 메뉴입니다.",
-          en: "Premium white fish sashimi with a clean and delicate taste. Recommended for first-time visitors.",
-          ja: "淡白で上品な味の白身魚刺身です。初めてのお客様にもおすすめです。",
+          en: "Premium white-fish sashimi with a clean, refined flavor. A great choice for first-time visitors.",
+          fil: "White fish sashimi na magaan at sosyal ang lasa. Magandang piliin kung first time ninyo rito.",
+          ja: "淡白で上品な味わいの白身魚の刺身です。初めてご来店のお客様にもおすすめです。",
           zh: "味道清淡高级的白身鱼生鱼片。也推荐给第一次来店的客人。",
           vi: "Sashimi cá trắng cao cấp, vị thanh và tinh tế. Phù hợp cho khách lần đầu đến quán.",
           ru: "Премиальное сашими из белой рыбы с чистым нежным вкусом. Подходит для первого посещения.",
@@ -2432,6 +2497,7 @@
         prices: {
           ko: [["소(2인)", "120,000원"], ["중(3인)", "170,000원"], ["대(4인)", "220,000원"]],
           en: [["Small (2 people)", "120,000 KRW"], ["Medium (3 people)", "170,000 KRW"], ["Large (4 people)", "220,000 KRW"]],
+          fil: [["Maliit (2 tao)", "120,000 KRW"], ["Katamtaman (3 tao)", "170,000 KRW"], ["Malaki (4 tao)", "220,000 KRW"]],
           ja: [["小(2名)", "120,000ウォン"], ["中(3名)", "170,000ウォン"], ["大(4名)", "220,000ウォン"]],
           zh: [["小(2人)", "120,000韩元"], ["中(3人)", "170,000韩元"], ["大(4人)", "220,000韩元"]],
           vi: [["Nhỏ (2 người)", "120,000 KRW"], ["Vừa (3 người)", "170,000 KRW"], ["Lớn (4 người)", "220,000 KRW"]],
@@ -2442,7 +2508,8 @@
       {
         title: {
           ko: "줄돔",
-          en: "Striped Beakfish",
+          en: "Barred Knifejaw",
+          fil: "Barred Knifejaw",
           ja: "イシダイ",
           zh: "条石鲷",
           vi: "Cá sọc cao cấp",
@@ -2452,7 +2519,8 @@
         desc: {
           ko: "쫄깃한 식감과 깊은 맛이 특징인 고급 생선 사시미입니다. 생선회를 좋아하는 손님께 추천합니다.",
           en: "Premium sashimi with a chewy texture and deep flavor. Recommended for sashimi lovers.",
-          ja: "弾力のある食感と深い味が特徴の高級刺身です。刺身が好きな方におすすめです。",
+          fil: "Premium na sashimi na chewy at malalim ang lasa. Rekomendado sa mga mahilig sa sashimi.",
+          ja: "弾力のある食感と深い旨みが特徴の高級刺身です。刺身好きの方におすすめです。",
           zh: "口感有嚼劲、味道浓郁的高级生鱼片。推荐给喜欢生鱼片的客人。",
           vi: "Sashimi cao cấp có độ dai và vị đậm. Phù hợp cho khách thích sashimi.",
           ru: "Премиальное сашими с плотной текстурой и насыщенным вкусом. Рекомендуется любителям сашими.",
@@ -2462,6 +2530,7 @@
         prices: {
           ko: [["소(2인)", "160,000원"], ["중(3인)", "230,000원"], ["대(4인)", "300,000원"]],
           en: [["Small (2 people)", "160,000 KRW"], ["Medium (3 people)", "230,000 KRW"], ["Large (4 people)", "300,000 KRW"]],
+          fil: [["Maliit (2 tao)", "160,000 KRW"], ["Katamtaman (3 tao)", "230,000 KRW"], ["Malaki (4 tao)", "300,000 KRW"]],
           ja: [["小(2名)", "160,000ウォン"], ["中(3名)", "230,000ウォン"], ["大(4名)", "300,000ウォン"]],
           zh: [["小(2人)", "160,000韩元"], ["中(3人)", "230,000韩元"], ["大(4人)", "300,000韩元"]],
           vi: [["Nhỏ (2 người)", "160,000 KRW"], ["Vừa (3 người)", "230,000 KRW"], ["Lớn (4 người)", "300,000 KRW"]],
@@ -2472,7 +2541,8 @@
       {
         title: {
           ko: "광어",
-          en: "Flatfish",
+          en: "Olive Flounder (Halibut)",
+          fil: "Olive Flounder (Halibut)",
           ja: "ヒラメ",
           zh: "比目鱼",
           vi: "Cá bơn",
@@ -2481,8 +2551,9 @@
         },
         desc: {
           ko: "한국에서 가장 대중적인 흰살 생선회입니다. 담백하고 깔끔한 맛이라 부담 없이 즐기기 좋습니다.",
-          en: "One of the most popular white fish sashimi in Korea. Mild, clean, and easy to enjoy.",
-          ja: "韓国で最も一般的な白身魚の刺身です。淡白で食べやすい味です。",
+          en: "Korea’s most popular white-fish sashimi. Mild and clean, it’s easy for anyone to enjoy.",
+          fil: "Ang pinakasikat na white fish sashimi sa Korea. Magaan at malinis ang lasa kaya madaling kainin.",
+          ja: "韓国で最もポピュラーな白身魚の刺身です。淡白ですっきりした味わいで、気軽にお楽しみいただけます。",
           zh: "韩国最常见的白身鱼生鱼片之一。味道清淡干净，容易入口。",
           vi: "Một loại sashimi cá trắng rất phổ biến ở Hàn Quốc. Vị thanh, dễ ăn.",
           ru: "Один из самых популярных видов сашими из белой рыбы в Корее. Мягкий и чистый вкус.",
@@ -2492,6 +2563,7 @@
         prices: {
           ko: [["소(2인)", "110,000원"], ["중(3인)", "160,000원"], ["대(4인)", "210,000원"]],
           en: [["Small (2 people)", "110,000 KRW"], ["Medium (3 people)", "160,000 KRW"], ["Large (4 people)", "210,000 KRW"]],
+          fil: [["Maliit (2 tao)", "110,000 KRW"], ["Katamtaman (3 tao)", "160,000 KRW"], ["Malaki (4 tao)", "210,000 KRW"]],
           ja: [["小(2名)", "110,000ウォン"], ["中(3名)", "160,000ウォン"], ["大(4名)", "210,000ウォン"]],
           zh: [["小(2人)", "110,000韩元"], ["中(3人)", "160,000韩元"], ["大(4人)", "210,000韩元"]],
           vi: [["Nhỏ (2 người)", "110,000 KRW"], ["Vừa (3 người)", "160,000 KRW"], ["Lớn (4 người)", "210,000 KRW"]],
@@ -2503,7 +2575,8 @@
         title: {
           ko: "우럭 / 농어",
           en: "Rockfish / Sea Bass",
-          ja: "ウロク / スズキ",
+          fil: "Rockfish / Sea Bass",
+          ja: "クロソイ / スズキ",
           zh: "韩式岩鱼 / 鲈鱼",
           vi: "Cá rockfish / cá vược",
           ru: "Рыба рокфиш / сибас",
@@ -2511,8 +2584,9 @@
         },
         desc: {
           ko: "쫄깃한 식감이 좋은 흰살 생선 사시미입니다. 회를 드신 후 매운탕 또는 지리탕과 함께 즐기기 좋습니다.",
-          en: "White fish sashimi with a pleasantly chewy texture. Enjoy it with spicy stew or clear soup afterward.",
-          ja: "弾力のある食感が特徴の白身魚刺身です。食後に魚鍋または澄ましスープと一緒に楽しめます。",
+          en: "White-fish sashimi with a pleasantly chewy texture. Great followed by spicy fish stew or mild clear soup.",
+          fil: "White fish sashimi na masarap ang pagka-chewy. Pagkatapos ng sashimi, bagay itong sundan ng maanghang na fish stew o malinaw na sabaw.",
+          ja: "弾力のある食感が魅力の白身魚の刺身です。刺身の後はメウンタンまたはちり鍋と一緒にお楽しみください。",
           zh: "口感有嚼劲的白身鱼生鱼片。吃完后可搭配辣鱼汤或清汤。",
           vi: "Sashimi cá trắng có độ dai dễ chịu. Có thể dùng cùng canh cay hoặc canh trong sau đó.",
           ru: "Сашими из белой рыбы с приятной плотной текстурой. После него хорошо подходит острый или прозрачный суп.",
@@ -2522,6 +2596,7 @@
         prices: {
           ko: [["소(2인)", "110,000원"], ["중(3인)", "160,000원"], ["대(4인)", "210,000원"]],
           en: [["Small (2 people)", "110,000 KRW"], ["Medium (3 people)", "160,000 KRW"], ["Large (4 people)", "210,000 KRW"]],
+          fil: [["Maliit (2 tao)", "110,000 KRW"], ["Katamtaman (3 tao)", "160,000 KRW"], ["Malaki (4 tao)", "210,000 KRW"]],
           ja: [["小(2名)", "110,000ウォン"], ["中(3名)", "160,000ウォン"], ["大(4名)", "210,000ウォン"]],
           zh: [["小(2人)", "110,000韩元"], ["中(3人)", "160,000韩元"], ["大(4人)", "210,000韩元"]],
           vi: [["Nhỏ (2 người)", "110,000 KRW"], ["Vừa (3 người)", "160,000 KRW"], ["Lớn (4 người)", "210,000 KRW"]],
@@ -2532,8 +2607,9 @@
       {
         title: {
           ko: "밀치",
-          en: "Mullet",
-          ja: "ボラ",
+          en: "Redlip Mullet",
+          fil: "Mullet (Milchi)",
+          ja: "メナダ",
           zh: "鲻鱼",
           vi: "Cá đối",
           ru: "Кефаль",
@@ -2541,8 +2617,9 @@
         },
         desc: {
           ko: "계절에 따라 많이 찾는 생선회입니다. 고소하고 부드러운 맛을 좋아하는 손님께 추천합니다.",
-          en: "A seasonal sashimi choice with a savory and smooth taste.",
-          ja: "季節によく選ばれる刺身です。香ばしく柔らかい味がお好きな方におすすめです。",
+          en: "A sashimi that’s popular in season. Recommended if you like a rich, nutty, tender flavor.",
+          fil: "Sashimi na hinahanap-hanap tuwing panahon nito. Rekomendado sa mga gusto ng malinamnam at malambot na lasa.",
+          ja: "季節によって人気の高い刺身です。コクがありやわらかな味わいがお好きな方におすすめです。",
           zh: "季节性常见的生鱼片。适合喜欢香醇柔和口味的客人。",
           vi: "Món sashimi theo mùa, vị béo nhẹ và mềm.",
           ru: "Сезонное сашими с мягким и насыщенным вкусом.",
@@ -2552,6 +2629,7 @@
         prices: {
           ko: [["소(2인)", "110,000원"], ["중(3인)", "160,000원"], ["대(4인)", "210,000원"]],
           en: [["Small (2 people)", "110,000 KRW"], ["Medium (3 people)", "160,000 KRW"], ["Large (4 people)", "210,000 KRW"]],
+          fil: [["Maliit (2 tao)", "110,000 KRW"], ["Katamtaman (3 tao)", "160,000 KRW"], ["Malaki (4 tao)", "210,000 KRW"]],
           ja: [["小(2名)", "110,000ウォン"], ["中(3名)", "160,000ウォン"], ["大(4名)", "210,000ウォン"]],
           zh: [["小(2人)", "110,000韩元"], ["中(3人)", "160,000韩元"], ["大(4人)", "210,000韩元"]],
           vi: [["Nhỏ (2 người)", "110,000 KRW"], ["Vừa (3 người)", "160,000 KRW"], ["Lớn (4 người)", "210,000 KRW"]],
@@ -2562,8 +2640,9 @@
       {
         title: {
           ko: "도다리 세꼬시",
-          en: "Thin-sliced Flounder with Bones",
-          ja: "ドダリ セコシ",
+          en: "Marbled Flounder Sekkoshi (Bone-in)",
+          fil: "Flounder Sekkoshi (Hiniwa na May Buto)",
+          ja: "マコガレイのセコシ",
           zh: "薄切带骨鲽鱼",
           vi: "Cá bơn thái mỏng cả xương",
           ru: "Тонко нарезанная камбала с костями",
@@ -2571,8 +2650,9 @@
         },
         desc: {
           ko: "도다리를 뼈째 얇게 썰어 씹는 식감을 즐기는 사시미입니다. 처음 드시는 분께는 식감이 낯설 수 있습니다.",
-          en: "Flounder sliced thinly with small bones for texture. The texture may feel unfamiliar if it is your first time.",
-          ja: "ドダリを骨ごと薄く切り、食感を楽しむ刺身です。初めての方には食感が慣れない場合があります。",
+          en: "Marbled flounder thinly sliced with the bones in, enjoyed for its crunchy bite. The texture may feel unfamiliar if it’s your first time.",
+          fil: "Manipis na hiwa ng marbled flounder kasama ang buto, kaya ramdam ang kagat. Baka maninibago kayo sa texture kung first time ninyo.",
+          ja: "マコガレイを骨ごと薄く切り、歯ごたえを楽しむ刺身です。初めての方には食感が珍しく感じられるかもしれません。",
           zh: "将鲽鱼带骨薄切，享受嚼劲的生鱼片。第一次吃的客人可能会觉得口感陌生。",
           vi: "Cá bơn thái mỏng cả xương để cảm nhận độ giòn. Nếu ăn lần đầu, kết cấu có thể hơi lạ.",
           ru: "Камбала, тонко нарезанная с мелкими костями ради текстуры. При первом разе текстура может быть непривычной.",
@@ -2582,6 +2662,7 @@
         prices: {
           ko: [["소(2인)", "100,000원"], ["중(3인)", "140,000원"], ["대(4인)", "180,000원"]],
           en: [["Small (2 people)", "100,000 KRW"], ["Medium (3 people)", "140,000 KRW"], ["Large (4 people)", "180,000 KRW"]],
+          fil: [["Maliit (2 tao)", "100,000 KRW"], ["Katamtaman (3 tao)", "140,000 KRW"], ["Malaki (4 tao)", "180,000 KRW"]],
           ja: [["小(2名)", "100,000ウォン"], ["中(3名)", "140,000ウォン"], ["大(4名)", "180,000ウォン"]],
           zh: [["小(2人)", "100,000韩元"], ["中(3人)", "140,000韩元"], ["大(4人)", "180,000韩元"]],
           vi: [["Nhỏ (2 người)", "100,000 KRW"], ["Vừa (3 người)", "140,000 KRW"], ["Lớn (4 người)", "180,000 KRW"]],
@@ -2687,13 +2768,13 @@
         howToEat: "Cách ăn"
       },
       fil: {
-        title: "Meals",
-        cookedTag: "Cooked",
-        rawTag: "May raw food",
+        title: "Mga Meal",
+        cookedTag: "Luto",
+        rawTag: "May hilaw na pagkain",
         mealTag: "Meal",
         bestTag: "★ BEST",
-        spicyColdTag: "Cold, sweet & spicy",
-        winterTag: "Winter only",
+        spicyColdTag: "Malamig, matamis-anghang",
+        winterTag: "Taglamig lang",
         howToEat: "Paano kainin"
       },
       ru: {
@@ -2723,8 +2804,9 @@
         type: "sizes",
         title: {
           ko: "생우럭 매운탕 / 지리탕",
-          en: "Fresh Rockfish Spicy Stew / Clear Soup",
-          ja: "生ウロク辛鍋 / 澄ましスープ",
+          en: "Fresh Rockfish Spicy Stew / Mild Clear Soup",
+          fil: "Sariwang Rockfish – Maanghang na Stew / Malinaw na Sabaw",
+          ja: "活クロソイのメウンタン / ちり鍋",
           zh: "鲜韩式岩鱼辣汤 / 清汤",
           vi: "Canh cá rockfish cay / canh trong",
           ru: "Суп из свежей рыбы / прозрачный суп",
@@ -2732,8 +2814,9 @@
         },
         desc: {
           ko: "날 음식을 드시지 못하는 분께 추천하는 대표 식사 메뉴입니다. 얼큰한 매운탕 또는 맑고 맵지 않은 지리탕으로 선택할 수 있습니다.",
-          en: "Recommended for guests who do not eat raw food. Choose spicy fish stew or a mild, non-spicy clear fish soup.",
-          ja: "生ものが苦手な方におすすめの食事メニューです。辛い魚鍋、または辛くない澄ましスープを選べます。",
+          en: "Our top pick for guests who don’t eat raw food. Choose a hearty spicy fish stew or a mild, non-spicy clear soup.",
+          fil: "Signature na meal para sa mga hindi kumakain ng hilaw. Puwedeng piliin ang maanghang na fish stew o ang malinaw at hindi maanghang na sabaw.",
+          ja: "生ものが苦手な方におすすめの代表的な食事メニューです。ピリッと辛いメウンタン、または澄んだ辛くないちり鍋からお選びいただけます。",
           zh: "推荐给不吃生食的客人。可选择辣鱼汤或不辣的清汤。",
           vi: "Gợi ý cho khách không ăn đồ sống. Có thể chọn canh cá cay hoặc canh trong không cay.",
           ru: "Рекомендуется гостям, которые не едят сырое. Можно выбрать острый рыбный суп или мягкий прозрачный суп.",
@@ -2743,6 +2826,7 @@
         prices: {
           ko: [["소(1~2인)", "30,000원"], ["중(2~3인)", "50,000원"], ["대(3~4인)", "70,000원"]],
           en: [["Small (1–2 people)", "30,000 KRW"], ["Medium (2–3 people)", "50,000 KRW"], ["Large (3–4 people)", "70,000 KRW"]],
+          fil: [["Maliit (1–2 tao)", "30,000 KRW"], ["Katamtaman (2–3 tao)", "50,000 KRW"], ["Malaki (3–4 tao)", "70,000 KRW"]],
           ja: [["小(1〜2名)", "30,000ウォン"], ["中(2〜3名)", "50,000ウォン"], ["大(3〜4名)", "70,000ウォン"]],
           zh: [["小(1~2人)", "30,000韩元"], ["中(2~3人)", "50,000韩元"], ["大(3~4人)", "70,000韩元"]],
           vi: [["Nhỏ (1–2 người)", "30,000 KRW"], ["Vừa (2–3 người)", "50,000 KRW"], ["Lớn (3–4 người)", "70,000 KRW"]],
@@ -2755,7 +2839,8 @@
         title: {
           ko: "생대구탕",
           en: "Fresh Cod Soup",
-          ja: "生タラ鍋",
+          fil: "Sariwang Cod Soup",
+          ja: "生ダラ鍋",
           zh: "鲜鳕鱼汤",
           vi: "Canh cá tuyết tươi",
           ru: "Суп из свежей трески",
@@ -2764,6 +2849,7 @@
         price: {
           ko: "22,000원",
           en: "22,000 KRW",
+          fil: "22,000 KRW",
           ja: "22,000ウォン",
           zh: "22,000韩元",
           vi: "22,000 KRW",
@@ -2772,8 +2858,9 @@
         },
         desc: {
           ko: "겨울 한정으로 제공되는 따뜻한 탕 메뉴입니다.",
-          en: "A warm soup menu served only in winter.",
-          ja: "冬限定で提供される温かい鍋メニューです。",
+          en: "A warm, hearty soup available in winter only.",
+          fil: "Mainit na sabaw na inihahain lang tuwing taglamig.",
+          ja: "冬季限定の温かい鍋料理です。",
           zh: "冬季限定的热汤菜单。",
           vi: "Món canh nóng chỉ phục vụ vào mùa đông.",
           ru: "Тёплый суп, который подается только зимой.",
@@ -2786,6 +2873,7 @@
         title: {
           ko: "회덮밥",
           en: "Sashimi Rice Bowl",
+          fil: "Sashimi Rice Bowl (Hoedeopbap)",
           ja: "刺身ビビンバ",
           zh: "生鱼片拌饭",
           vi: "Cơm trộn cá sống",
@@ -2794,8 +2882,9 @@
         },
         desc: {
           ko: "생선회와 채소를 밥과 함께 비벼 먹는 메뉴입니다. 매운탕과 공기밥이 포함되며, 매운탕은 맵지 않은 지리탕으로 변경 가능합니다.",
-          en: "A rice bowl mixed with raw fish, vegetables, rice, and red chili-vinegar sauce. Includes fish stew and rice; the stew can be changed to clear soup.",
-          ja: "刺身、野菜、ご飯を赤い酢コチュジャンと混ぜて食べるメニューです。魚鍋とご飯付きで、魚鍋は澄ましスープに変更できます。",
+          en: "Raw fish and vegetables mixed with rice. Comes with spicy fish stew and a bowl of rice; the stew can be swapped for a mild, non-spicy clear soup.",
+          fil: "Sashimi at gulay na hinahalo sa kanin bago kainin. Kasama ang maanghang na fish stew at kanin; puwedeng palitan ng malinaw na sabaw na hindi maanghang ang stew.",
+          ja: "刺身と野菜をご飯と混ぜて食べるメニューです。メウンタンとご飯付きで、メウンタンは辛くないちり鍋に変更できます。",
           zh: "将生鱼片、蔬菜、米饭和红色辣醋酱拌在一起食用。包含鱼汤和米饭，鱼汤可换成清汤。",
           vi: "Món cơm trộn cá sống, rau, cơm và sốt đỏ chua cay. Bao gồm canh cá và cơm; canh có thể đổi sang canh trong.",
           ru: "Рис с сырой рыбой, овощами и красным соусом. Включает рыбный суп и рис; суп можно заменить на прозрачный.",
@@ -2803,8 +2892,9 @@
         },
         eating: {
           ko: "야채와 생선회가 들어있는 그릇에 붉은 소스통의 초고추장을 넣고, 밥과 함께 잘 비벼서 드세요.",
-          en: "Add the red sauce from the sauce bottle to the bowl with vegetables and raw fish, then mix well with rice.",
-          ja: "野菜と刺身が入った器に赤いソースボトルの酢コチュジャンを入れ、ご飯とよく混ぜてお召し上がりください。",
+          en: "Add the sweet-sour red chili sauce (chogochujang) from the red bottle to the bowl of vegetables and raw fish, then mix well with the rice.",
+          fil: "Ilagay ang chogochujang (matamis-asim na red chili sauce) mula sa pulang bote sa mangkok ng gulay at sashimi, saka haluing mabuti kasama ang kanin.",
+          ja: "野菜と刺身が入った器に、赤いソースボトルの酢コチュジャンを入れ、ご飯とよく混ぜてお召し上がりください。",
           zh: "将红色酱瓶中的辣醋酱加入装有蔬菜和生鱼片的碗中，再和米饭充分拌匀后食用。",
           vi: "Cho sốt đỏ trong chai vào tô có rau và cá sống, rồi trộn đều với cơm trước khi ăn.",
           ru: "Добавьте красный соус из бутылочки в миску с овощами и сырой рыбой, затем хорошо перемешайте с рисом.",
@@ -2813,8 +2903,9 @@
         tags: ["rawTag", "mealTag"],
         options: {
           ko: [["일반", "생선회", "17,000원"], ["모듬", "생선회 + 멍게 + 해삼", "22,000원"], ["전복모듬", "생선회 + 멍게 + 해삼 + 전복", "27,000원"], ["도다리", "도다리회", "19,000원"]],
-          en: [["Regular", "raw fish", "17,000 KRW"], ["Assorted", "raw fish + sea squirt + sea cucumber", "22,000 KRW"], ["Abalone assorted", "raw fish + sea squirt + sea cucumber + abalone", "27,000 KRW"], ["Flounder", "flounder sashimi", "19,000 KRW"]],
-          ja: [["一般", "刺身", "17,000ウォン"], ["盛り合わせ", "刺身 + ホヤ + ナマコ", "22,000ウォン"], ["アワビ盛り合わせ", "刺身 + ホヤ + ナマコ + アワビ", "27,000ウォン"], ["ドダリ", "ドダリ刺身", "19,000ウォン"]],
+          en: [["Regular", "Raw fish", "17,000 KRW"], ["Assorted", "Raw fish + sea squirt + sea cucumber", "22,000 KRW"], ["With Abalone", "Raw fish + sea squirt + sea cucumber + abalone", "27,000 KRW"], ["Flounder", "Marbled flounder sashimi", "19,000 KRW"]],
+          fil: [["Regular", "sashimi", "17,000 KRW"], ["Assorted", "sashimi + sea squirt + sea cucumber", "22,000 KRW"], ["May Abalone", "sashimi + sea squirt + sea cucumber + abalone", "27,000 KRW"], ["Flounder", "marbled flounder sashimi", "19,000 KRW"]],
+          ja: [["基本", "刺身", "17,000ウォン"], ["盛り合わせ", "刺身 + ホヤ + ナマコ", "22,000ウォン"], ["アワビ入り盛り合わせ", "刺身 + ホヤ + ナマコ + アワビ", "27,000ウォン"], ["マコガレイ", "マコガレイの刺身", "19,000ウォン"]],
           zh: [["普通", "生鱼片", "17,000韩元"], ["综合", "生鱼片 + 海鞘 + 海参", "22,000韩元"], ["鲍鱼综合", "生鱼片 + 海鞘 + 海参 + 鲍鱼", "27,000韩元"], ["鲽鱼", "鲽鱼生鱼片", "19,000韩元"]],
           vi: [["Thường", "cá sống", "17,000 KRW"], ["Tổng hợp", "cá sống + hải tiêu + hải sâm", "22,000 KRW"], ["Tổng hợp bào ngư", "cá sống + hải tiêu + hải sâm + bào ngư", "27,000 KRW"], ["Cá bơn", "sashimi cá bơn", "19,000 KRW"]],
           ru: [["Обычный", "сырая рыба", "17,000 KRW"], ["Ассорти", "сырая рыба + асцидия + морской огурец", "22,000 KRW"], ["Ассорти с абалоном", "сырая рыба + асцидия + морской огурец + абалон", "27,000 KRW"], ["Камбала", "сашими из камбалы", "19,000 KRW"]],
@@ -2827,7 +2918,8 @@
         title: {
           ko: "물회",
           en: "Mulhoe (Cold Spicy Sashimi Soup)",
-          ja: "ムルフェ（冷たい辛味刺身スープ）",
+          fil: "Mulhoe (Malamig na Maanghang na Sashimi Soup)",
+          ja: "ムルフェ（冷たい刺身の甘辛スープ）",
           zh: "韩式冷辣生鱼汤",
           vi: "Mulhoe",
           ru: "Мульхве",
@@ -2835,18 +2927,19 @@
         },
         desc: {
           ko: "차갑고 매콤달콤한 물회 소스에 생선회와 채소를 함께 먹는 수림횟집 인기 메뉴입니다. 다양한 과일을 갈아 넣어 직접 개발한 특제 소스를 사용합니다. 매운탕, 공기밥, 소면이 포함되며, 매운탕은 맵지 않은 지리탕으로 변경 가능합니다.",
-          en: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits. Includes fish stew, rice, and noodles; the stew can be changed to clear soup.",
-          ja: "冷たく甘辛いムルフェソースに刺身と野菜を混ぜて食べる人気メニューです。さまざまな果物をすり入れて開発した自家製特製ソースを使用しています。魚鍋、ご飯、素麺付きで、魚鍋は澄ましスープに変更できます。",
+          en: "A Soorim favorite: raw fish and vegetables in a chilled, sweet-and-spicy mulhoe broth, made with our own special sauce of freshly ground fruits. Comes with spicy fish stew, rice, and thin wheat noodles; the stew can be swapped for a mild, non-spicy clear soup.",
+          ja: "冷たく甘辛いムルフェのソースに刺身と野菜を合わせて食べる、スーリムの人気メニューです。さまざまな果物をすりおろして入れた自家製の特製ソースを使っています。メウンタン、ご飯、素麺付きで、メウンタンは辛くないちり鍋に変更できます。",
           zh: "将生鱼片和蔬菜与冰凉酸甜微辣的水会酱汁一起拌食的人气菜单。酱汁为本店使用多种水果研磨后研发的特制酱汁。包含鱼汤、米饭和素面，鱼汤可换成清汤。",
           vi: "Món cá sống lạnh vị ngọt cay nhẹ, ăn cùng rau và sốt mulhoe đặc biệt của Soorim được xay từ nhiều loại trái cây. Bao gồm canh cá, cơm và mì; canh có thể đổi sang canh trong.",
-          fil: "A popular cold, sweet-and-spicy sashimi soup with raw fish, vegetables, and Soorim’s special house sauce made with blended fruits. Includes fish stew, rice, and noodles; the stew can be changed to clear soup.",
+          fil: "Patok na menu ng Soorim: sashimi at gulay sa malamig, matamis at maanghang na mulhoe sauce. Gawa ang espesyal na sauce namin mula sa iba’t ibang prutas na dinurog, at kami mismo ang bumuo ng recipe. Kasama ang maanghang na fish stew, kanin, at somen (manipis na noodles); puwedeng palitan ng malinaw na sabaw na hindi maanghang ang stew.",
           ru: "Популярное холодное сладко-острое блюдо из сырой рыбы и овощей с фирменным соусом Soorim, приготовленным с измельченными фруктами. Включает суп, рис и лапшу; суп можно заменить на прозрачный.",
           mn: "Түүхий загас, ногоо, жимсээр хийсэн Soorim-ийн тусгай соустай, хүйтэн, чихэрлэг халуун ногоотой алдартай хоол. Загасны шөл, будаа, гоймон багтана; шөлийг тунгалаг шөлөөр сольж болно."
         },
         eating: {
           ko: "그릇 안에 물회 소스가 함께 들어있습니다. 생선회와 채소, 소스를 잘 섞어서 시원하게 드세요.",
-          en: "The mulhoe sauce is already in the bowl. Mix the raw fish, vegetables, and sauce well before eating.",
-          ja: "器の中にムルフェ（冷たい辛味刺身スープ）ソースが入っています。刺身、野菜、ソースをよく混ぜて冷たくお召し上がりください。",
+          en: "The mulhoe sauce is already in the bowl. Mix the raw fish, vegetables, and sauce well and enjoy it ice-cold.",
+          fil: "Nasa mangkok na ang mulhoe sauce. Haluing mabuti ang sashimi, gulay, at sauce, at kainin habang malamig.",
+          ja: "器にムルフェのソースが入っています。刺身、野菜、ソースをよく混ぜて、冷たいうちにお召し上がりください。",
           zh: "碗里已经有水会酱汁。请将生鱼片、蔬菜和酱汁充分拌匀后享用。",
           vi: "Sốt mulhoe đã có trong tô. Trộn đều cá sống, rau và sốt trước khi ăn.",
           ru: "Соус мульхве уже находится в миске. Хорошо перемешайте сырую рыбу, овощи и соус.",
@@ -2855,8 +2948,9 @@
         tags: ["rawTag", "spicyColdTag", "mealTag"],
         options: {
           ko: [["일반", "생선회", "20,000원"], ["모듬", "생선회 + 멍게 + 해삼", "25,000원"], ["전복모듬", "생선회 + 멍게 + 해삼 + 전복", "30,000원"], ["도다리", "도다리회", "22,000원"]],
-          en: [["Regular", "raw fish", "20,000 KRW"], ["Assorted", "raw fish + sea squirt + sea cucumber", "25,000 KRW"], ["Abalone assorted", "raw fish + sea squirt + sea cucumber + abalone", "30,000 KRW"], ["Flounder", "flounder sashimi", "22,000 KRW"]],
-          ja: [["一般", "刺身", "20,000ウォン"], ["盛り合わせ", "刺身 + ホヤ + ナマコ", "25,000ウォン"], ["アワビ盛り合わせ", "刺身 + ホヤ + ナマコ + アワビ", "30,000ウォン"], ["ドダリ", "ドダリ刺身", "22,000ウォン"]],
+          en: [["Regular", "Raw fish", "20,000 KRW"], ["Assorted", "Raw fish + sea squirt + sea cucumber", "25,000 KRW"], ["With Abalone", "Raw fish + sea squirt + sea cucumber + abalone", "30,000 KRW"], ["Flounder", "Marbled flounder sashimi", "22,000 KRW"]],
+          fil: [["Regular", "sashimi", "20,000 KRW"], ["Assorted", "sashimi + sea squirt + sea cucumber", "25,000 KRW"], ["May Abalone", "sashimi + sea squirt + sea cucumber + abalone", "30,000 KRW"], ["Flounder", "marbled flounder sashimi", "22,000 KRW"]],
+          ja: [["基本", "刺身", "20,000ウォン"], ["盛り合わせ", "刺身 + ホヤ + ナマコ", "25,000ウォン"], ["アワビ入り盛り合わせ", "刺身 + ホヤ + ナマコ + アワビ", "30,000ウォン"], ["マコガレイ", "マコガレイの刺身", "22,000ウォン"]],
           zh: [["普通", "生鱼片", "20,000韩元"], ["综合", "生鱼片 + 海鞘 + 海参", "25,000韩元"], ["鲍鱼综合", "生鱼片 + 海鞘 + 海参 + 鲍鱼", "30,000韩元"], ["鲽鱼", "鲽鱼生鱼片", "22,000韩元"]],
           vi: [["Thường", "cá sống", "20,000 KRW"], ["Tổng hợp", "cá sống + hải tiêu + hải sâm", "25,000 KRW"], ["Tổng hợp bào ngư", "cá sống + hải tiêu + hải sâm + bào ngư", "30,000 KRW"], ["Cá bơn", "sashimi cá bơn", "22,000 KRW"]],
           ru: [["Обычный", "сырая рыба", "20,000 KRW"], ["Ассорти", "сырая рыба + асцидия + морской огурец", "25,000 KRW"], ["Ассорти с абалоном", "сырая рыба + асцидия + морской огурец + абалон", "30,000 KRW"], ["Камбала", "сашими из камбалы", "22,000 KRW"]],
@@ -2969,7 +3063,7 @@
       en: {
         lunchTitle: "Lunch Special",
         lunchInline: "Minimum order: 2 people",
-        lunchChange: "Available during lunch time. Order available until 2:30 PM. The included spicy fish stew can be changed to non-spicy clear fish soup.",
+        lunchChange: "Available at lunchtime; last order 2:30 PM. The included spicy fish stew can be swapped for a mild, non-spicy clear soup.",
         kidsTitle: "Kids Menu",
         rawTag: "Includes raw food",
         mealTag: "Lunch special",
@@ -2979,11 +3073,11 @@
       },
       ja: {
         lunchTitle: "ランチ特選",
-        lunchInline: "2名様以上注文可能",
-        lunchChange: "ランチ時間に注文できます。午後2:30まで注文可能です。含まれる辛い魚鍋は、辛くない澄ましスープに変更できます。",
+        lunchInline: "2名様からご注文いただけます",
+        lunchChange: "ランチタイム限定です。ご注文は午後2:30まで / 付属のメウンタンは辛くないちり鍋に変更できます。",
         kidsTitle: "お子様メニュー",
         rawTag: "生もの含む",
-        mealTag: "ランチ",
+        mealTag: "ランチ特選",
         cookedTag: "加熱料理",
         kidsTag: "お子様",
         includedLabel: "内容"
@@ -3012,14 +3106,14 @@
       },
       fil: {
         lunchTitle: "Lunch Special",
-        lunchInline: "Minimum order: 2 people",
-        lunchChange: "Available during lunch time until 2:30 PM. Ang kasamang spicy fish stew ay puwedeng palitan ng non-spicy clear soup.",
-        kidsTitle: "Kids Menu",
-        rawTag: "May raw food",
-        mealTag: "Lunch special",
-        cookedTag: "Cooked",
-        kidsTag: "Kids",
-        includedLabel: "Includes"
+        lunchInline: "Minimum na 2 tao bawat order",
+        lunchChange: "Puwedeng i-order tuwing lunch, hanggang 2:30 PM lang / Puwedeng palitan ng malinaw na sabaw na hindi maanghang ang kasamang maanghang na fish stew.",
+        kidsTitle: "Pambatang Menu",
+        rawTag: "May hilaw na pagkain",
+        mealTag: "Lunch Special",
+        cookedTag: "Luto",
+        kidsTag: "Pambata",
+        includedLabel: "Kasama"
       },
       ru: {
         lunchTitle: "Обеденное спецменю",
@@ -3049,7 +3143,8 @@
       {
         title: {
           ko: "회정식",
-          en: "Lunch Sashimi Set",
+          en: "Sashimi Set Meal",
+          fil: "Sashimi Set Meal",
           ja: "刺身定食",
           zh: "生鱼片午餐套餐",
           vi: "Set sashimi bữa trưa",
@@ -3059,6 +3154,7 @@
         price: {
           ko: "35,000원",
           en: "35,000 KRW",
+          fil: "35,000 KRW",
           ja: "35,000ウォン",
           zh: "35,000韩元",
           vi: "35,000 KRW",
@@ -3067,8 +3163,9 @@
         },
         desc: {
           ko: "점심 대표 메뉴입니다. 모듬회, 모듬해물, 맛보기 물회, 매운탕 또는 지리탕, 공기밥이 포함됩니다.",
-          en: "A popular lunch set with assorted sashimi, seafood, mulhoe tasting, fish stew or clear soup, and rice.",
-          ja: "ランチ代表メニューです。盛り合わせ刺身、海鮮、味見用ムルフェ、魚鍋または澄ましスープ、ご飯が含まれます。",
+          en: "Our signature lunch with assorted sashimi, assorted seafood, mini mulhoe, spicy fish stew or mild clear soup, and a bowl of rice.",
+          fil: "Signature na pang-lunch. Kasama ang assorted sashimi, assorted seafood, pantikim na mulhoe, maanghang na fish stew o malinaw na sabaw, at kanin.",
+          ja: "ランチの代表メニューです。刺身盛り合わせ、海鮮盛り合わせ、ミニムルフェ、メウンタンまたはちり鍋、ご飯が付きます。",
           zh: "午餐代表菜单。包含综合生鱼片、综合海鲜、品尝水会、鱼汤或清汤和米饭。",
           vi: "Set trưa đại diện gồm sashimi tổng hợp, hải sản, mulhoe ăn thử, canh cá hoặc canh trong và cơm.",
           ru: "Популярный обеденный сет с ассорти сашими, морепродуктами, пробным мульхве, рыбным супом или прозрачным супом и рисом.",
@@ -3076,8 +3173,9 @@
         },
         items: {
           ko: "모듬회 + 모듬해물 + 맛보기 물회 + 매운탕 + 공기밥",
-          en: "Assorted sashimi + seafood + mulhoe tasting + fish stew + rice",
-          ja: "盛り合わせ刺身 + 海鮮 + 味見用ムルフェ + 魚鍋 + ご飯",
+          en: "Assorted sashimi + assorted seafood + mini mulhoe + spicy fish stew + rice",
+          fil: "Assorted sashimi + assorted seafood + pantikim na mulhoe + maanghang na fish stew + kanin",
+          ja: "刺身盛り合わせ + 海鮮盛り合わせ + ミニムルフェ + メウンタン + ご飯",
           zh: "综合生鱼片 + 综合海鲜 + 品尝水会 + 鱼汤 + 米饭",
           vi: "Sashimi tổng hợp + hải sản + mulhoe ăn thử + canh cá + cơm",
           ru: "Ассорти сашими + морепродукты + пробный мульхве + рыбный суп + рис",
@@ -3090,8 +3188,9 @@
       {
         title: {
           ko: "돈까스 정식",
-          en: "Kids Pork Cutlet Set",
-          ja: "お子様とんかつ定食",
+          en: "Pork Cutlet Set",
+          fil: "Tonkatsu Set (Pork Cutlet)",
+          ja: "とんかつ定食",
           zh: "儿童炸猪排套餐",
           vi: "Set cơm thịt heo chiên cho trẻ em",
           ru: "Детский сет с тонкацу",
@@ -3100,6 +3199,7 @@
         price: {
           ko: "10,000원",
           en: "10,000 KRW",
+          fil: "10,000 KRW",
           ja: "10,000ウォン",
           zh: "10,000韩元",
           vi: "10,000 KRW",
@@ -3108,7 +3208,8 @@
         },
         desc: {
           ko: "등심 돈까스 + 샐러드 + 후리가케 밥",
-          en: "Pork cutlet + salad + rice with furikake",
+          en: "Pork loin cutlet + salad + furikake rice",
+          fil: "Pork loin tonkatsu + salad + kanin na may furikake",
           ja: "ロースとんかつ + サラダ + ふりかけご飯",
           zh: "炸猪排 + 沙拉 + 拌饭调味料米饭",
           vi: "Thịt heo chiên + salad + cơm rắc furikake",
@@ -3199,8 +3300,8 @@
       en: {
         seafoodTitle: "Extra Seafood",
         extraMenuTitle: "Extra Menu",
-        seafoodNotice: "Extra seafood cannot be ordered alone. Please ask our staff when ordering a course, sashimi, or meal.",
-        extraMenuNotice: "Extra menu items cannot be ordered alone. Please ask our staff if they are available.",
+        seafoodNotice: "Extra seafood cannot be ordered on its own. Please ask our staff to add it when ordering a course, sashimi, or meal.",
+        extraMenuNotice: "Extra menu items cannot be ordered on their own. Please check availability with our staff.",
         rawTag: "Raw food",
         cookedTag: "Cooked",
         seafoodTag: "Seafood",
@@ -3211,24 +3312,24 @@
         kidsTag: "Good for kids",
         signatureTag: "Signature",
         movingTag: "May move",
-        soyTag: "Soy sauce"
+        soyTag: "Soy-marinated"
       },
       ja: {
         seafoodTitle: "追加海鮮",
         extraMenuTitle: "追加メニュー",
-        seafoodNotice: "追加海鮮は単品注文できません。コース、刺身、食事メニュー注文時にスタッフへお問い合わせください。",
-        extraMenuNotice: "追加メニューは単品注文できません。注文可能かスタッフへご確認ください。",
+        seafoodNotice: "追加海鮮のみのご注文はできません。コース・刺身・食事メニューをご注文の際に、あわせてスタッフにお申し付けください。",
+        extraMenuNotice: "追加メニューのみのご注文はできません。ご注文の可否はスタッフにご確認ください。",
         rawTag: "生もの",
         cookedTag: "加熱料理",
         seafoodTag: "海鮮",
         experienceTag: "体験メニュー",
         strongTextureTag: "食感強め",
-        uniqueTag: "独特な海鮮",
+        uniqueTag: "珍しい海鮮",
         recommendTag: "おすすめ",
-        kidsTag: "お子様向け",
+        kidsTag: "お子様におすすめ",
         signatureTag: "代表メニュー",
         movingTag: "動く場合あり",
-        soyTag: "醤油だれ"
+        soyTag: "醤油漬け"
       },
       zh: {
         seafoodTitle: "追加海鲜",
@@ -3265,21 +3366,21 @@
         soyTag: "Ướp xì dầu"
       },
       fil: {
-        seafoodTitle: "Extra Seafood",
-        extraMenuTitle: "Extra Menu",
-        seafoodNotice: "Hindi puwedeng i-order nang hiwalay ang extra seafood. Pakiusap magtanong sa staff kapag umorder ng course, sashimi, o meal.",
-        extraMenuNotice: "Hindi puwedeng i-order nang hiwalay ang extra menu. Pakiusap magtanong sa staff kung available.",
-        rawTag: "Raw food",
-        cookedTag: "Cooked",
+        seafoodTitle: "Dagdag na Seafood",
+        extraMenuTitle: "Dagdag na Menu",
+        seafoodNotice: "Hindi puwedeng i-order nang mag-isa ang dagdag na seafood. Sabihan ang staff kasabay ng order ninyong course, sashimi, o meal.",
+        extraMenuNotice: "Hindi puwedeng i-order nang mag-isa ang dagdag na menu. Itanong sa staff kung puwede itong i-order.",
+        rawTag: "Hilaw",
+        cookedTag: "Luto",
         seafoodTag: "Seafood",
-        experienceTag: "Experience",
-        strongTextureTag: "Strong texture",
-        uniqueTag: "Unique seafood",
-        recommendTag: "Recommended",
-        kidsTag: "Good for kids",
+        experienceTag: "Must-Try",
+        strongTextureTag: "Firm at chewy",
+        uniqueTag: "Kakaibang seafood",
+        recommendTag: "Rekomendado",
+        kidsTag: "Bagay sa bata",
         signatureTag: "Signature",
-        movingTag: "May move",
-        soyTag: "Soy sauce"
+        movingTag: "Puwedeng gumalaw",
+        soyTag: "Timplang toyo"
       },
       ru: {
         seafoodTitle: "Доп. морепродукты",
@@ -3322,7 +3423,8 @@
         title: {
           ko: "모듬 해물",
           en: "Assorted Seafood",
-          ja: "盛り合わせ海鮮",
+          fil: "Assorted Seafood",
+          ja: "海鮮盛り合わせ",
           zh: "综合海鲜",
           vi: "Hải sản tổng hợp",
           ru: "Ассорти морепродуктов",
@@ -3331,6 +3433,7 @@
         price: {
           ko: "50,000원",
           en: "50,000 KRW",
+          fil: "50,000 KRW",
           ja: "50,000ウォン",
           zh: "50,000韩元",
           vi: "50,000 KRW",
@@ -3339,8 +3442,9 @@
         },
         desc: {
           ko: "여러 가지 해산물을 함께 맛볼 수 있는 추가 메뉴입니다. 해산물을 다양하게 즐기고 싶은 손님께 추천합니다.",
-          en: "An extra menu with a variety of seafood. Recommended for guests who want to try different seafood items.",
-          ja: "さまざまな海鮮を一緒に楽しめる追加メニューです。",
+          en: "A platter of assorted seafood. Recommended if you’d like to try a variety of seafood.",
+          fil: "Dagdag na platter ng iba’t ibang seafood. Rekomendado sa mga gustong tumikim ng sari-saring seafood.",
+          ja: "さまざまな海鮮を一度に味わえる追加メニューです。いろいろな海鮮を楽しみたい方におすすめです。",
           zh: "可以一起品尝多种海鲜的追加菜单。",
           vi: "Món thêm gồm nhiều loại hải sản khác nhau.",
           ru: "Дополнительное блюдо с разными морепродуктами.",
@@ -3352,6 +3456,7 @@
         title: {
           ko: "해삼",
           en: "Sea Cucumber",
+          fil: "Sea Cucumber",
           ja: "ナマコ",
           zh: "海参",
           vi: "Hải sâm",
@@ -3361,6 +3466,7 @@
         price: {
           ko: "30,000원",
           en: "30,000 KRW",
+          fil: "30,000 KRW",
           ja: "30,000ウォン",
           zh: "30,000韩元",
           vi: "30,000 KRW",
@@ -3369,8 +3475,9 @@
         },
         desc: {
           ko: "꼬들꼬들한 식감이 강한 해산물입니다. 처음 드시는 분께는 식감이 낯설 수 있습니다.",
-          en: "A seafood item with a very firm, chewy texture. The texture may feel unfamiliar at first.",
-          ja: "コリコリとした食感が強い海鮮です。初めての方には食感が珍しく感じられます。",
+          en: "Seafood with a firm, crunchy-chewy texture. The texture may feel unfamiliar at first.",
+          fil: "Seafood na malutong-lutong at matigas-tigas ang kagat. Baka maninibago kayo sa texture kung first time ninyo.",
+          ja: "コリコリとした歯ごたえが強い海鮮です。初めての方には食感が珍しく感じられるかもしれません。",
           zh: "口感较硬、有嚼劲的海鲜。第一次吃可能会觉得陌生。",
           vi: "Hải sản có độ giòn dai mạnh. Khách ăn lần đầu có thể thấy hơi lạ.",
           ru: "Морепродукт с очень плотной и хрустящей текстурой.",
@@ -3382,7 +3489,8 @@
         title: {
           ko: "산낙지",
           en: "Live Octopus",
-          ja: "活きテナガダコ",
+          fil: "Sannakji (Buhay na Octopus)",
+          ja: "サンナクチ（活きテナガダコ）",
           zh: "活章鱼",
           vi: "Bạch tuộc sống",
           ru: "Живой осьминог",
@@ -3391,6 +3499,7 @@
         price: {
           ko: "소 30,000원<br>중 50,000원",
           en: "Small 30,000 KRW<br>Medium 50,000 KRW",
+          fil: "Maliit 30,000 KRW<br>Katamtaman 50,000 KRW",
           ja: "小 30,000ウォン<br>中 50,000ウォン",
           zh: "小 30,000韩元<br>中 50,000韩元",
           vi: "Nhỏ 30,000 KRW<br>Vừa 50,000 KRW",
@@ -3399,8 +3508,9 @@
         },
         desc: {
           ko: "주문 후 손질되어 제공되며, 접시 위에서 움직일 수 있습니다. 외국인 손님들이 체험 메뉴로 많이 찾습니다.",
-          en: "Prepared after ordering. The pieces may still move on the plate. Many foreign guests order it as a unique experience.",
-          ja: "注文後に調理され、皿の上で動くことがあります。体験メニューとして人気です。",
+          en: "Prepared to order and may still be moving on the plate. A popular experience among international visitors.",
+          fil: "Hinihiwa ito pagka-order, kaya puwede pa itong gumalaw sa plato. Paborito itong subukan ng mga foreign guest bilang kakaibang karanasan.",
+          ja: "ご注文後にさばいてお出しするため、お皿の上で動くことがあります。外国人のお客様に体験メニューとして人気です。",
           zh: "点餐后现处理，上桌后可能还会移动。很多外国客人会作为体验菜单点餐。",
           vi: "Được sơ chế sau khi gọi món. Miếng bạch tuộc có thể còn động đậy trên đĩa.",
           ru: "Готовится после заказа. Кусочки могут двигаться на тарелке. Часто заказывают как необычный опыт.",
@@ -3408,8 +3518,9 @@
         },
         notice: {
           ko: "산낙지는 천천히 꼭꼭 씹어 드세요.",
-          en: "Please chew live octopus slowly and carefully.",
-          ja: "活きダコはゆっくりよく噛んでお召し上がりください。",
+          en: "Please chew live octopus slowly and thoroughly.",
+          fil: "Nguyain nang dahan-dahan at mabuti ang sannakji.",
+          ja: "サンナクチはゆっくりよく噛んでお召し上がりください。",
           zh: "请慢慢充分咀嚼活章鱼后食用。",
           vi: "Vui lòng nhai bạch tuộc sống thật kỹ và chậm.",
           ru: "Пожалуйста, ешьте медленно и тщательно пережевывайте.",
@@ -3420,7 +3531,8 @@
       {
         title: {
           ko: "개불",
-          en: "Spoon Worm",
+          en: "Spoon Worm (Gaebul)",
+          fil: "Gaebul (Spoon Worm)",
           ja: "ユムシ",
           zh: "海肠",
           vi: "Sá sùng biển",
@@ -3430,6 +3542,7 @@
         price: {
           ko: "30,000원",
           en: "30,000 KRW",
+          fil: "30,000 KRW",
           ja: "30,000ウォン",
           zh: "30,000韩元",
           vi: "30,000 KRW",
@@ -3438,8 +3551,9 @@
         },
         desc: {
           ko: "한국에서도 호불호가 있는 독특한 해산물입니다. 바다 향과 씹는 식감이 강한 편입니다.",
-          en: "A very unique seafood even in Korea. It has a strong ocean flavor and chewy texture.",
-          ja: "韓国でも好みが分かれる独特な海鮮です。磯の香りと食感が強いです。",
+          en: "A unique seafood that divides opinion even in Korea. It has a strong ocean flavor and a chewy bite.",
+          fil: "Kakaibang seafood na kahit sa Korea ay may gusto at may ayaw. Matapang ang lasa ng dagat at malakas ang kagat.",
+          ja: "韓国でも好みが分かれる独特な海鮮です。磯の香りと歯ごたえが強めです。",
           zh: "在韩国也比较独特、喜好分明的海鲜。海味和嚼劲较强。",
           vi: "Hải sản khá đặc biệt, ngay cả ở Hàn Quốc. Có mùi biển và độ dai mạnh.",
           ru: "Очень необычный морепродукт даже для Кореи, с сильным морским вкусом и плотной текстурой.",
@@ -3451,7 +3565,8 @@
         title: {
           ko: "전복회",
           en: "Abalone Sashimi",
-          ja: "アワビ刺身",
+          fil: "Abalone Sashimi",
+          ja: "アワビの刺身",
           zh: "鲍鱼刺身",
           vi: "Sashimi bào ngư",
           ru: "Сашими из абалона",
@@ -3460,6 +3575,7 @@
         price: {
           ko: "50,000원",
           en: "50,000 KRW",
+          fil: "50,000 KRW",
           ja: "50,000ウォン",
           zh: "50,000韩元",
           vi: "50,000 KRW",
@@ -3468,8 +3584,9 @@
         },
         desc: {
           ko: "전복을 얇게 썰어 신선하게 즐기는 메뉴입니다. 쫄깃한 식감이 특징입니다.",
-          en: "Freshly sliced abalone served as sashimi. Known for its chewy texture.",
-          ja: "アワビを薄く切って新鮮に楽しむメニューです。弾力のある食感が特徴です。",
+          en: "Fresh abalone, thinly sliced and served raw. Known for its chewy texture.",
+          fil: "Abalone na hiniwa nang manipis at inihahaing sariwa. Kilala ito sa pagka-chewy.",
+          ja: "アワビを薄く切り、新鮮なままお楽しみいただくメニューです。コリコリとした食感が特徴です。",
           zh: "将鲍鱼薄切后新鲜享用的菜单。口感有嚼劲。",
           vi: "Bào ngư thái mỏng ăn tươi. Đặc trưng bởi độ dai giòn.",
           ru: "Свежий абалон, тонко нарезанный как сашими. Отличается плотной текстурой.",
@@ -3481,6 +3598,7 @@
         title: {
           ko: "멍게",
           en: "Sea Squirt",
+          fil: "Sea Squirt (Meongge)",
           ja: "ホヤ",
           zh: "海鞘",
           vi: "Hải tiêu",
@@ -3490,6 +3608,7 @@
         price: {
           ko: "30,000원",
           en: "30,000 KRW",
+          fil: "30,000 KRW",
           ja: "30,000ウォン",
           zh: "30,000韩元",
           vi: "30,000 KRW",
@@ -3498,7 +3617,8 @@
         },
         desc: {
           ko: "바다 향이 강한 해산물입니다. 신선한 해산물 특유의 향을 좋아하는 손님께 추천합니다.",
-          en: "A seafood item with a strong ocean aroma. Recommended for guests who enjoy fresh seafood flavors.",
+          en: "Seafood with a strong ocean aroma. Recommended if you love the distinctive taste of fresh seafood.",
+          fil: "Seafood na matapang ang amoy at lasa ng dagat. Rekomendado sa mga mahilig sa natatanging lasa ng sariwang seafood.",
           ja: "磯の香りが強い海鮮です。新鮮な海鮮特有の香りが好きな方におすすめです。",
           zh: "海味较强的海鲜。推荐给喜欢新鲜海鲜香气的客人。",
           vi: "Hải sản có mùi biển đậm. Phù hợp với khách thích hương vị hải sản tươi.",
@@ -3513,8 +3633,9 @@
       {
         title: {
           ko: "우럭탕수",
-          en: "Fried Rockfish with Sweet & Sour Sauce",
-          ja: "ウロクの甘酢あんかけ",
+          en: "Sweet & Sour Fried Rockfish",
+          fil: "Sweet & Sour na Rockfish",
+          ja: "クロソイの甘酢あんかけ",
           zh: "糖醋韩式岩鱼",
           vi: "Cá rockfish chiên sốt chua ngọt",
           ru: "Жареная рыба в кисло-сладком соусе",
@@ -3523,6 +3644,7 @@
         price: {
           ko: "30,000원",
           en: "30,000 KRW",
+          fil: "30,000 KRW",
           ja: "30,000ウォン",
           zh: "30,000韩元",
           vi: "30,000 KRW",
@@ -3531,8 +3653,9 @@
         },
         desc: {
           ko: "바삭하게 튀긴 우럭에 새콤달콤한 소스를 곁들인 수림횟집 대표 익힌 메뉴입니다.",
-          en: "Crispy fried rockfish with sweet and sour sauce. One of Soorim’s signature cooked dishes.",
-          ja: "カリッと揚げたウロクに甘酸っぱいソースをかけた代表的な加熱料理です。",
+          en: "Crispy fried whole rockfish with a sweet and sour sauce — one of Soorim’s signature cooked dishes.",
+          fil: "Malutong na pritong buong rockfish na may matamis-asim na sauce. Isa sa mga signature na lutong ulam ng Soorim.",
+          ja: "カリッと揚げたクロソイに甘酸っぱいあんをかけた、スーリムを代表する加熱料理です。",
           zh: "炸得酥脆的韩式岩鱼搭配酸甜酱，是水林代表熟食菜单。",
           vi: "Cá chiên giòn ăn cùng sốt chua ngọt. Một món chín đại diện của Soorim.",
           ru: "Хрустящая жареная рыба с кисло-сладким соусом. Одно из фирменных готовых блюд Soorim.",
@@ -3543,7 +3666,8 @@
       {
         title: {
           ko: "가리비찜 5마리",
-          en: "Steamed Scallops 5 pcs",
+          en: "Steamed Scallops (5 pcs)",
+          fil: "Steamed Scallops (5 piraso)",
           ja: "ホタテ蒸し 5個",
           zh: "蒸扇贝 5个",
           vi: "Sò điệp hấp 5 con",
@@ -3553,6 +3677,7 @@
         price: {
           ko: "20,000원",
           en: "20,000 KRW",
+          fil: "20,000 KRW",
           ja: "20,000ウォン",
           zh: "20,000韩元",
           vi: "20,000 KRW",
@@ -3561,8 +3686,9 @@
         },
         desc: {
           ko: "따뜻하게 쪄서 제공되는 가리비 메뉴입니다. 회를 못 드시는 분도 함께 즐기기 좋습니다.",
-          en: "Warm steamed scallops. A good option for guests who do not eat raw food.",
-          ja: "温かく蒸して提供するホタテメニューです。刺身が苦手な方にもおすすめです。",
+          en: "Scallops steamed and served warm. Great for guests who don’t eat raw food, too.",
+          fil: "Scallops na inihahaing mainit pagkatapos i-steam. Swak din para sa mga hindi kumakain ng sashimi.",
+          ja: "温かく蒸してお出しするホタテです。刺身が苦手な方も一緒にお楽しみいただけます。",
           zh: "温热蒸制的扇贝。不吃生食的客人也适合享用。",
           vi: "Sò điệp được hấp nóng. Phù hợp cho khách không ăn đồ sống.",
           ru: "Тёплые гребешки на пару. Подходит гостям, которые не едят сырое.",
@@ -3573,8 +3699,9 @@
       {
         title: {
           ko: "새우튀김 5마리",
-          en: "Fried Shrimp 5 pcs",
-          ja: "エビフライ 5尾",
+          en: "Fried Shrimp (5 pcs)",
+          fil: "Shrimp Tempura (5 piraso)",
+          ja: "エビの天ぷら 5尾",
           zh: "炸虾 5只",
           vi: "Tôm chiên 5 con",
           ru: "Жареные креветки 5 шт.",
@@ -3583,6 +3710,7 @@
         price: {
           ko: "4,000원",
           en: "4,000 KRW",
+          fil: "4,000 KRW",
           ja: "4,000ウォン",
           zh: "4,000韩元",
           vi: "4,000 KRW",
@@ -3591,8 +3719,9 @@
         },
         desc: {
           ko: "바삭하게 튀긴 새우 메뉴입니다. 아이와 외국인 손님도 부담 없이 먹기 좋습니다.",
-          en: "Crispy fried shrimp. Easy to enjoy for kids and foreign guests.",
-          ja: "カリッと揚げたエビメニューです。お子様や外国人のお客様にも食べやすいです。",
+          en: "Crispy fried shrimp. Easy to enjoy for kids and international guests alike.",
+          fil: "Malutong na pritong hipon. Madaling kainin ng mga bata at ng mga foreign guest.",
+          ja: "カリッと揚げたエビです。お子様や外国人のお客様にも食べやすい一品です。",
           zh: "酥脆炸虾。儿童和外国客人也容易接受。",
           vi: "Tôm chiên giòn, dễ ăn cho trẻ em và khách nước ngoài.",
           ru: "Хрустящие жареные креветки. Легко понравится детям и иностранным гостям.",
@@ -3604,7 +3733,8 @@
         title: {
           ko: "연어구이",
           en: "Grilled Salmon",
-          ja: "鮭焼き",
+          fil: "Inihaw na Salmon",
+          ja: "焼きサーモン",
           zh: "烤三文鱼",
           vi: "Cá hồi nướng",
           ru: "Жареный лосось",
@@ -3613,6 +3743,7 @@
         price: {
           ko: "10,000원",
           en: "10,000 KRW",
+          fil: "10,000 KRW",
           ja: "10,000ウォン",
           zh: "10,000韩元",
           vi: "10,000 KRW",
@@ -3621,8 +3752,9 @@
         },
         desc: {
           ko: "구운 연어 메뉴입니다. 날 음식을 드시지 않는 분께도 추천합니다.",
-          en: "Grilled salmon. Recommended for guests who do not eat raw food.",
-          ja: "焼いた鮭のメニューです。生ものが苦手な方にもおすすめです。",
+          en: "Grilled salmon. Also recommended for guests who don’t eat raw food.",
+          fil: "Inihaw na salmon. Rekomendado rin para sa mga hindi kumakain ng hilaw.",
+          ja: "焼いたサーモンです。生ものを召し上がらない方にもおすすめです。",
           zh: "烤三文鱼。推荐给不吃生食的客人。",
           vi: "Cá hồi nướng. Gợi ý cho khách không ăn đồ sống.",
           ru: "Жареный лосось. Рекомендуется гостям, которые не едят сырое.",
@@ -3634,7 +3766,8 @@
         title: {
           ko: "꽁치구이",
           en: "Grilled Pacific Saury",
-          ja: "サンマ焼き",
+          fil: "Inihaw na Saury",
+          ja: "焼きサンマ",
           zh: "烤秋刀鱼",
           vi: "Cá thu đao nướng",
           ru: "Жареная сайра",
@@ -3643,6 +3776,7 @@
         price: {
           ko: "3,000원",
           en: "3,000 KRW",
+          fil: "3,000 KRW",
           ja: "3,000ウォン",
           zh: "3,000韩元",
           vi: "3,000 KRW",
@@ -3651,8 +3785,9 @@
         },
         desc: {
           ko: "간단하게 곁들이기 좋은 구운 생선 메뉴입니다.",
-          en: "A simple grilled fish side dish.",
-          ja: "気軽に追加しやすい焼き魚メニューです。",
+          en: "A simple grilled fish, great as a side.",
+          fil: "Inihaw na isda na magandang pang-partner sa order ninyo.",
+          ja: "気軽に添えられる焼き魚です。",
           zh: "适合简单搭配的烤鱼菜单。",
           vi: "Món cá nướng ăn kèm đơn giản.",
           ru: "Простое блюдо из жареной рыбы для дополнения к заказу.",
@@ -3663,8 +3798,9 @@
       {
         title: {
           ko: "새우장 5마리",
-          en: "Soy-marinated Shrimp 5 pcs",
-          ja: "エビ醤油漬け 5尾",
+          en: "Soy-marinated Raw Shrimp (5 pcs)",
+          fil: "Saeujang – Hipon sa Toyo (5 piraso)",
+          ja: "生エビの醤油漬け 5尾",
           zh: "酱油腌虾 5只",
           vi: "Tôm ngâm xì dầu 5 con",
           ru: "Креветки в соевом маринаде 5 шт.",
@@ -3673,6 +3809,7 @@
         price: {
           ko: "10,000원",
           en: "10,000 KRW",
+          fil: "10,000 KRW",
           ja: "10,000ウォン",
           zh: "10,000韩元",
           vi: "10,000 KRW",
@@ -3681,8 +3818,9 @@
         },
         desc: {
           ko: "간장 양념에 숙성한 새우 메뉴입니다.",
-          en: "Shrimp marinated in soy sauce seasoning.",
-          ja: "醤油だれに漬けたエビメニューです。",
+          en: "Raw shrimp cured in a soy sauce marinade.",
+          fil: "Hilaw na hipon na ibinabad at pinahinog sa timplang toyo.",
+          ja: "醤油だれに漬けて熟成させた生エビです。",
           zh: "用酱油调味腌制的虾。",
           vi: "Tôm được ngâm trong nước tương gia vị.",
           ru: "Креветки, маринованные в соевом соусе.",
@@ -3693,7 +3831,8 @@
       {
         title: {
           ko: "공기밥",
-          en: "Rice",
+          en: "Bowl of Rice",
+          fil: "Kanin",
           ja: "ご飯",
           zh: "米饭",
           vi: "Cơm trắng",
@@ -3703,6 +3842,7 @@
         price: {
           ko: "1,000원",
           en: "1,000 KRW",
+          fil: "1,000 KRW",
           ja: "1,000ウォン",
           zh: "1,000韩元",
           vi: "1,000 KRW",
@@ -3713,8 +3853,9 @@
       {
         title: {
           ko: "초밥알",
-          en: "Sushi Rice",
-          ja: "寿司飯",
+          en: "Sushi Rice Balls",
+          fil: "Sushi Rice",
+          ja: "シャリ（寿司飯）",
           zh: "寿司饭",
           vi: "Cơm sushi",
           ru: "Рис для суши",
@@ -3723,6 +3864,7 @@
         price: {
           ko: "3,000원",
           en: "3,000 KRW",
+          fil: "3,000 KRW",
           ja: "3,000ウォン",
           zh: "3,000韩元",
           vi: "3,000 KRW",
@@ -3731,8 +3873,9 @@
         },
         desc: {
           ko: "회와 함께 초밥처럼 드실 수 있는 밥입니다.",
-          en: "Rice that can be eaten with sashimi like sushi.",
-          ja: "刺身と一緒に寿司のように食べられるご飯です。",
+          en: "Rice balls to top with your sashimi, sushi-style.",
+          fil: "Kanin na pang-sushi; ipares sa sashimi para gumawa ng sariling sushi.",
+          ja: "刺身をのせてお寿司のように楽しめるご飯です。",
           zh: "可以和生鱼片一起像寿司一样食用的米饭。",
           vi: "Cơm có thể ăn cùng sashimi như sushi.",
           ru: "Рис, который можно есть с сашими как суши.",
@@ -3743,6 +3886,7 @@
         title: {
           ko: "국수사리",
           en: "Extra Noodles",
+          fil: "Dagdag na Noodles",
           ja: "追加麺",
           zh: "追加面条",
           vi: "Mì thêm",
@@ -3752,6 +3896,7 @@
         price: {
           ko: "1,000원",
           en: "1,000 KRW",
+          fil: "1,000 KRW",
           ja: "1,000ウォン",
           zh: "1,000韩元",
           vi: "1,000 KRW",
@@ -3838,25 +3983,25 @@
 
       en: {
         orderTitle: "Before Ordering",
-        orderNote: "Please check before choosing your menu.",
+        orderNote: "Please read before choosing your menu.",
         orderBox: `
-          If you do not eat raw food, we recommend <strong>fresh rockfish spicy stew / clear soup</strong>, <strong>fried rockfish with sweet & sour sauce</strong>, or <strong>kids pork cutlet set</strong>.<br><br>
-          Some dishes include raw fish, live octopus, or raw seafood. Live octopus may still move on the plate. Please chew slowly and carefully.<br><br>
-          <strong>All course menus require a minimum order for 2 people.</strong> Extra seafood and extra menu items cannot be ordered alone.<br><br>
+          If you don’t eat raw food, we recommend the <strong>fresh rockfish spicy stew / mild clear soup</strong>, <strong>sweet & sour fried rockfish</strong>, or <strong>pork cutlet set</strong>.<br><br>
+          Some dishes, such as sashimi and live octopus, are served raw. Live octopus may still be moving on the plate, so please chew slowly and thoroughly.<br><br>
+          <strong>All course menus require a minimum of 2 people.</strong> Extra seafood and extra menu items cannot be ordered on their own.<br><br>
           Photos are for reference only. Actual dishes may vary depending on season, ingredient availability, and number of guests.<br><br>
-          <strong>We kindly ask each guest to order at least one item.</strong>
+          <strong>Please order one dish per person.</strong>
         `,
         drinkTitle: "Drinks",
-        drinkNote: "Drink menus can be opened by category.",
+        drinkNote: "Tap a category to expand or collapse the list.",
         drinkNotice: "ID may be required when ordering alcohol.",
         footerTitle: "Soorim Seafood Restaurant",
         footerItems: [
-          "This is the menu for Soorim Seafood Restaurant in Haeundae.",
-          "Photos are for reference only. Actual dishes may vary depending on season, ingredients, and number of guests.",
-          "All course menus require a minimum order for 2 people.",
-          "Extra seafood and extra menu items cannot be ordered alone.",
-          "If you do not eat raw food, we recommend clear fish soup, fried rockfish, pork cutlet, fried shrimp, or steamed scallops.",
-          "We kindly ask each guest to order at least one item."
+          "This is the menu of Soorim in Haeundae.",
+          "Photos are for reference only. Actual dishes may vary depending on season, ingredient availability, and number of guests.",
+          "All course menus require a minimum of 2 people.",
+          "Extra seafood and extra menu items cannot be ordered on their own.",
+          "If you don’t eat raw food, we recommend the fresh rockfish spicy stew / mild clear soup, sweet & sour fried rockfish, pork cutlet set, fried shrimp, or steamed scallops.",
+          "Please order one dish per person."
         ]
       },
 
@@ -3864,22 +4009,22 @@
         orderTitle: "注文前のご案内",
         orderNote: "メニューを選ぶ前にご確認ください。",
         orderBox: `
-          生ものが苦手な方には、<strong>生ウロク辛鍋 / 澄ましスープ</strong>、<strong>ウロクの甘酢あんかけ</strong>、<strong>お子様とんかつ定食</strong>をおすすめします。<br><br>
-          刺身、活きダコなど一部メニューは生で提供されます。活きダコは皿の上で動くことがありますので、ゆっくりよく噛んでお召し上がりください。<br><br>
-          <strong>すべてのコースメニューは2名様以上から注文可能です。</strong> 追加海鮮と追加メニューは単品注文できません。<br><br>
-          写真はイメージです。実際の内容は季節、食材の仕入れ、注文人数により異なる場合があります。<br><br>
+          生ものが苦手な方には、<strong>活クロソイのメウンタン / ちり鍋</strong>、<strong>クロソイの甘酢あんかけ</strong>、<strong>とんかつ定食</strong>をおすすめします。<br><br>
+          刺身やサンナクチなど一部メニューは生で提供されます。サンナクチはお皿の上で動くことがありますので、ゆっくりよく噛んでお召し上がりください。<br><br>
+          <strong>すべてのコースは2名様からご注文いただけます。</strong> 追加海鮮と追加メニューのみのご注文はできません。<br><br>
+          写真はイメージです。実際の内容は季節、食材の仕入れ状況、ご注文人数により異なる場合があります。<br><br>
           <strong>お一人様一品以上のご注文をお願いいたします。</strong>
         `,
         drinkTitle: "お酒 / 飲み物",
-        drinkNote: "種類別に開いて確認できます。",
+        drinkNote: "お酒は種類ごとにタップして開閉できます。",
         drinkNotice: "お酒のご注文時に身分証の確認が必要な場合があります。",
-        footerTitle: "海雲台スリム海鮮料理店",
+        footerTitle: "スーリム",
         footerItems: [
-          "海雲台スリム海鮮料理店のメニューです。",
-          "写真はイメージです。実際の内容は季節、食材、人数により異なる場合があります。",
-          "すべてのコースメニューは2名様以上から注文可能です。",
-          "追加海鮮と追加メニューは単品注文できません。",
-          "生ものが苦手な方には、澄ましスープ、ウロクの甘酢あんかけ、とんかつ、エビフライ、ホタテ蒸しをおすすめします。",
+          "海雲台スーリムのメニューです。",
+          "写真はイメージです。実際の内容は季節、食材の仕入れ状況、ご注文人数により異なる場合があります。",
+          "すべてのコースは2名様からご注文いただけます。",
+          "追加海鮮と追加メニューのみのご注文はできません。",
+          "生ものが苦手な方には、活クロソイのメウンタン / ちり鍋、クロソイの甘酢あんかけ、とんかつ定食、エビの天ぷら、ホタテ蒸しをおすすめします。",
           "お一人様一品以上のご注文をお願いいたします。"
         ]
       },
@@ -3934,25 +4079,25 @@
 
       fil: {
         orderTitle: "Bago Umorder",
-        orderNote: "Paki-check muna bago pumili ng menu.",
+        orderNote: "Pakibasa muna bago pumili ng menu.",
         orderBox: `
-          Kung hindi kayo kumakain ng raw food, inirerekomenda namin ang <strong>fresh rockfish spicy stew / clear soup</strong>, <strong>fried rockfish with sweet & sour sauce</strong>, o <strong>kids pork cutlet set</strong>.<br><br>
-          May ilang menu na may raw fish, live octopus, o raw seafood. Ang live octopus ay maaaring gumalaw pa sa plato. Pakiusap nguyain nang mabagal at mabuti.<br><br>
-          <strong>Ang lahat ng course menu ay minimum 2 tao.</strong> Ang extra seafood at extra menu items ay hindi puwedeng i-order nang hiwalay.<br><br>
-          Ang mga larawan ay reference lamang. Maaaring magbago ang aktwal na pagkain depende sa season, availability ng ingredients, at bilang ng guests.<br><br>
-          <strong>Pakiusap, bawat guest ay umorder ng kahit isang item.</strong>
+          Para sa mga hindi kumakain ng hilaw, rekomendado namin ang <strong>Sariwang Rockfish – Maanghang na Stew / Malinaw na Sabaw</strong>, <strong>Sweet & Sour na Rockfish</strong>, at <strong>Tonkatsu Set</strong>.<br><br>
+          Inihahaing hilaw ang ilang menu gaya ng sashimi at sannakji (buhay na octopus). Puwede pang gumalaw sa plato ang sannakji, kaya nguyain ito nang dahan-dahan at mabuti.<br><br>
+          <strong>Minimum na 2 tao ang order sa lahat ng course.</strong> Hindi puwedeng i-order nang mag-isa ang dagdag na seafood at dagdag na menu.<br><br>
+          Pang-representasyon lang ang mga larawan. Maaaring mag-iba ang aktwal na laman depende sa season, supply ng sangkap, at bilang ng kakain.<br><br>
+          <strong>Paki-order ng isang menu bawat tao.</strong>
         `,
-        drinkTitle: "Drinks",
-        drinkNote: "Maaaring buksan ang drink menu ayon sa category.",
-        drinkNotice: "Maaaring kailanganin ang ID kapag umorder ng alcohol.",
-        footerTitle: "Soorim Seafood Restaurant",
+        drinkTitle: "Alak at Inumin",
+        drinkNote: "I-tap ang bawat kategorya ng alak para buksan o isara ito.",
+        drinkNotice: "Maaaring hingan kayo ng ID kapag umorder ng alak.",
+        footerTitle: "Soorim",
         footerItems: [
-          "Ito ang menu ng Soorim Seafood Restaurant sa Haeundae.",
-          "Ang mga larawan ay reference lamang. Maaaring magbago ang aktwal na pagkain depende sa season, ingredients, at bilang ng guests.",
-          "Ang lahat ng course menu ay minimum 2 tao.",
-          "Hindi puwedeng i-order nang hiwalay ang extra seafood at extra menu items.",
-          "Kung hindi kayo kumakain ng raw food, inirerekomenda namin ang clear fish soup, fried rockfish, pork cutlet, fried shrimp, o steamed scallops.",
-          "Pakiusap, bawat guest ay umorder ng kahit isang item."
+          "Ito ang menu ng Soorim sa Haeundae.",
+          "Pang-representasyon lang ang mga larawan. Maaaring mag-iba ang aktwal na laman depende sa season, supply ng sangkap, at bilang ng kakain.",
+          "Minimum na 2 tao ang order sa lahat ng course.",
+          "Hindi puwedeng i-order nang mag-isa ang dagdag na seafood at dagdag na menu.",
+          "Para sa mga hindi kumakain ng hilaw, rekomendado namin ang sariwang rockfish (maanghang na stew / malinaw na sabaw), sweet & sour na rockfish, tonkatsu set, shrimp tempura, at steamed scallops.",
+          "Paki-order ng isang menu bawat tao."
         ]
       },
 
@@ -4011,6 +4156,7 @@
         title: {
           ko: "음료 / 무알콜",
           en: "Soft Drinks / Non-alcoholic",
+          fil: "Softdrinks / Non-Alcoholic",
           ja: "ソフトドリンク / ノンアルコール",
           zh: "饮料 / 无酒精",
           vi: "Nước uống / Không cồn",
@@ -4018,15 +4164,16 @@
           mn: "Ундаа / Спиртгүй"
         },
         items: [
-          { name: { ko: "탄산음료", en: "Soft Drink", ja: "炭酸飲料", zh: "碳酸饮料", vi: "Nước ngọt có gas", ru: "Газированный напиток", mn: "Хийжүүлсэн ундаа" }, price: "2,000" },
-          { name: { ko: "토닉워터", en: "Tonic Water", ja: "トニックウォーター", zh: "汤力水", vi: "Tonic water", ru: "Тоник", mn: "Тоник ус" }, price: "2,000" },
-          { name: { ko: "카스 0.0 무알콜", en: "Cass 0.0 Non-alcoholic Beer", ja: "Cass 0.0 ノンアルコール", zh: "Cass 0.0 无酒精啤酒", vi: "Bia không cồn Cass 0.0", ru: "Cass 0.0 безалкогольное пиво", mn: "Cass 0.0 спиртгүй шар айраг" }, price: "4,000" }
+          { name: { ko: "탄산음료", en: "Soda", fil: "Softdrinks", ja: "炭酸飲料", zh: "碳酸饮料", vi: "Nước ngọt có gas", ru: "Газированный напиток", mn: "Хийжүүлсэн ундаа" }, price: "2,000" },
+          { name: { ko: "토닉워터", en: "Tonic Water", fil: "Tonic Water", ja: "トニックウォーター", zh: "汤力水", vi: "Tonic water", ru: "Тоник", mn: "Тоник ус" }, price: "2,000" },
+          { name: { ko: "카스 0.0 무알콜", en: "Cass 0.0 Non-alcoholic Beer", fil: "Cass 0.0 (Non-Alcoholic na Beer)", ja: "Cass 0.0 ノンアルコール", zh: "Cass 0.0 无酒精啤酒", vi: "Bia không cồn Cass 0.0", ru: "Cass 0.0 безалкогольное пиво", mn: "Cass 0.0 спиртгүй шар айраг" }, price: "4,000" }
         ]
       },
       {
         title: {
           ko: "소주 / 맥주",
           en: "Soju / Beer",
+          fil: "Soju / Beer",
           ja: "焼酎 / ビール",
           zh: "烧酒 / 啤酒",
           vi: "Soju / Bia",
@@ -4034,14 +4181,15 @@
           mn: "Сожу / Шар айраг"
         },
         items: [
-          { name: { ko: "소주: 참이슬 / 진로 / 좋은데이 / 대선 / 새로 / 참이슬C", en: "Soju: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", ja: "焼酎: チャミスル / ジンロ / ジョウンデイ / デソン / セロ / チャミスルC", zh: "烧酒: 真露 / Jinro / Good Day / Daesun / Saero / Chamisul C", vi: "Soju: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", ru: "Соджу: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", mn: "Сожу: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C" }, price: "5,000" },
-          { name: { ko: "맥주: 카스 / 테라 / 크러시 / 켈리", en: "Beer: Cass / Terra / Krush / Kelly", ja: "ビール: Cass / Terra / Krush / Kelly", zh: "啤酒: Cass / Terra / Krush / Kelly", vi: "Bia: Cass / Terra / Krush / Kelly", ru: "Пиво: Cass / Terra / Krush / Kelly", mn: "Шар айраг: Cass / Terra / Krush / Kelly" }, price: "5,000" }
+          { name: { ko: "소주: 참이슬 / 진로 / 좋은데이 / 대선 / 새로 / 참이슬C", en: "Soju: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", fil: "Soju: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", ja: "焼酎: チャミスル / ジンロ / ジョウンデー / テソン / セロ / チャミスルC", zh: "烧酒: 真露 / Jinro / Good Day / Daesun / Saero / Chamisul C", vi: "Soju: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", ru: "Соджу: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C", mn: "Сожу: Chamisul / Jinro / Good Day / Daesun / Saero / Chamisul C" }, price: "5,000" },
+          { name: { ko: "맥주: 카스 / 테라 / 크러시 / 켈리", en: "Beer: Cass / Terra / Krush / Kelly", fil: "Beer: Cass / Terra / Krush / Kelly", ja: "ビール: Cass / Terra / Krush / Kelly", zh: "啤酒: Cass / Terra / Krush / Kelly", vi: "Bia: Cass / Terra / Krush / Kelly", ru: "Пиво: Cass / Terra / Krush / Kelly", mn: "Шар айраг: Cass / Terra / Krush / Kelly" }, price: "5,000" }
         ]
       },
       {
         title: {
           ko: "전통주 / 기타 주류",
-          en: "Korean Liquor / Other Alcohol",
+          en: "Traditional Liquor / Others",
+          fil: "Tradisyonal na Alak ng Korea / Iba Pa",
           ja: "韓国酒 / その他",
           zh: "韩国酒 / 其他酒类",
           vi: "Rượu Hàn / Rượu khác",
@@ -4049,19 +4197,20 @@
           mn: "Солонгос архи / Бусад"
         },
         items: [
-          { name: { ko: "화요 25도", en: "Hwayo 25%", ja: "火尧 25度", zh: "火尧 25度", vi: "Hwayo 25 độ", ru: "Hwayo 25%", mn: "Hwayo 25%" }, price: "25,000" },
-          { name: { ko: "화요 41도", en: "Hwayo 41%", ja: "火尧 41度", zh: "火尧 41度", vi: "Hwayo 41 độ", ru: "Hwayo 41%", mn: "Hwayo 41%" }, price: "40,000" },
-          { name: { ko: "일품진로", en: "Ilpoom Jinro", ja: "一品眞露", zh: "一品真露", vi: "Ilpoom Jinro", ru: "Ilpoom Jinro", mn: "Ilpoom Jinro" }, price: "25,000" },
-          { name: { ko: "청하 / 별빛청하", en: "Cheongha / Starlight Cheongha", ja: "清河 / 星光清河", zh: "清河 / 星光清河", vi: "Cheongha / Starlight Cheongha", ru: "Cheongha / Starlight Cheongha", mn: "Cheongha / Starlight Cheongha" }, price: "6,000" },
-          { name: { ko: "백세주", en: "Baekseju", ja: "百歳酒", zh: "百岁酒", vi: "Baekseju", ru: "Baekseju", mn: "Baekseju" }, price: "8,000" },
-          { name: { ko: "막걸리", en: "Makgeolli", ja: "マッコリ", zh: "马格利米酒", vi: "Makgeolli", ru: "Макколи", mn: "Макколи" }, price: "5,000" },
-          { name: { ko: "보해복분자", en: "Bokbunja Raspberry Wine", ja: "覆盆子酒", zh: "覆盆子酒", vi: "Rượu phúc bồn tử", ru: "Ежевичное вино Bokbunja", mn: "Бокбунжа дарс" }, price: "18,000" }
+          { name: { ko: "화요 25도", en: "Hwayo 25%", fil: "Hwayo 25%", ja: "ファヨ（火堯）25度", zh: "火尧 25度", vi: "Hwayo 25 độ", ru: "Hwayo 25%", mn: "Hwayo 25%" }, price: "25,000" },
+          { name: { ko: "화요 41도", en: "Hwayo 41%", fil: "Hwayo 41%", ja: "ファヨ（火堯）41度", zh: "火尧 41度", vi: "Hwayo 41 độ", ru: "Hwayo 41%", mn: "Hwayo 41%" }, price: "40,000" },
+          { name: { ko: "일품진로", en: "Ilpoom Jinro", fil: "Ilpoom Jinro", ja: "一品眞露", zh: "一品真露", vi: "Ilpoom Jinro", ru: "Ilpoom Jinro", mn: "Ilpoom Jinro" }, price: "25,000" },
+          { name: { ko: "청하 / 별빛청하", en: "Cheongha / Starlight Cheongha", fil: "Cheongha / Starlight Cheongha", ja: "チョンハ（清河）/ 星光チョンハ", zh: "清河 / 星光清河", vi: "Cheongha / Starlight Cheongha", ru: "Cheongha / Starlight Cheongha", mn: "Cheongha / Starlight Cheongha" }, price: "6,000" },
+          { name: { ko: "백세주", en: "Baekseju", fil: "Baekseju", ja: "ペクセジュ（百歳酒）", zh: "百岁酒", vi: "Baekseju", ru: "Baekseju", mn: "Baekseju" }, price: "8,000" },
+          { name: { ko: "막걸리", en: "Makgeolli (Rice Wine)", fil: "Makgeolli (Rice Wine)", ja: "マッコリ", zh: "马格利米酒", vi: "Makgeolli", ru: "Макколи", mn: "Макколи" }, price: "5,000" },
+          { name: { ko: "보해복분자", en: "Bohae Bokbunja (Black Raspberry Wine)", fil: "Bohae Bokbunja (Raspberry Wine)", ja: "ボヘ覆盆子酒", zh: "覆盆子酒", vi: "Rượu phúc bồn tử", ru: "Ежевичное вино Bokbunja", mn: "Бокбунжа дарс" }, price: "18,000" }
         ]
       },
       {
         title: {
           ko: "사케",
           en: "Sake",
+          fil: "Sake",
           ja: "日本酒",
           zh: "清酒",
           vi: "Rượu sake",
@@ -4069,11 +4218,11 @@
           mn: "Сакэ"
         },
         items: [
-          { name: { ko: "간바레오또상", en: "Ganbare Otosan", ja: "がんばれお父さん", zh: "Ganbare Otosan", vi: "Ganbare Otosan", ru: "Ganbare Otosan", mn: "Ganbare Otosan" }, price: "35,000" },
-          { name: { ko: "하쿠츠루마루", en: "Hakutsuru Maru", ja: "白鶴まる", zh: "白鹤丸", vi: "Hakutsuru Maru", ru: "Hakutsuru Maru", mn: "Hakutsuru Maru" }, price: "35,000" },
-          { name: { ko: "라쿠엔유즈슈", en: "Rakuen Yuzu-shu", ja: "楽園ゆず酒", zh: "乐园柚子酒", vi: "Rakuen Yuzu-shu", ru: "Rakuen Yuzu-shu", mn: "Rakuen Yuzu-shu" }, price: "35,000" },
-          { name: { ko: "준마이다이긴조", en: "Junmai Daiginjo", ja: "純米大吟醸", zh: "纯米大吟酿", vi: "Junmai Daiginjo", ru: "Junmai Daiginjo", mn: "Junmai Daiginjo" }, price: "80,000" },
-          { name: { ko: "닷사이39", en: "Dassai 39", ja: "獺祭39", zh: "獭祭39", vi: "Dassai 39", ru: "Dassai 39", mn: "Dassai 39" }, price: "130,000" }
+          { name: { ko: "간바레오또상", en: "Ganbare Otousan", fil: "Ganbare Otosan", ja: "がんばれお父さん", zh: "Ganbare Otosan", vi: "Ganbare Otosan", ru: "Ganbare Otosan", mn: "Ganbare Otosan" }, price: "35,000" },
+          { name: { ko: "하쿠츠루마루", en: "Hakutsuru Maru", fil: "Hakutsuru Maru", ja: "白鶴まる", zh: "白鹤丸", vi: "Hakutsuru Maru", ru: "Hakutsuru Maru", mn: "Hakutsuru Maru" }, price: "35,000" },
+          { name: { ko: "라쿠엔유즈슈", en: "Rakuen Yuzushu", fil: "Rakuen Yuzu-shu", ja: "楽園ゆず酒", zh: "乐园柚子酒", vi: "Rakuen Yuzu-shu", ru: "Rakuen Yuzu-shu", mn: "Rakuen Yuzu-shu" }, price: "35,000" },
+          { name: { ko: "준마이다이긴조", en: "Junmai Daiginjo", fil: "Junmai Daiginjo", ja: "純米大吟醸", zh: "纯米大吟酿", vi: "Junmai Daiginjo", ru: "Junmai Daiginjo", mn: "Junmai Daiginjo" }, price: "80,000" },
+          { name: { ko: "닷사이39", en: "Dassai 39", fil: "Dassai 39", ja: "獺祭39", zh: "獭祭39", vi: "Dassai 39", ru: "Dassai 39", mn: "Dassai 39" }, price: "130,000" }
         ]
       }
     ];
@@ -4173,15 +4322,15 @@
         wifiTitle: "Wi-Fi",
 
         eventTitle: "Review Event",
-        eventDesc: "Please choose a review event.",
+        eventDesc: "Please choose a review event to join.",
 
         naverTitle: "Naver Receipt Review",
-        naverShort: "The Naver receipt review event will be prepared later.",
-        naverDesc: "The Naver receipt review event will be prepared later.",
+        naverShort: "The receipt review event is coming soon.",
+        naverDesc: "The Naver receipt review event is coming soon.",
 
         googleTitle: "Google Review Event",
-        googleShort: "Photo review required · Lalasweet ice cream",
-        googleLead: "Leave us a Google review and receive a Lalasweet ice cream.",
+        googleShort: "Photo review → free Lalasweet ice cream",
+        googleLead: "Leave us a Google review and get a free Lalasweet ice cream.",
 
         stepTitle: "How to participate",
         step1: "Tap the button below to open our Google review page.",
@@ -4190,7 +4339,7 @@
 
         benefitLabel: "Review Benefit",
         benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
-        note: "1 ice cream is provided for each review.",
+        note: "One ice cream per review.",
 
         buttonText: "Write a Google Review",
         backText: "← Back to event selection"
@@ -4204,21 +4353,21 @@
         eventDesc: "参加するレビューイベントを選んでください。",
 
         naverTitle: "NAVERレシートレビュー",
-        naverShort: "NAVERレシートレビューイベントは後日準備予定です。",
-        naverDesc: "NAVERレシートレビューイベントは後日準備予定です。",
+        naverShort: "レシートレビューイベントは準備中です。",
+        naverDesc: "NAVERレシートレビューイベントは現在準備中です。",
 
         googleTitle: "Googleレビューイベント",
-        googleShort: "写真付きレビューでララスイートアイスクリーム提供",
-        googleLead: "Googleレビューを残していただくと、ララスイートアイスクリームを差し上げます。",
+        googleShort: "写真付きレビューでララスウィートのアイスをプレゼント",
+        googleLead: "Googleレビューを投稿いただくと、ララスウィートのアイスクリームをプレゼントします。",
 
         stepTitle: "参加方法",
         step1: "下のボタンからGoogleレビュー画面を開いてください。",
-        step2: "写真を最低1枚以上添付してください。",
+        step2: "写真を1枚以上添付してください。",
         step3: "レビュー投稿後、スタッフにお見せください。",
 
         benefitLabel: "レビュー特典",
-        benefitText: "ララスイートアイスクリーム1個（5,000ウォン相当）",
-        note: "レビュー1件につきアイスクリーム1個を差し上げます。",
+        benefitText: "ララスウィート アイスクリーム1個（5,000ウォン相当）",
+        note: "レビュー1件につきアイスクリーム1個をプレゼントします。",
 
         buttonText: "Googleレビューを書く",
         backText: "← イベント選択に戻る"
@@ -4313,27 +4462,27 @@
         wifiTitle: "Wi-Fi",
 
         eventTitle: "Review Event",
-        eventDesc: "Pumili ng review event.",
+        eventDesc: "Pumili ng review event na gusto ninyong salihan.",
 
         naverTitle: "Naver Receipt Review",
-        naverShort: "Ihahanda mamaya ang Naver receipt review event.",
-        naverDesc: "Ihahanda mamaya ang Naver receipt review event.",
+        naverShort: "Ihahanda pa lang namin ang receipt review event.",
+        naverDesc: "Ihahanda pa lang namin ang Naver receipt review event.",
 
         googleTitle: "Google Review Event",
-        googleShort: "Photo review · Lalasweet ice cream",
-        googleLead: "Mag-iwan ng Google review at makatanggap ng Lalasweet ice cream.",
+        googleShort: "Mag-review na may photo, may libreng Lalasweet ice cream",
+        googleLead: "Mag-iwan ng Google review at bibigyan namin kayo ng Lalasweet ice cream.",
 
-        stepTitle: "How to join",
-        step1: "I-tap ang button sa ibaba para buksan ang Google review page.",
-        step2: "Mag-upload ng kahit 1 photo.",
+        stepTitle: "Paano sumali",
+        step1: "I-tap ang button sa ibaba para pumunta sa Google review page namin.",
+        step2: "Mag-attach ng kahit 1 larawan.",
         step3: "Pagkatapos mag-post ng review, ipakita ito sa staff.",
 
-        benefitLabel: "Review Benefit",
-        benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
-        note: "1 ice cream para sa bawat review.",
+        benefitLabel: "Regalo sa Review",
+        benefitText: "1 Lalasweet ice cream (halagang 5,000 KRW)",
+        note: "1 ice cream bawat review.",
 
-        buttonText: "Write a Google Review",
-        backText: "← Back to event selection"
+        buttonText: "Mag-review sa Google",
+        backText: "← Bumalik sa pagpili ng event"
       },
 
       ru: {
@@ -4413,35 +4562,35 @@
 
       en: {
         title: "Naver Receipt Review",
-        short: "Naver account required · Receipt review · Lalasweet ice cream",
-        lead: "Leave a Naver receipt review and receive a Lalasweet ice cream.",
+        short: "Naver account required · Receipt review → free Lalasweet ice cream",
+        lead: "Leave us a Naver receipt review and get a free Lalasweet ice cream.",
         stepTitle: "How to participate",
-        step1: "Please receive your receipt after payment.",
+        step1: "After paying, take your receipt or ask our staff for one.",
         step2: "Tap the button below to open our Naver review page.",
         step3: "Select Review → Write Review → Receipt.",
-        step4: "Take a photo of your receipt to verify it.",
+        step4: "Take a photo of your receipt to verify your visit.",
         step5: "Please attach at least 1 food photo.",
         step6: "After posting your review, show it to our staff.",
         benefitLabel: "Review Benefit",
         benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
-        note: "1 ice cream is provided for each review. If you need an additional receipt, please ask our staff.",
+        note: "One ice cream per review. If you need another receipt, please ask our staff.",
         buttonText: "Write a Naver Review"
       },
 
       ja: {
         title: "NAVERレシートレビュー",
-        short: "NAVERアカウント必要 · レシートレビューでアイスクリーム提供",
-        lead: "NAVERレシートレビューを残していただくと、ララスイートアイスクリームを差し上げます。",
+        short: "NAVERアカウントが必要 · レシートレビューでララスウィートのアイスをプレゼント",
+        lead: "NAVERレシートレビューを投稿いただくと、ララスウィートのアイスクリームをプレゼントします。",
         stepTitle: "参加方法",
-        step1: "お会計後、レシートをお受け取りください。",
+        step1: "お会計後にレシートを受け取るか、スタッフにレシートをお申し付けください。",
         step2: "下のボタンからNAVERレビュー画面を開いてください。",
         step3: "レビュー → レビューを書く → レシートを選択してください。",
-        step4: "レシートの写真を撮影して認証してください。",
-        step5: "料理写真を最低1枚以上添付してください。",
+        step4: "レシートを撮影して認証してください。",
+        step5: "料理の写真を1枚以上添付してください。",
         step6: "レビュー投稿後、スタッフにお見せください。",
         benefitLabel: "レビュー特典",
-        benefitText: "ララスイートアイスクリーム1個（5,000ウォン相当）",
-        note: "レビュー1件につきアイスクリーム1個を差し上げます。追加のレシートが必要な場合はスタッフにお問い合わせください。",
+        benefitText: "ララスウィート アイスクリーム1個（5,000ウォン相当）",
+        note: "レビュー1件につきアイスクリーム1個をプレゼントします。追加のレシートが必要な場合はスタッフにお申し付けください。",
         buttonText: "NAVERレビューを書く"
       },
 
@@ -4498,19 +4647,19 @@
 
       fil: {
         title: "Naver Receipt Review",
-        short: "Naver account required · Receipt review · Ice cream",
-        lead: "Mag-iwan ng Naver receipt review at makatanggap ng Lalasweet ice cream.",
-        stepTitle: "How to join",
-        step1: "Kunin ang receipt pagkatapos magbayad.",
-        step2: "I-tap ang button sa ibaba para buksan ang Naver review page.",
-        step3: "Piliin ang Review → Write Review → Receipt.",
-        step4: "Kunan ng photo ang receipt para ma-verify.",
-        step5: "Mag-upload ng kahit 1 food photo.",
+        short: "Kailangan ng Naver account · Mag-receipt review, may libreng Lalasweet ice cream",
+        lead: "Mag-iwan ng Naver receipt review at bibigyan namin kayo ng Lalasweet ice cream.",
+        stepTitle: "Paano sumali",
+        step1: "Kunin ang resibo pagkatapos magbayad, o humingi nito sa staff.",
+        step2: "I-tap ang button sa ibaba para pumunta sa Naver review page namin.",
+        step3: "Piliin ang Review (리뷰) → Write Review (리뷰쓰기) → Receipt (영수증).",
+        step4: "Kunan ng larawan ang resibo para ma-verify.",
+        step5: "Mag-attach ng kahit 1 larawan ng pagkain.",
         step6: "Pagkatapos mag-post ng review, ipakita ito sa staff.",
-        benefitLabel: "Review Benefit",
-        benefitText: "1 Lalasweet Ice Cream (worth 5,000 KRW)",
-        note: "1 ice cream para sa bawat review. Kung kailangan ng dagdag na receipt, magtanong sa staff.",
-        buttonText: "Write a Naver Review"
+        benefitLabel: "Regalo sa Review",
+        benefitText: "1 Lalasweet ice cream (halagang 5,000 KRW)",
+        note: "1 ice cream bawat review. Kung kailangan pa ninyo ng ibang resibo, sabihan lang ang staff.",
+        buttonText: "Mag-review sa Naver"
       },
 
       ru: {
@@ -4697,33 +4846,33 @@
       en: {
         button: "About Soorim",
         title: "About Soorim",
-        lead: "Soorim Seafood Restaurant has been serving guests in the same place in Haeundae for 14 years.",
+        lead: "Soorim is one of Haeundae’s best-known sashimi restaurants, serving guests at the same location for 14 years.",
         items: [
-          "We use fresh fish and seafood delivered every day.",
-          "Thanks to our guests, ingredients turn over quickly, which helps us serve fresher seafood every day.",
-          "We always try to use large, high-quality fish for the best sashimi experience.",
-          "Seafood full of ocean flavor is served together with our live fish sashimi.",
-          "Our spacious restaurant can welcome about 170 guests, with both hall seating and private rooms for groups, families, and travelers.",
-          "Our signature mulhoe is made with our own handmade sauce. We blend various fruits, reduce sugar, and age the sauce for a balanced taste.",
-          "Our special fried rockfish is made by frying a whole fresh rockfish, then serving it with our house-made sweet and sour sauce."
+          "We use only fresh fish and seafood delivered daily.",
+          "Thanks to our many loyal guests, our ingredients turn over quickly, and we work hard to use fresh ingredients every day.",
+          "Whatever the fish, we always do our best to source large, top-quality catches.",
+          "Ocean-fresh seafood comes complimentary with your live-fish sashimi.",
+          "Our spacious restaurant seats about 170 guests, with a main hall and private rooms — ideal for group dinners, family gatherings, and meals while traveling.",
+          "Our mulhoe is made with a handmade sauce we developed ourselves. We grind a variety of fruits to cut down on sugar, then age the sauce well for a balanced flavor.",
+          "Our specialty, sweet & sour fried rockfish, is made by deep-frying a whole live rockfish to keep it tender, then finishing it with our house-made sweet and sour sauce."
         ],
-        quote: "We believe that one good meal can shape the memory of a trip. We will keep working hard so your time in Haeundae becomes a warm and delicious memory."
+        quote: "We believe a single meal can shape the memory of a trip. With delicious food and warm service, we’ll always strive to make your time in Haeundae a wonderful memory."
       },
 
       ja: {
-        button: "About Soorim",
-        title: "海雲台スリム海鮮料理店について",
-        lead: "海雲台スリム海鮮料理店は、同じ場所で14年間営業を続けている海雲台の代表的な刺身店です。",
+        button: "About スーリム",
+        title: "スーリムについて",
+        lead: "海雲台のスーリムは、同じ場所で14年にわたり営業を続ける、海雲台を代表する刺身店です。",
         items: [
           "毎日仕入れる新鮮な魚と海鮮だけを使用しています。",
           "多くのお客様にご来店いただくことで食材の回転が早く、毎日新鮮な食材を使えるよう努めています。",
-          "どの魚も大きく良い原物を使うため、常に最善を尽くしています。",
-          "海の香り豊かな海鮮を活魚刺身と一緒にお楽しみいただけます。",
-          "約170名まで利用できる大型店舗で、ホール席と個室があり、団体会食や家族の集まりにも適しています。",
-          "シグネチャーメニューのムルフェ（冷たい辛味刺身スープ）は、自家製ソースで作ります。さまざまな果物を直接すり、砂糖を控え、熟成させて調和のある味に仕上げています。",
-          "名物のウロク甘酢あんかけは、活魚のウロクを丸ごと揚げ、自家製ソースで風味を引き立てています。"
+          "どの刺身にも、大きく質の良い魚を使うよう常に最善を尽くしています。",
+          "磯の香りあふれる海鮮が基本で付き、活魚の刺身と一緒にお楽しみいただけます。",
+          "約170名様まで収容できる大型店舗で、ホールと個室を備えており、団体の会食やご家族の集まり、旅行中のお食事にも最適です。",
+          "スーリムのムルフェは、独自に開発した手作りソースで作ります。さまざまな果物をすりおろして砂糖の使用を抑え、じっくり熟成させて調和のとれた味わいに仕上げています。",
+          "名物のクロソイの甘酢あんかけは、活きたクロソイを丸ごと揚げてふっくらとした食感を生かし、自家製の甘酢あんで風味を加えています。"
         ],
-        quote: "私たちは「一食の食事が旅の記憶を左右する」と考えています。海雲台での大切な時間が、おいしい料理と親切なサービスで良い思い出になるよう努力してまいります。"
+        quote: "私たちは「一度の食事が旅の思い出を左右する」と考えています。海雲台を訪れたお客様の大切な時間が、おいしい料理と心のこもったサービスで素敵な思い出になるよう、これからも工夫と努力を重ねてまいります。"
       },
 
       zh: {
@@ -4760,18 +4909,18 @@
 
       fil: {
         button: "About Soorim",
-        title: "About Soorim",
-        lead: "Ang Soorim Seafood Restaurant ay nagsisilbi sa parehong lugar sa Haeundae sa loob ng 14 na taon.",
+        title: "Tungkol sa Soorim",
+        lead: "Ang Soorim ay isa sa mga kilalang sashimi restaurant sa Haeundae, 14 na taon nang nasa iisang lugar.",
         items: [
-          "Gumagamit kami ng sariwang isda at seafood na dumarating araw-araw.",
-          "Dahil sa pagmamahal ng aming mga customer, mabilis ang ikot ng ingredients kaya mas sariwa ang naihahain namin araw-araw.",
-          "Palagi kaming nagsisikap gumamit ng malalaki at de-kalidad na isda para sa pinakamagandang sashimi experience.",
-          "Ang seafood na puno ng lasa ng dagat ay inihahain kasama ng live fish sashimi.",
-          "Maluwag ang restaurant at kayang tumanggap ng humigit-kumulang 170 guests, may hall seating at private rooms para sa groups, families, at travelers.",
-          "Ang signature mulhoe ng Soorim ay gawa sa sariling handmade sauce. Iba’t ibang prutas ang ginagamit namin, binabawasan ang asukal, at pinapahinog ang sauce para maging balanced ang lasa.",
-          "Ang special fried rockfish ay gawa sa buong sariwang rockfish at inihahain kasama ng house-made sweet and sour sauce."
+          "Sariwang isda at seafood lang na dumarating araw-araw ang ginagamit namin.",
+          "Dahil sa suporta ng maraming customer, mabilis maubos ang aming sangkap, kaya sinisikap naming laging sariwa ang gamit araw-araw.",
+          "Anumang isda ang gawing sashimi, sinisikap naming laging pumili ng malaki at de-kalidad.",
+          "May kasamang seafood na puno ng lasa ng dagat, para ma-enjoy ninyo kasabay ng sashimi mula sa buhay na isda.",
+          "Malaki ang restaurant at kayang tumanggap ng mga 170 tao. May hall at mga private room, kaya swak sa company dinner, family gathering, at kainan habang nagbibiyahe.",
+          "Gawa ang mulhoe ng Soorim sa sarili naming handmade sauce. Dinudurog namin ang iba’t ibang prutas para mabawasan ang asukal, at pinapahinog nang husto ang sauce para balanse ang lasa.",
+          "Ang paborito naming sweet & sour na rockfish ay buong rockfish na buhay pa bago iprito, kaya malambot ang laman, at nilalagyan ng sarili naming sweet & sour sauce para mas malasa."
         ],
-        quote: "Naniniwala kami na ang isang masarap na pagkain ay maaaring maging mahalagang alaala ng isang biyahe. Patuloy kaming magsisikap para maging masarap at mainit ang alaala ninyo sa Haeundae."
+        quote: "Naniniwala kami na ‘ang isang kainan ang humuhubog sa alaala ng biyahe.’ Lagi naming pag-iisipan at pagsisikapan na ang mahalagang oras ninyo sa Haeundae ay maging magandang alaala, sa pamamagitan ng masarap na pagkain at magiliw na serbisyo."
       },
 
       ru: {
@@ -4813,10 +4962,10 @@
       const philosophyTitles = {
         ko: "운영 철학",
         en: "Our Philosophy",
-        ja: "運営哲学",
+        ja: "運営理念",
         zh: "经营理念",
         vi: "Triết lý vận hành",
-        fil: "Our Philosophy",
+        fil: "Aming Pilosopiya",
         ru: "Наша философия",
         mn: "Үйл ажиллагааны философи"
       };
@@ -4830,7 +4979,7 @@
 
       if (btnEl) btnEl.textContent = text.button;
       if (titleEl) titleEl.textContent = text.title;
-      if (philosophyTitleEl) philosophyTitleEl.textContent = philosophyTitles[lang] || philosophyTitles.ko;
+      if (philosophyTitleEl) philosophyTitleEl.textContent = getAnyText(philosophyTitles, lang);
       if (leadEl) leadEl.textContent = text.lead;
       if (listEl) {
         listEl.innerHTML = text.items.map((item) => {
@@ -4840,113 +4989,31 @@
       if (quoteEl) quoteEl.textContent = text.quote;
     }
 
-    function toTraditionalChinese(text) {
-      if (!text) return text;
-
-      const map = {
-        "简": "簡", "体": "體", "汉": "漢", "语": "語",
-        "点": "點", "单": "單", "导": "導", "门": "門",
-        "云": "雲", "国": "國", "韩": "韓", "馆": "館",
-        "鱼": "魚", "鲜": "鮮", "汤": "湯", "饮": "飲",
-        "饭": "飯", "虾": "蝦", "贝": "貝", "鲍": "鮑",
-        "鲷": "鯛", "鲽": "鰈", "鳕": "鱈", "鲻": "鯔",
-        "鲈": "鱸", "酱": "醬", "鸡": "雞", "麦": "麥",
-        "面": "麵", "条": "條", "烧": "燒", "热": "熱",
-        "气": "氣", "这": "這", "个": "個", "为": "為",
-        "与": "與", "时": "時", "后": "後", "发": "發",
-        "现": "現", "处": "處", "动": "動", "请": "請",
-        "实": "實", "际": "際", "会": "會", "变": "變",
-        "应": "應", "图": "圖", "仅": "僅", "参": "參",
-        "数": "數", "须": "須", "价": "價", "开": "開",
-        "类": "類", "证": "證", "评": "評", "谢": "謝",
-        "礼": "禮", "准": "準", "备": "備", "详": "詳",
-        "欢": "歡", "经": "經", "营": "營", "历": "歷",
-        "统": "統", "丰": "豐", "尝": "嘗", "亲": "親",
-        "间": "間", "进": "進", "节": "節", "级": "級",
-        "综": "綜", "种": "種", "样": "樣", "较": "較",
-        "软": "軟", "转": "轉", "带": "帶", "选": "選",
-        "优": "優", "质": "質", "爱": "愛", "忆": "憶",
-        "调": "調", "制": "製", "额": "額", "产": "產",
-        "岁": "歲", "项": "項", "众": "眾", "龙": "龍",
-        "乐": "樂", "双": "雙", "称": "稱", "练": "練",
-        "钟": "鐘", "复": "複", "里": "裡"
-      };
-
-      let converted = text.replace(/[简体汉语点单导门云国韩馆鱼鲜汤饮饭虾贝鲍鲷鲽鳕鲻鲈酱鸡麦面条烧热气这个为与时后发现处动请实际会变应图仅参数须价开类证评谢礼准备详欢经营历统丰尝亲间进节级综种样较软转带选优质爱忆调制额产岁项众龙乐双称练钟复里]/g, (char) => {
-        return map[char] || char;
-      });
-
-      const phraseMap = [
-        ["水林生魚片店", "水林海鮮料理店"],
-        ["海雲台水林海鮮料理店菜單", "海雲台水林海鮮料理店菜單"],
-        ["韓式岩魚", "韓式岩魚"],
-        ["鮮韓式岩魚", "鮮韓式岩魚"],
-        ["糖醋韓式岩魚", "糖醋韓式岩魚"],
-        ["清湯", "清魚湯"],
-        ["韓式冷辣生魚湯", "韓式冰涼辣味生魚湯"],
-        ["小票評價", "發票評論"],
-        ["評論活動", "評論活動"],
-        ["點餐指南", "點餐說明"],
-        ["午餐特選", "午餐特餐"]
-      ];
-
-      phraseMap.forEach(([from, to]) => {
-        converted = converted.split(from).join(to);
-      });
-
-      return converted;
-    }
-
-    function convertVisibleTextToTraditionalChinese() {
-      const roots = [
-        document.querySelector(".page"),
-        document.getElementById("wifi-modal"),
-        document.getElementById("event-modal"),
-        document.getElementById("about-modal")
-      ].filter(Boolean);
-
-      roots.forEach((root) => {
-        const walker = document.createTreeWalker(
-          root,
-          NodeFilter.SHOW_TEXT,
-          {
-            acceptNode(node) {
-              const parent = node.parentElement;
-
-              if (!parent) return NodeFilter.FILTER_REJECT;
-              if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-              if (parent.closest(".language-bar")) return NodeFilter.FILTER_REJECT;
-
-              return NodeFilter.FILTER_ACCEPT;
-            }
-          }
-        );
-
-        const textNodes = [];
-
-        while (walker.nextNode()) {
-          textNodes.push(walker.currentNode);
-        }
-
-        textNodes.forEach((node) => {
-          node.nodeValue = toTraditionalChinese(node.nodeValue);
-        });
-      });
-    }
+    const htmlLangCodes = {
+      ko: "ko",
+      en: "en",
+      ja: "ja",
+      zh: "zh-Hans",
+      zhTw: "zh-Hant",
+      vi: "vi",
+      fil: "fil",
+      ru: "ru",
+      mn: "mn"
+    };
 
     function applyLanguage(lang) {
-      const renderLang = lang === "zhTw" ? "zh" : lang;
-      const selectedTexts = translations[renderLang] || translations.ko;
+      if (!htmlLangCodes[lang]) lang = "ko";
+      const selectedTexts = getLanguageBlock(translations, lang);
 
-      renderFeatured(renderLang);
-      renderCourse(renderLang);
-      renderSashimi(renderLang);
-      renderMeal(renderLang);
-      renderLunchKids(renderLang);
-      renderExtraSections(renderLang);
-      renderInfoSections(renderLang);
-      renderModals(renderLang);
-      renderAboutModal(renderLang);
+      renderFeatured(lang);
+      renderCourse(lang);
+      renderSashimi(lang);
+      renderMeal(lang);
+      renderLunchKids(lang);
+      renderExtraSections(lang);
+      renderInfoSections(lang);
+      renderModals(lang);
+      renderAboutModal(lang);
 
       document.querySelectorAll("[data-i18n]").forEach((element) => {
         const key = element.dataset.i18n;
@@ -4960,12 +5027,42 @@
         button.classList.toggle("active", button.dataset.lang === lang);
       });
 
-      if (lang === "zhTw") {
-        convertVisibleTextToTraditionalChinese();
+      document.documentElement.lang = htmlLangCodes[lang];
+      saveLanguage(lang);
+    }
+
+    function saveLanguage(lang) {
+      try {
+        localStorage.setItem("soorim-menu-lang", lang);
+      } catch (error) {}
+    }
+
+    function getSavedLanguage() {
+      try {
+        return localStorage.getItem("soorim-menu-lang");
+      } catch (error) {
+        return null;
+      }
+    }
+
+    // 처음 방문한 손님은 휴대폰 언어 설정에 맞춰 보여줍니다. (지원하지 않는 외국어는 영어)
+    function detectLanguage() {
+      const browserLangs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "ko"];
+
+      for (const rawLang of browserLangs) {
+        const code = String(rawLang).toLowerCase();
+
+        if (code.startsWith("ko")) return "ko";
+        if (code.startsWith("zh")) {
+          return /hant|tw|hk|mo/.test(code) ? "zhTw" : "zh";
+        }
+        if (code.startsWith("fil") || code.startsWith("tl")) return "fil";
+
+        const base = code.split("-")[0];
+        if (["en", "ja", "vi", "ru", "mn"].includes(base)) return base;
       }
 
-      document.documentElement.lang = lang === "zhTw" ? "zh-Hant" : (lang === "fil" ? "fil" : renderLang);
-      localStorage.setItem("soorim-menu-lang", lang);
+      return "en";
     }
 
     document.querySelectorAll(".lang-btn").forEach((button) => {
@@ -5041,8 +5138,7 @@
     enableDragScroll(".language-bar");
     enableDragScroll(".quick-nav");
 
-    const savedLang = localStorage.getItem("soorim-menu-lang") || "ko";
-    applyLanguage(savedLang);
+    applyLanguage(getSavedLanguage() || detectLanguage());
 
     function scrollToTop() {
       window.scrollTo({
@@ -5051,10 +5147,16 @@
       });
     }
 
+    let modalOpener = null;
+
     function openInfoModal(modalId) {
       const modal = document.getElementById(modalId);
       if (modal) {
+        modalOpener = document.activeElement;
         modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+        modal.querySelector(".info-close-btn")?.focus({ preventScroll: true });
       }
     }
 
@@ -5062,6 +5164,13 @@
       const modal = document.getElementById(modalId);
       if (modal) {
         modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+      }
+
+      if (!document.querySelector(".info-modal.show")) {
+        document.body.classList.remove("modal-open");
+        modalOpener?.focus?.({ preventScroll: true });
+        modalOpener = null;
       }
     }
 
@@ -5074,7 +5183,7 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         document.querySelectorAll(".info-modal.show").forEach((modal) => {
-          modal.classList.remove("show");
+          closeInfoModal(modal.id);
         });
       }
     });
@@ -5148,7 +5257,14 @@
       }
     }
 
+    const topButtonEl = document.getElementById("top-button");
+
+    function updateTopButton() {
+      topButtonEl?.classList.toggle("show", window.scrollY > 400);
+    }
+
     window.addEventListener("scroll", updateActiveQuickLink, { passive: true });
+    window.addEventListener("scroll", updateTopButton, { passive: true });
     window.addEventListener("load", updateActiveQuickLink);
     updateActiveQuickLink();
 
