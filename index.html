@@ -21,21 +21,58 @@
 
   <link rel="preload" as="image" href="images/b-course.JPG" fetchpriority="high">
 
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
   <style>
+    :root {
+      --brand: #17322b;
+      --brand-2: #24493f;
+      --brand-soft: #e7efe9;
+      --bg: #f3eee5;
+      --surface: #fffcf6;
+      --card: #ffffff;
+      --line: #ebe1d2;
+      --line-soft: #f3ebdf;
+      --ink: #1c1915;
+      --ink-2: #554b40;
+      --ink-3: #8b7f71;
+      --price: #c0392b;
+      --gold: linear-gradient(135deg, #f8df8a, #d9a520 50%, #fff0a6);
+      --gold-ink: #3a2500;
+      --warn-bg: #fff5e3;
+      --warn-line: #f0d6a8;
+      --warn-ink: #5d4121;
+      --radius-lg: 20px;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 4px 16px rgba(40, 30, 15, 0.06);
+      --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.25);
+      --nav-h: 54px;
+    }
+
     * {
       box-sizing: border-box;
     }
 
     html {
       scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
-      background: #f7f3ec;
-      color: #1f1f1f;
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Hiragino Sans", "PingFang SC", "PingFang TC", "Noto Sans KR", "Noto Sans JP", "Noto Sans SC", "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
       line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :lang(ja) body,
+    body:lang(ja) {
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Pretendard Variable", sans-serif;
     }
 
     a {
@@ -43,134 +80,1037 @@
       text-decoration: none;
     }
 
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      background: #fffaf3;
-      min-height: 100vh;
-      box-shadow: 0 0 30px rgba(0,0,0,0.08);
+    button {
+      font: inherit;
+      color: inherit;
     }
+
+    :focus-visible {
+      outline: 3px solid #d9a520;
+      outline-offset: 2px;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--surface);
+      min-height: 100vh;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.07);
+      padding-bottom: 8px;
+    }
+
+    /* ---------- 상단 ---------- */
 
     .hero {
       position: relative;
-      padding: calc(28px + env(safe-area-inset-top)) 18px 20px;
-      background: linear-gradient(135deg, #17322b, #0f1f1b);
+      padding: calc(18px + env(safe-area-inset-top)) 18px 16px;
+      background: radial-gradient(circle at 110% -10%, rgba(255,255,255,0.12) 0 140px, transparent 141px), linear-gradient(160deg, #1b3b32, #0f1f1b);
       color: #fff;
       overflow: hidden;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -70px;
-      top: -70px;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
+    .store-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .store-title-text {
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     .store-name {
-      position: relative;
-      z-index: 1;
-      font-size: clamp(24px, 7vw, 30px);
+      font-size: clamp(25px, 7vw, 32px);
       font-weight: 900;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.6px;
+      line-height: 1.15;
       margin: 0;
       white-space: nowrap;
-      min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .store-title-row {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
+    .store-subtitle {
+      margin: 3px 0 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .wifi-qr-btn {
+    .lang-open-btn {
       flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      padding: 2px;
-      border: 1px solid rgba(255,255,255,0.35);
-      border-radius: 10px;
-      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 0 13px;
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      backdrop-filter: blur(6px);
+    }
+
+    .lang-open-btn .globe {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .lang-open-btn::after {
+      content: "▾";
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .hero-chip {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 38px;
+      padding: 0 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .hero-chip.event-btn {
+      background: var(--gold);
+      color: var(--gold-ink);
+      border-color: rgba(255,245,190,0.9);
+      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.3);
     }
 
     .wifi-qr-thumb {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: #fff;
       display: block;
-      border-radius: 7px;
     }
 
-    .event-btn {
-      margin-left: auto;
-      flex: 0 0 auto;
-      border: 1px solid rgba(255, 245, 190, 0.9);
-      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
-      color: #3a2500;
-      padding: 8px 11px;
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #9aa59f;
+      box-shadow: 0 0 0 3px rgba(154,165,159,0.25);
+    }
+
+    .status-chip[data-state="open"] .status-dot {
+      background: #3ddc84;
+      box-shadow: 0 0 0 3px rgba(61,220,132,0.25);
+    }
+
+    .status-chip[data-state="break"] .status-dot,
+    .status-chip[data-state="last"] .status-dot {
+      background: #ffb020;
+      box-shadow: 0 0 0 3px rgba(255,176,32,0.25);
+    }
+
+    .status-chip[data-state="closed"] .status-dot {
+      background: #ff6b5b;
+      box-shadow: 0 0 0 3px rgba(255,107,91,0.25);
+    }
+
+    /* ---------- 대표 사진 ---------- */
+
+    .main-visual {
+      position: relative;
+      padding: 0 14px 16px;
+      background: linear-gradient(#0f1f1b, #0f1f1b 60%, var(--surface) 60%);
+    }
+
+    .main-photo-wrap {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.25);
+      cursor: zoom-in;
+    }
+
+    .main-photo {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: #2a3a35;
+    }
+
+    .main-visual-text {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 50px 16px 15px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.78));
+      color: #fff;
+    }
+
+    .main-title-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0 0 3px;
+    }
+
+    .main-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .main-desc {
+      margin: 0;
+      color: rgba(255,255,255,0.9);
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.28);
-      white-space: nowrap;
+      line-height: 1;
     }
 
-    .event-btn,
+    /* ---------- 섹션 이동 메뉴 ---------- */
+
+    .quick-nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255,252,246,0.94);
+      backdrop-filter: saturate(1.4) blur(12px);
+      -webkit-backdrop-filter: saturate(1.4) blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .quick-nav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 9px 12px;
+      scrollbar-width: none;
+      cursor: grab;
+      user-select: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .quick-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .quick-nav.dragging {
+      cursor: grabbing;
+    }
+
+    .quick-link {
+      flex: 0 0 auto;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 800;
+      color: #3a2a1c;
+      -webkit-user-drag: none;
+      user-select: none;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .quick-link.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    /* ---------- 섹션 공통 ---------- */
+
+    section {
+      padding: 26px 16px 22px;
+      scroll-margin-top: calc(var(--nav-h) + env(safe-area-inset-top));
+    }
+
+    section + section {
+      border-top: 8px solid var(--line-soft);
+    }
+
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+      line-height: 1.25;
+    }
+
+    .section-title-row .section-title {
+      margin: 0;
+    }
+
+    .section-note {
+      margin: -4px 0 12px;
+      font-size: 13px;
+      color: var(--ink-3);
+    }
+
+    .section-important-note,
+    .section-inline-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .section-important-note {
+      margin-bottom: 10px;
+    }
+
+    .section-change-note,
+    .notice-box {
+      margin: 0 0 14px;
+      padding: 11px 13px;
+      border-radius: var(--radius-sm);
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-line);
+      color: var(--warn-ink);
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .section-change-note::before {
+      content: "🌶️ ";
+    }
+
+    .notice-box {
+      margin: 14px 0 0;
+    }
+
     .about-soorim-btn {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 36px;
+      padding: 0 13px;
+      border-radius: 999px;
+      border: 1px solid #ead7b8;
+      background: #fff8e9;
+      color: var(--gold-ink);
+      font-size: 12.5px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .about-soorim-btn::after {
+      content: "›";
+      font-size: 16px;
+    }
+
+    #order-guide .notice-box {
+      margin-top: 0;
+      background: #fff;
+      border-color: var(--line);
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    #order-guide .notice-box strong {
+      color: var(--ink);
+    }
+
+    /* ---------- 대표 메뉴 (가로 넘김) ---------- */
+
+    .photo-hint {
+      margin: -4px 0 12px;
+      font-size: 12.5px;
+      color: var(--ink-3);
+      font-weight: 700;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: min(78%, 300px);
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 16px;
+      margin: 0 -16px;
+      padding: 2px 16px 12px;
+      scrollbar-width: none;
+      cursor: grab;
+    }
+
+    .featured-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .featured-grid.dragging {
+      cursor: grabbing;
+      scroll-snap-type: none;
+    }
+
+    .featured-card {
+      scroll-snap-align: start;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .featured-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: #e9e1d4;
+      cursor: zoom-in;
+      -webkit-user-drag: none;
+    }
+
+    .featured-body {
+      padding: 12px 14px 14px;
+      display: grid;
+      gap: 5px;
+    }
+
+    .featured-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .featured-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+      line-height: 1.3;
+    }
+
+    .featured-price {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--price);
+    }
+
+    .featured-desc {
+      margin: 0;
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .small-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.1;
+      vertical-align: middle;
+    }
+
+    .best-badge {
+      position: relative;
+      overflow: hidden;
+      background: var(--gold);
+      color: var(--gold-ink);
+      border: 1px solid rgba(255, 245, 190, 0.9);
+      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.25);
+      letter-spacing: 0.3px;
+    }
+
+    .best-badge::after {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -70%;
+      width: 45%;
+      height: 180%;
+      background: rgba(255,255,255,0.4);
+      transform: rotate(25deg);
+      animation: bestShine 2.8s ease-in-out infinite;
+    }
+
+    @keyframes bestShine {
+      0% { left: -70%; }
+      45%, 100% { left: 130%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .best-badge::after { animation: none; display: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ---------- 메뉴 카드 ---------- */
+
+    .menu-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .menu-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .menu-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .menu-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      line-height: 1.35;
+    }
+
+    .menu-name .small-badge {
+      margin-left: 4px;
+      position: relative;
+      top: -1px;
+    }
+
+    .menu-price {
+      flex: 0 0 auto;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--price);
+      white-space: nowrap;
+      text-align: right;
+      line-height: 1.35;
+    }
+
+    .menu-desc {
+      margin: 6px 0 0;
+      font-size: 14px;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+
+    .menu-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .menu-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #f3eadc;
+      color: #5f4a34;
+      font-size: 11.5px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .menu-tag.raw { background: #fff0e6; color: #8a3b1f; }
+    .menu-tag.raw::before { content: "🐟 "; }
+    .menu-tag.cooked { background: #e9f4ea; color: #225b30; }
+    .menu-tag.cooked::before { content: "🔥 "; }
+    .menu-tag.spicy { background: #ffeceb; color: #9e2d22; }
+    .menu-tag.spicy::before { content: "🌶️ "; }
+    .menu-tag.meal { background: #eef2ff; color: #273c8f; }
+
+    .course-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      background: #faf6ef;
+      border: 1px dashed #e6d8c3;
+    }
+
+    .course-item {
+      padding: 4px 9px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink-2);
+    }
+
+    .price-lines {
+      margin-top: 10px;
+      font-size: 13.5px;
+      color: var(--ink-2);
+    }
+
+    /* 가격 줄 (크기 · 옵션) */
+
+    .size-price-list,
+    .option-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .size-price-row,
+    .option-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 6px 6px 6px 12px;
+      border-radius: var(--radius-sm);
+      background: #fbf7f0;
+      border: 1px solid var(--line-soft);
+    }
+
+    .size-name,
+    .option-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #2b2118;
+    }
+
+    .option-left {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .option-desc {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-3);
+      line-height: 1.35;
+    }
+
+    .size-price,
+    .option-price {
+      font-size: 14.5px;
+      font-weight: 900;
+      color: var(--price);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .eating-guide {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--brand-soft);
+      color: #24493f;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .eating-guide::before {
+      content: "💡 ";
+    }
+
+    .menu-card .notice-box {
+      margin-top: 10px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+
+    /* 담기 버튼 */
+
+    .add-btn {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid #cfe0d6;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      border-width: 2px;
-      transform: translateY(0);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      position: relative;
+      transition: transform 0.12s ease, background 0.12s ease;
     }
 
-    .event-btn::before {
-      content: "🎁";
-      font-size: 13px;
-      line-height: 1;
+    .add-btn:active {
+      transform: scale(0.92);
     }
 
-    .about-soorim-btn::before {
-      content: "ⓘ";
-      font-size: 13px;
-      line-height: 1;
-    }
-
-    .event-btn::after,
-    .about-soorim-btn::after {
-      content: "›";
-      font-size: 17px;
+    .add-btn[data-count]:not([data-count="0"]) {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+      font-size: 14px;
       font-weight: 900;
-      line-height: 1;
-      margin-left: 1px;
     }
 
-    .event-btn:active,
-    .about-soorim-btn:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 2px 6px rgba(126, 82, 0, 0.22);
+    .add-btn[data-count]:not([data-count="0"])::before {
+      content: attr(data-count);
     }
 
-    @media (hover: hover) {
-      .event-btn:hover,
-      .about-soorim-btn:hover {
-        filter: brightness(1.05);
-        box-shadow: 0 5px 15px rgba(126, 82, 0, 0.32);
-      }
+    .add-btn[data-count]:not([data-count="0"]) span {
+      display: none;
+    }
+
+    .price-action {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .single-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .single-price-row .menu-price {
+      margin-right: auto;
+    }
+
+    /* ---------- 주류 ---------- */
+
+    details {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 15px 16px;
+      font-size: 16px;
+      font-weight: 900;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "⌄";
+      font-size: 18px;
+      color: var(--ink-3);
+      transition: transform 0.2s ease;
+    }
+
+    details[open] summary::after {
+      transform: rotate(180deg);
+    }
+
+    .details-content {
+      padding: 0 10px 10px;
+    }
+
+    .drink-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 6px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .drink-title {
+      flex: 1 1 auto;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .drink-text {
+      margin: 0;
+      font-size: 14px;
+      color: var(--price);
+      white-space: nowrap;
+    }
+
+    /* ---------- 매장 정보 ---------- */
+
+    .info-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .info-icon {
+      font-size: 18px;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .info-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink-3);
+    }
+
+    .info-value {
+      font-weight: 700;
+      color: var(--ink);
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    .info-sub {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    .info-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fbf7f0;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .pill-btn.primary {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fff;
+    }
+
+    .hours-table {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2px 12px;
+      margin-top: 2px;
+    }
+
+    .hours-table dt {
+      color: var(--ink-2);
+      font-weight: 700;
+    }
+
+    .hours-table dd {
+      margin: 0;
+      font-weight: 800;
+    }
+
+    /* ---------- 하단 ---------- */
+
+    .footer {
+      padding: 26px 16px calc(110px + env(safe-area-inset-bottom));
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .footer-title {
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .footer-list {
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,0.82);
+      font-size: 13px;
+    }
+
+    .footer-list li {
+      margin-bottom: 6px;
+    }
+
+    /* ---------- 떠 있는 버튼 ---------- */
+
+    .top-button {
+      position: fixed;
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 0;
+      background: rgba(23,50,43,0.92);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      cursor: pointer;
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, bottom 0.2s ease;
+    }
+
+    .top-button.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    body.has-cart .top-button {
+      bottom: calc(84px + env(safe-area-inset-bottom));
+    }
+
+    .cart-bar {
+      position: fixed;
+      left: 50%;
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      z-index: 45;
+      width: min(calc(100% - 28px), 520px);
+      transform: translate(-50%, 140%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 10px 10px 16px;
+      border: 0;
+      border-radius: 18px;
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.25s ease;
+      text-align: left;
+    }
+
+    body.has-cart .cart-bar {
+      transform: translate(-50%, 0);
+    }
+
+    .cart-count {
+      min-width: 26px;
+      height: 26px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--brand);
+      font-size: 14px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-bar-label {
+      flex: 1 1 auto;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .cart-bar-total {
+      font-size: 15px;
+      font-weight: 900;
+      white-space: nowrap;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.14);
+    }
+
+    /* ---------- 팝업 · 시트 ---------- */
+
+    body.modal-open {
+      overflow: hidden;
     }
 
     .info-modal {
@@ -178,24 +1118,52 @@
       position: fixed;
       inset: 0;
       z-index: 1000;
-      background: rgba(0,0,0,0.55);
+      background: rgba(10, 15, 13, 0.55);
       padding: 18px;
       align-items: center;
       justify-content: center;
+      animation: fadeIn 0.18s ease;
     }
 
     .info-modal.show {
       display: flex;
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes sheetUp {
+      from { transform: translateY(40px); opacity: 0.6; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
     .info-modal-card {
       width: 100%;
-      max-width: 420px;
-      background: #fffaf3;
+      max-width: 440px;
+      max-height: calc(100vh - 36px);
+      max-height: calc(100dvh - 36px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: var(--surface);
       border-radius: 22px;
-      border: 1px solid #eadfce;
-      box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+      box-shadow: var(--shadow-lg);
       padding: 18px;
+    }
+
+    .info-modal.sheet {
+      align-items: flex-end;
+      padding: 0;
+    }
+
+    .info-modal.sheet .info-modal-card {
+      max-width: 560px;
+      border-radius: 24px 24px 0 0;
+      padding-bottom: calc(18px + env(safe-area-inset-bottom));
+      animation: sheetUp 0.22s ease;
+      max-height: 88vh;
+      max-height: 88dvh;
     }
 
     .info-modal-head {
@@ -214,58 +1182,258 @@
     }
 
     .info-close-btn {
+      flex: 0 0 auto;
       border: 0;
-      background: #17322b;
-      color: #fff;
-      width: 34px;
-      height: 34px;
+      background: #efe7da;
+      color: var(--ink);
+      width: 36px;
+      height: 36px;
       border-radius: 999px;
-      font-size: 18px;
-      font-weight: 900;
+      font-size: 20px;
+      font-weight: 700;
       cursor: pointer;
     }
 
     .wifi-qr-large {
       width: 100%;
-      max-width: 320px;
+      max-width: 300px;
       display: block;
-      margin: 8px auto 12px;
+      margin: 4px auto 6px;
       border-radius: 18px;
-      border: 1px solid #eadfce;
+      border: 1px solid var(--line);
       background: #fff;
     }
 
     .modal-desc {
       margin: 0;
       font-size: 14px;
-      color: #51483d;
+      color: var(--ink-2);
       line-height: 1.55;
+      font-weight: 600;
+    }
+
+    /* 언어 선택 */
+
+    .language-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 52px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .lang-btn.active {
+      border-color: var(--brand);
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+
+    .lang-btn.active::after {
+      content: "✓";
+      font-weight: 900;
+    }
+
+    /* 주문 메모 */
+
+    .cart-guide {
+      margin: 0 0 12px;
+      padding: 11px 13px;
+      border-radius: var(--radius-sm);
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .cart-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 6px 10px;
+      align-items: center;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .cart-ko {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+    }
+
+    .cart-ko small {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ink-2);
+    }
+
+    .cart-local {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-3);
+    }
+
+    .cart-price {
+      grid-column: 1;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--price);
+    }
+
+    .qty {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      border-radius: 999px;
+      background: #f3ece1;
+      padding: 3px;
+    }
+
+    .qty button {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .qty output {
+      min-width: 28px;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .cart-total-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 14px 2px 4px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .cart-total-row strong {
+      font-size: 22px;
+      color: var(--price);
+    }
+
+    .cart-note {
+      margin: 4px 2px 12px;
+      font-size: 12px;
+      color: var(--ink-3);
+      font-weight: 600;
+    }
+
+    .cart-empty {
+      padding: 26px 10px;
+      text-align: center;
+      color: var(--ink-3);
       font-weight: 700;
     }
 
-    .event-list {
+    .cart-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .cart-actions .pill-btn {
+      flex: 1 1 auto;
+      justify-content: center;
+      min-height: 46px;
+      font-size: 14px;
+    }
+
+    body.staff-view .cart-ko {
+      font-size: 24px;
+    }
+
+    /* 사진 크게 보기 */
+
+    .lightbox {
+      background: rgba(0,0,0,0.92);
+      padding: 0;
+      flex-direction: column;
+    }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: calc(100vh - 120px);
+      max-height: calc(100dvh - 120px);
+      object-fit: contain;
+      display: block;
+    }
+
+    .lightbox-caption {
+      color: #fff;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .lightbox .info-close-btn {
+      position: absolute;
+      top: calc(12px + env(safe-area-inset-top));
+      right: 12px;
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+
+    /* 리뷰 이벤트 */
+
+    .event-list,
+    .event-choice-grid {
       display: grid;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .event-item {
       padding: 12px;
       border-radius: 14px;
-      background: #fff4e1;
-      border: 1px solid #f1d4a6;
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-line);
       font-size: 14px;
-      color: #5d4121;
-      font-weight: 800;
+      color: var(--warn-ink);
+      font-weight: 700;
       line-height: 1.45;
     }
 
     .event-steps {
       margin: 9px 0 0;
-      padding-left: 18px;
-      color: #51483d;
+      padding-left: 20px;
+      color: var(--ink-2);
       font-size: 13.5px;
-      font-weight: 750;
+      font-weight: 600;
       line-height: 1.55;
     }
 
@@ -276,55 +1444,44 @@
     .event-gift-box {
       margin-top: 10px;
       padding: 10px 12px;
-      border-radius: 13px;
-      background: #17322b;
+      border-radius: 12px;
+      background: var(--brand);
       color: #fff;
       font-size: 14px;
-      font-weight: 900;
-      line-height: 1.45;
+      font-weight: 800;
     }
 
     .event-small-note {
       margin-top: 8px;
       color: #8a3b1f;
       font-size: 12.5px;
-      font-weight: 900;
-      line-height: 1.45;
+      font-weight: 800;
     }
 
     .event-review-btn {
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 46px;
       margin-top: 12px;
-      padding: 11px 13px;
       border-radius: 999px;
-      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
-      color: #3a2500;
-      font-size: 14px;
+      background: var(--gold);
+      color: var(--gold-ink);
+      font-size: 14.5px;
       font-weight: 900;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(126, 82, 0, 0.24);
-      border: 1px solid rgba(255, 245, 190, 0.9);
-    }
-
-    .event-choice-grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(126, 82, 0, 0.22);
     }
 
     .event-choice-btn {
       width: 100%;
-      border: 1px solid #f1d4a6;
-      background: #fff4e1;
-      color: #5d4121;
+      border: 1px solid var(--warn-line);
+      background: var(--warn-bg);
+      color: var(--warn-ink);
       border-radius: 15px;
-      padding: 13px 14px;
+      padding: 14px;
       text-align: left;
       cursor: pointer;
       font-weight: 900;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.035);
     }
 
     .event-choice-title {
@@ -338,308 +1495,57 @@
     .event-choice-title::after {
       content: "›";
       font-size: 20px;
-      font-weight: 900;
-      color: #b13b25;
+      color: var(--price);
     }
 
     .event-choice-sub {
       display: block;
-      margin-top: 5px;
+      margin-top: 4px;
       font-size: 12.5px;
-      font-weight: 800;
+      font-weight: 700;
       color: #8a7764;
       line-height: 1.4;
     }
 
     .event-back-btn {
       width: 100%;
+      min-height: 42px;
       margin-top: 10px;
-      border: 1px solid #eadfce;
+      border: 1px solid var(--line);
       background: #fff;
-      color: #51483d;
-      border-radius: 999px;
-      padding: 10px 12px;
-      font-size: 13px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .store-subtitle {
-      position: relative;
-      z-index: 1;
-      margin: 5px 0 0;
-      font-size: 13px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.72);
-      letter-spacing: -0.2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .language-bar {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 18px 0 2px;
-      scrollbar-width: none;
-    }
-
-    .language-bar::-webkit-scrollbar {
-      display: none;
-    }
-
-    .lang-btn {
-      flex: 0 0 auto;
-      border: 1px solid rgba(255,255,255,0.25);
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      padding: 8px 12px;
+      color: var(--ink-2);
       border-radius: 999px;
       font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .lang-btn.active {
-      background: #fff;
-      color: #17322b;
-    }
-
-    .main-visual {
-      padding: 16px;
-      background: #17322b;
-      color: #fff;
-    }
-
-    .main-photo {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      display: block;
-      border-radius: 22px;
-      background: #ddd;
-    }
-
-    .main-visual-text {
-      padding: 16px 4px 4px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 5px 9px;
-      border-radius: 999px;
-      background: #e94b35;
-      color: #fff;
-      font-size: 12px;
       font-weight: 800;
-      line-height: 1;
-    }
-
-    .main-title-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin: 10px 0 4px;
-    }
-
-    .main-title {
-      margin: 0;
-      font-size: 25px;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-    }
-
-    .main-desc {
-      margin: 0;
-      color: rgba(255,255,255,0.86);
-      font-size: 14px;
-    }
-
-    .quick-nav-wrap {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(255,250,243,0.96);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid #eadfce;
-    }
-
-    .quick-nav {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 9px 12px;
-      scrollbar-width: none;
-    }
-
-    .language-bar,
-    .quick-nav {
-      cursor: grab;
-      user-select: none;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .language-bar.dragging,
-    .quick-nav.dragging {
-      cursor: grabbing;
-    }
-
-    .quick-nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    .quick-link {
-      flex: 0 0 auto;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: #fff;
-      border: 1px solid #e5d7c4;
-      font-size: 12.5px;
-      font-weight: 900;
-      color: #3a2a1c;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-    }
-
-    .quick-link {
-      -webkit-user-drag: none;
-      user-select: none;
-    }
-
-    
-    .quick-link.active {
-      background: #17322b;
-      color: #fff;
-      border-color: #17322b;
-      box-shadow: 0 5px 14px rgba(23, 50, 43, 0.28);
-      transform: translateY(-1px);
-    }
-
-    section {
-      padding: 26px 16px;
-      border-bottom: 10px solid #f2eadf;
-      scroll-margin-top: 64px;
-    }
-
-    .section-title-row {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .section-title {
-      margin: 0;
-      font-size: 23px;
-      font-weight: 900;
-      letter-spacing: -0.6px;
-    }
-
-    .section-note {
-      margin: 5px 0 0;
-      font-size: 13px;
-      color: #786b5b;
-    }
-
-    .section-important-note {
-      display: inline-flex;
-      align-items: center;
-      margin-top: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #17322b;
-      color: #fff;
-      font-size: 13px;
-      font-weight: 900;
-      box-shadow: 0 4px 12px rgba(23, 50, 43, 0.18);
-    }
-
-    .section-change-note {
-      margin: 9px 0 14px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: #fff4e1;
-      border: 1px solid #f1d4a6;
-      color: #5d4121;
-      font-size: 13.5px;
-      font-weight: 800;
-      line-height: 1.45;
-    }
-
-    .compact-title-row {
-      align-items: center;
-      flex-wrap: wrap;
-      row-gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .section-inline-note {
-      flex: 0 0 auto;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: #17322b;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 900;
-      max-width: 100%;
-      line-height: 1.35;
-      box-shadow: 0 4px 12px rgba(23, 50, 43, 0.18);
-    }
-
-    .about-soorim-btn {
-      flex: 0 0 auto;
-      border: 1px solid rgba(255, 245, 190, 0.9);
-      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
-      color: #3a2500;
-      padding: 8px 11px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.22);
-      white-space: nowrap;
     }
+
+    /* 수림 소개 */
 
     .about-modal-card {
       max-width: 560px;
       padding: 0;
-      overflow: hidden;
     }
 
     .about-modal-card .info-modal-head {
+      position: sticky;
+      top: 0;
+      z-index: 1;
       margin: 0;
-      padding: 18px 18px 14px;
+      padding: 16px 18px;
       background: linear-gradient(135deg, #17322b, #0f1f1b);
       color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .about-modal-card .info-modal-title {
-      color: #fff;
-      font-size: 21px;
     }
 
     .about-modal-card .info-close-btn {
       background: rgba(255,255,255,0.16);
-      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
     }
 
     .about-body {
       display: grid;
-      gap: 14px;
-      max-height: 72vh;
-      overflow-y: auto;
+      gap: 12px;
       padding: 16px;
-      background:
-        radial-gradient(circle at top right, rgba(212,160,23,0.18), transparent 32%),
-        #fffaf3;
     }
 
     .about-hero-box {
@@ -647,11 +1553,10 @@
       border-radius: 18px;
       background: linear-gradient(135deg, #fff8e9, #f6ead7);
       border: 1px solid #ead7b8;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
     }
 
     .about-eyebrow {
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-size: 11px;
       font-weight: 900;
       color: #b13b25;
@@ -661,15 +1566,13 @@
     .about-lead {
       margin: 0;
       font-size: 16px;
-      font-weight: 900;
-      color: #241a12;
+      font-weight: 800;
       line-height: 1.55;
-      letter-spacing: -0.25px;
     }
 
     .about-list {
       display: grid;
-      gap: 9px;
+      gap: 8px;
       margin: 0;
       padding: 0;
       list-style: none;
@@ -677,27 +1580,25 @@
 
     .about-list li {
       position: relative;
-      margin: 0;
-      padding: 12px 13px 12px 36px;
-      border-radius: 15px;
+      padding: 11px 13px 11px 36px;
+      border-radius: 14px;
       background: #fff;
-      border: 1px solid #eadfce;
-      color: #51483d;
+      border: 1px solid var(--line);
+      color: var(--ink-2);
       font-size: 13.5px;
-      font-weight: 750;
+      font-weight: 600;
       line-height: 1.55;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.035);
     }
 
     .about-list li::before {
       content: "✓";
       position: absolute;
-      left: 13px;
+      left: 12px;
       top: 12px;
       width: 17px;
       height: 17px;
       border-radius: 999px;
-      background: #17322b;
+      background: var(--brand);
       color: #fff;
       display: inline-flex;
       align-items: center;
@@ -709,9 +1610,8 @@
     .about-philosophy-box {
       padding: 15px;
       border-radius: 18px;
-      background: linear-gradient(135deg, #17322b, #23473d);
+      background: linear-gradient(135deg, #17322b, #24493f);
       color: #fff;
-      box-shadow: 0 8px 20px rgba(23,50,43,0.22);
     }
 
     .about-philosophy-title {
@@ -719,518 +1619,68 @@
       margin-bottom: 8px;
       padding: 5px 9px;
       border-radius: 999px;
-      background: linear-gradient(135deg, #f8df8a, #d4a017 50%, #fff1a8);
-      color: #3a2500;
+      background: var(--gold);
+      color: var(--gold-ink);
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: 0.4px;
     }
 
     .about-quote {
       margin: 0;
       color: rgba(255,255,255,0.92);
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 600;
       line-height: 1.65;
     }
 
-    .featured-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
-    .featured-card {
-      overflow: hidden;
-      background: #fff;
-      border: 1px solid #eadfce;
-      border-radius: 20px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    }
-
-    .featured-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      display: block;
-      background: #ddd;
-    }
-
-    .featured-placeholder {
-      width: 100%;
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #efe3d1, #d7c1a1);
-      color: #5b452d;
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: -0.4px;
-      text-align: center;
-      padding: 16px;
-    }
-    
-    .featured-body {
-      padding: 13px 14px 14px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      column-gap: 8px;
-      row-gap: 6px;
-      align-items: center;
-    }
-
-    .featured-kicker {
-      grid-column: 2;
-      grid-row: 1;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-bottom: 0;
-    }
-
-    .small-badge {
-      display: inline-flex;
-      padding: 4px 7px;
-      border-radius: 999px;
-      background: #17322b;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .best-badge {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #f8df8a, #d4a017 45%, #fff1a8 70%, #a76f00);
-      color: #3a2500;
-      border: 1px solid rgba(255, 245, 190, 0.9);
-      box-shadow: 0 3px 10px rgba(126, 82, 0, 0.28);
-      letter-spacing: 0.4px;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.45);
-    }
-
-    .best-badge::after {
-      content: "";
-      position: absolute;
-      top: -40%;
-      left: -70%;
-      width: 45%;
-      height: 180%;
-      background: rgba(255,255,255,0.35);
-      transform: rotate(25deg);
-      animation: bestShine 2.8s ease-in-out infinite;
-    }
-
-    @keyframes bestShine {
-      0% {
-        left: -70%;
-      }
-      45% {
-        left: 130%;
-      }
-      100% {
-        left: 130%;
-      }
-    }
-
-    .featured-title {
-      grid-column: 1;
-      grid-row: 1;
-      margin: 0;
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: -0.4px;
-      min-width: 0;
-    }
-
-    .featured-price {
-      grid-column: 1 / -1;
-      margin: 0;
-      font-size: 15px;
-      font-weight: 900;
-      color: #b13b25;
-    }
-
-    .featured-desc {
-      grid-column: 1 / -1;
-      margin: 0;
-      font-size: 13.5px;
-      color: #51483d;
-      line-height: 1.45;
-    }
-
-    .menu-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .menu-card {
-      background: #fff;
-      border: 1px solid #eadfce;
-      border-radius: 16px;
-      padding: 15px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.035);
-    }
-
-    .menu-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .menu-name {
-      margin: 0;
-      font-size: 17px;
-      font-weight: 900;
-      letter-spacing: -0.3px;
-    }
-
-    .menu-price {
-      flex: 0 0 auto;
-      font-size: 16px;
-      font-weight: 900;
-      color: #b13b25;
-      white-space: nowrap;
-    }
-
-    .menu-desc {
-      margin: 8px 0 0;
-      font-size: 14px;
-      color: #51483d;
-    }
-
-    .menu-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .menu-tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #f3eadc;
-      color: #5f4a34;
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .menu-tag.best {
-      background: #17322b;
-      color: #fff;
-    }
-
-    .menu-tag.raw {
-      background: #fff1e8;
-      color: #8a3b1f;
-    }
-
-    .menu-tag.cooked {
-      background: #eaf4eb;
-      color: #225b30;
-    }
-
-    .menu-tag.spicy {
-      background: #ffecea;
-      color: #9e2d22;
-    }
-
-    .menu-tag.meal {
-      background: #eef2ff;
-      color: #273c8f;
-    }
-
-    .option-list {
-      margin-top: 10px;
-      display: grid;
-      gap: 7px;
-      width: 100%;
-    }
-
-    .option-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: baseline;
-      gap: 12px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: #fbf6ee;
-      border: 1px solid #f0e3d2;
-    }
-
-    .option-left {
-      min-width: 0;
-      display: flex;
-      align-items: baseline;
-      gap: 7px;
-      flex-wrap: wrap;
-    }
-
-    .option-name {
-      font-size: 14px;
-      font-weight: 900;
-      color: #2b2118;
-      white-space: nowrap;
-    }
-
-    .option-desc {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #6b5d4d;
-      line-height: 1.35;
-    }
-
-    .option-price {
-      font-size: 14px;
-      font-weight: 900;
-      color: #b13b25;
-      white-space: nowrap;
-      text-align: right;
-    }
-
-    .eating-guide {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 13px;
-      background: #fff8eb;
-      border: 1px solid #efd7ad;
-      color: #5d4121;
-      font-size: 13px;
-      font-weight: 800;
-      line-height: 1.45;
-    }
-
-    .size-price-list {
-      margin-top: 10px;
-      display: grid;
-      gap: 6px;
-      width: 100%;
-    }
-
-    .size-price-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 18px;
-      padding: 7px 10px;
-      border-radius: 11px;
-      background: #fbf6ee;
-      border: 1px solid #f0e3d2;
-      font-size: 14px;
-    }
-
-    .size-name {
-      font-weight: 900;
-      color: #332a22;
-      white-space: nowrap;
-    }
-
-    .size-price {
-      font-weight: 900;
-      color: #b13b25;
-      white-space: nowrap;
-      text-align: right;
-    }
-
-    .price-lines {
-      margin-top: 9px;
-      display: grid;
-      gap: 5px;
-      font-size: 14px;
-      color: #332a22;
-    }
-
-    .notice-box {
-      margin-top: 14px;
-      padding: 13px 14px;
-      border-radius: 14px;
-      background: #fff4e1;
-      border: 1px solid #f1d4a6;
-      color: #5d4121;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .menu-card .notice-box {
-      margin-top: 8px;
-      padding: 6px 9px;
-      border-radius: 10px;
-      font-size: 12.5px;
-      line-height: 1.35;
-      font-weight: 800;
-    }
-
-    details {
-      background: #fff;
-      border: 1px solid #eadfce;
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    summary {
-      cursor: pointer;
-      padding: 16px;
-      font-size: 17px;
-      font-weight: 900;
-      list-style: none;
-    }
-
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    summary::after {
-      content: "⌄";
-      float: right;
-      font-size: 18px;
-      color: #8a7764;
-      margin-top: 0;
-    }
-
-    details[open] summary::after {
-      content: "⌃";
-    }
-
-    .details-content {
-      padding: 0 16px 16px;
-    }
-
-    .drink-group {
-      padding: 12px 0;
-      border-top: 1px solid #f0e5d6;
-    }
-
-    .drink-group:first-child {
-      border-top: 0;
-    }
-
-    .drink-title {
-      margin: 0 0 8px;
-      font-size: 15px;
-      font-weight: 900;
-    }
-
-    .drink-text {
-      margin: 0;
-      font-size: 14px;
-      color: #51483d;
-    }
-
-    .footer {
-      padding: 28px 16px calc(40px + env(safe-area-inset-bottom));
-      background: #17322b;
-      color: #fff;
-    }
-
-    .footer-title {
-      margin: 0 0 12px;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .footer-list {
-      margin: 0;
-      padding-left: 18px;
-      color: rgba(255,255,255,0.86);
-      font-size: 14px;
-    }
-
-    .footer-list li {
-      margin-bottom: 8px;
-    }
-
-    .top-button {
+    .toast {
       position: fixed;
-      right: 16px;
-      bottom: calc(16px + env(safe-area-inset-bottom));
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      border: 0;
-      background: #17322b;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 900;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-      cursor: pointer;
-      z-index: 20;
+      left: 50%;
+      top: calc(16px + env(safe-area-inset-top));
+      z-index: 2000;
+      transform: translate(-50%, -20px);
       opacity: 0;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(20,20,20,0.9);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 700;
       pointer-events: none;
-      transform: translateY(8px);
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .top-button.show {
+    .toast.show {
       opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-
-    body.modal-open {
-      overflow: hidden;
-    }
-
-    .main-photo,
-    .featured-card img {
-      cursor: pointer;
-      transition: height 0.25s ease, max-height 0.25s ease;
-    }
-
-    .main-photo.photo-expanded,
-    .featured-card img.photo-expanded {
-      height: auto;
-      max-height: none;
-      object-fit: contain;
-    }
-
-    .photo-hint {
-      margin-top: 7px;
-      font-size: 12px;
-      color: #8a7764;
-      font-weight: 800;
+      transform: translate(-50%, 0);
     }
 
     @media (min-width: 720px) {
       .hero {
-        padding: 34px 26px 24px;
+        padding: calc(26px + env(safe-area-inset-top)) 26px 20px;
       }
 
-      .store-name {
-        font-size: 38px;
-      }
-
-      .main-photo {
-        height: 420px;
-      }
-
-      .featured-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .featured-card img,
-      .featured-placeholder {
-        height: 210px;
+      .main-visual {
+        padding: 0 24px 20px;
       }
 
       section {
-        padding: 34px 24px;
+        padding: 32px 24px 26px;
+      }
+
+      .featured-grid {
+        margin: 0 -24px;
+        padding: 2px 24px 12px;
+        scroll-padding: 0 24px;
+        grid-auto-columns: 300px;
       }
 
       .quick-nav {
-        gap: 8px;
-        padding: 12px 18px;
+        padding: 10px 18px;
       }
 
-      .quick-link {
-        padding: 8px 13px;
-        font-size: 13px;
+      .language-bar {
+        grid-template-columns: 1fr 1fr 1fr;
       }
     }
   </style>
@@ -1241,45 +1691,50 @@
 
     <header class="hero" id="top">
       <div class="store-title-row">
-        <h1 class="store-name" data-i18n="storeName">수림횟집</h1>
+        <div class="store-title-text">
+          <h1 class="store-name" data-i18n="storeName">수림횟집</h1>
+          <p class="store-subtitle" data-i18n="storeSubtitle">생선회 & 해산물 전문점</p>
+        </div>
 
-        <button class="wifi-qr-btn" type="button" onclick="openInfoModal('wifi-modal')" aria-label="와이파이 QR 보기">
-          <img class="wifi-qr-thumb" src="images/wifi-qr.JPG" alt="와이파이 QR">
-        </button>
-
-        <button class="event-btn" id="event-btn-text" type="button" onclick="openInfoModal('event-modal')">
-          EVENT
+        <button class="lang-open-btn" type="button" onclick="openInfoModal('lang-modal')" aria-haspopup="dialog">
+          <span class="globe" aria-hidden="true">🌐</span>
+          <span id="lang-current">한국어</span>
         </button>
       </div>
 
-      <p class="store-subtitle" data-i18n="storeSubtitle">생선회 & 해산물 전문점</p>
-      
-      <div class="language-bar">
-        <button type="button" class="lang-btn active" data-lang="ko">한국어</button>
-        <button type="button" class="lang-btn" data-lang="en">English</button>
-        <button type="button" class="lang-btn" data-lang="ja">日本語</button>
-        <button type="button" class="lang-btn" data-lang="zh">简体中文</button>
-        <button type="button" class="lang-btn" data-lang="zhTw">繁體中文</button>
-        <button type="button" class="lang-btn" data-lang="vi">Tiếng Việt</button>
-        <button type="button" class="lang-btn" data-lang="fil">Filipino</button>
-        <button type="button" class="lang-btn" data-lang="ru">Русский</button>
-        <button type="button" class="lang-btn" data-lang="mn">Монгол</button>
+      <div class="hero-actions">
+        <a class="hero-chip status-chip" id="status-chip" href="#store-info" data-state="">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="status-text">매장 정보</span>
+        </a>
+
+        <button class="hero-chip" type="button" onclick="openInfoModal('wifi-modal')">
+          <img class="wifi-qr-thumb" src="images/wifi-qr.JPG" alt="" width="20" height="20">
+          <span>Wi-Fi</span>
+        </button>
+
+        <button class="hero-chip event-btn" type="button" onclick="openInfoModal('event-modal')">
+          <span aria-hidden="true">🎁</span>
+          <span id="event-btn-text">EVENT</span>
+        </button>
       </div>
     </header>
 
     <div class="main-visual">
-      <img class="main-photo" src="images/b-course.JPG" alt="수림횟집 B코스 대표 사진" fetchpriority="high" decoding="async" width="1200" height="800">
-      <div class="main-visual-text">
-        <div class="main-title-line">
-          <h2 class="main-title" data-i18n="mainTitle">B코스</h2>
-          <span class="badge best-badge">★ BEST</span>
+      <div class="main-photo-wrap">
+        <img class="main-photo" src="images/b-course.JPG" alt="수림횟집 B코스 대표 사진" fetchpriority="high" decoding="async" width="1200" height="978">
+        <div class="main-visual-text">
+          <div class="main-title-line">
+            <h2 class="main-title" data-i18n="mainTitle">B코스</h2>
+            <span class="badge best-badge">★ BEST</span>
+          </div>
+          <p class="main-desc" data-i18n="mainDesc">수림횟집 대표 코스 메뉴 · 고급모듬회와 다양한 해산물을 함께 즐길 수 있는 인기 메뉴입니다.</p>
         </div>
-        <p class="main-desc" data-i18n="mainDesc">수림횟집 대표 코스 메뉴 · 고급모듬회와 다양한 해산물을 함께 즐길 수 있는 인기 메뉴입니다.</p>
       </div>
     </div>
 
     <div class="quick-nav-wrap">
-      <nav class="quick-nav">
+      <nav class="quick-nav" aria-label="Menu sections">
         <a class="quick-link" href="#order-guide" data-i18n="navOrderGuide">주문안내</a>
         <a class="quick-link" href="#featured" data-i18n="navFeatured">대표메뉴</a>
         <a class="quick-link" href="#course" data-i18n="navCourse">코스메뉴</a>
@@ -1290,6 +1745,7 @@
         <a class="quick-link" href="#extra-seafood" data-i18n="navExtraSeafood">추가해산물</a>
         <a class="quick-link" href="#extra-menu" data-i18n="navExtraMenu">추가메뉴</a>
         <a class="quick-link" href="#drink" data-i18n="navDrink">주류/음료</a>
+        <a class="quick-link" href="#store-info" id="nav-store-info-text">매장정보</a>
       </nav>
     </div>
 
@@ -1402,6 +1858,11 @@
     </section>
    
 
+    <section id="store-info">
+      <h2 class="section-title" id="store-info-title-text">매장 정보</h2>
+      <div class="info-grid" id="store-info-list"></div>
+    </section>
+
     <footer class="footer">
       <h2 class="footer-title" id="footer-title-text">수림횟집</h2>
       <ul class="footer-list" id="footer-list-text"></ul>
@@ -1457,6 +1918,53 @@
         </div>
     </div>
   </div>
+
+  <div class="info-modal sheet" id="lang-modal" role="dialog" aria-modal="true" aria-labelledby="lang-modal-title-text" aria-hidden="true" onclick="closeModalByBg(event, 'lang-modal')">
+    <div class="info-modal-card">
+      <div class="info-modal-head">
+        <h2 class="info-modal-title" id="lang-modal-title-text">Language · 언어</h2>
+        <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('lang-modal')">×</button>
+      </div>
+
+      <div class="language-bar">
+        <button type="button" class="lang-btn active" data-lang="ko">한국어</button>
+        <button type="button" class="lang-btn" data-lang="en">English</button>
+        <button type="button" class="lang-btn" data-lang="ja">日本語</button>
+        <button type="button" class="lang-btn" data-lang="zh">简体中文</button>
+        <button type="button" class="lang-btn" data-lang="zhTw">繁體中文</button>
+        <button type="button" class="lang-btn" data-lang="vi">Tiếng Việt</button>
+        <button type="button" class="lang-btn" data-lang="fil">Filipino</button>
+        <button type="button" class="lang-btn" data-lang="ru">Русский</button>
+        <button type="button" class="lang-btn" data-lang="mn">Монгол</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-modal sheet" id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-modal-title-text" aria-hidden="true" onclick="closeModalByBg(event, 'cart-modal')">
+    <div class="info-modal-card">
+      <div class="info-modal-head">
+        <h2 class="info-modal-title" id="cart-modal-title-text">주문 메모</h2>
+        <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('cart-modal')">×</button>
+      </div>
+
+      <p class="cart-guide" id="cart-guide-text"></p>
+      <div id="cart-content"></div>
+    </div>
+  </div>
+
+  <div class="info-modal lightbox" id="photo-modal" role="dialog" aria-modal="true" aria-label="Photo" aria-hidden="true" onclick="closeInfoModal('photo-modal')">
+    <button class="info-close-btn" type="button" aria-label="Close" onclick="closeInfoModal('photo-modal')">×</button>
+    <img id="photo-modal-img" src="" alt="">
+    <div class="lightbox-caption" id="photo-modal-caption"></div>
+  </div>
+
+  <button class="cart-bar" id="cart-bar" type="button" onclick="openCart()" aria-haspopup="dialog">
+    <span class="cart-count" id="cart-count">0</span>
+    <span class="cart-bar-label" id="cart-bar-label">주문 메모 보기</span>
+    <span class="cart-bar-total" id="cart-bar-total">0원</span>
+  </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <button class="top-button" id="top-button" type="button" aria-label="Back to top" onclick="scrollToTop()">↑</button>
 
@@ -1653,6 +2161,753 @@
     function getAnyArray(value, lang) {
       if (!value) return [];
       return value[lang] || (lang === "zhTw" ? value.zh : null) || (lang === "fil" ? value.fil || value.en : null) || value.en || value.ko || [];
+    }
+
+    let currentLang = "ko";
+
+    // ===== 매장 정보 (영업시간·주소·전화) =====
+    // 영업시간이나 연락처가 바뀌면 이 부분만 고치면 됩니다.
+    const storeInfo = {
+      phone: "051-744-5570",
+      phoneIntl: "+82-51-744-5570",
+      addressKo: "부산 해운대구 해운대해변로221번길 15, A동 1층 (우동)",
+      addressEn: "1F, Bldg A, 15 Haeundaehaebyeon-ro 221beon-gil, Haeundae-gu, Busan",
+      open: "10:30",
+      close: "22:30",
+      lastOrder: "21:30",
+      breakStart: "14:30",
+      breakEnd: "16:30",
+      breakDays: [1, 2, 3, 4, 5],
+      naverMapUrl: "https://map.naver.com/p/entry/place/16547341",
+      kakaoMapUrl: "https://map.kakao.com/link/search/%ED%95%B4%EC%9A%B4%EB%8C%80%20%EC%88%98%EB%A6%BC%ED%9A%9F%EC%A7%91",
+      googleMapUrl: "https://www.google.com/maps/search/?api=1&query=%EC%88%98%EB%A6%BC%ED%9A%9F%EC%A7%91%20%ED%95%B4%EC%9A%B4%EB%8C%80%ED%95%B4%EB%B3%80%EB%A1%9C221%EB%B2%88%EA%B8%B8%2015"
+    };
+
+    const uiTexts = {
+      ko: {
+        langName: "한국어",
+        navInfo: "매장정보",
+        storeInfoTitle: "매장 정보",
+        hours: "영업시간",
+        everyday: "매일",
+        breakTime: "브레이크타임 (평일)",
+        lastOrder: "라스트오더",
+        closedDays: "연중무휴",
+        hoursNote: "공휴일·명절 운영은 매장에 확인해 주세요.",
+        address: "주소",
+        copyAddress: "주소 복사",
+        copied: "복사했어요",
+        phone: "전화",
+        call: "전화 걸기",
+        parking: "주차",
+        parkingValue: "주차 가능",
+        seats: "좌석",
+        seatsValue: "약 170석 · 홀 및 개별룸",
+        naverMap: "네이버 지도",
+        kakaoMap: "카카오맵",
+        googleMap: "구글 지도",
+        statusOpenBreak: "영업 중 · {t} 브레이크타임",
+        statusOpen: "영업 중 · 라스트오더 {t}",
+        statusBreak: "브레이크타임 · {t} 재오픈",
+        statusLast: "주문 마감 · {t} 영업 종료",
+        statusClosed: "영업 종료 · {t} 오픈",
+        add: "주문 메모에 담기",
+        added: "주문 메모에 담았어요",
+        cartTitle: "주문 메모",
+        cartBar: "주문 메모 보기",
+        cartGuide: "드시고 싶은 메뉴를 담은 뒤 이 화면을 직원에게 보여주세요. 주문은 직원이 받습니다.",
+        cartEmpty: "담은 메뉴가 없습니다. 메뉴 옆 + 버튼을 눌러 담아 보세요.",
+        total: "합계",
+        cartNote: "참고용 금액입니다. 코스는 2인 이상, 인원수만큼 담아 주세요.",
+        clear: "모두 비우기",
+        seeMenu: "메뉴 보기 ›",
+        won: "{n}원"
+      },
+      en: {
+        langName: "English",
+        navInfo: "Store Info",
+        storeInfoTitle: "Store Info",
+        hours: "Opening hours",
+        everyday: "Every day",
+        breakTime: "Break time (Mon–Fri)",
+        lastOrder: "Last order",
+        closedDays: "Open every day",
+        hoursNote: "Please check with us for public holiday hours.",
+        address: "Address",
+        copyAddress: "Copy address",
+        copied: "Copied",
+        phone: "Phone",
+        call: "Call",
+        parking: "Parking",
+        parkingValue: "Parking available",
+        seats: "Seating",
+        seatsValue: "About 170 seats · Hall & private rooms",
+        naverMap: "Naver Map",
+        kakaoMap: "Kakao Map",
+        googleMap: "Google Maps",
+        statusOpenBreak: "Open now · Break at {t}",
+        statusOpen: "Open now · Last order {t}",
+        statusBreak: "Break time · Reopens {t}",
+        statusLast: "Last order passed · Closes {t}",
+        statusClosed: "Closed · Opens {t}",
+        add: "Add to order list",
+        added: "Added to your order list",
+        cartTitle: "My Order List",
+        cartBar: "View order list",
+        cartGuide: "Add the dishes you want, then show this screen to our staff. Staff will take your order.",
+        cartEmpty: "Your list is empty. Tap the + button next to a dish to add it.",
+        total: "Total",
+        cartNote: "For reference only. Courses are for 2 or more people — add one per person.",
+        clear: "Clear all",
+        seeMenu: "See menu ›",
+        won: "{n} KRW"
+      },
+      ja: {
+        langName: "日本語",
+        navInfo: "店舗情報",
+        storeInfoTitle: "店舗情報",
+        hours: "営業時間",
+        everyday: "毎日",
+        breakTime: "休憩時間（平日）",
+        lastOrder: "ラストオーダー",
+        closedDays: "年中無休",
+        hoursNote: "祝日・連休の営業はお店にご確認ください。",
+        address: "住所",
+        copyAddress: "住所をコピー",
+        copied: "コピーしました",
+        phone: "電話",
+        call: "電話する",
+        parking: "駐車場",
+        parkingValue: "駐車可",
+        seats: "席数",
+        seatsValue: "約170席・ホールと個室あり",
+        naverMap: "NAVER地図",
+        kakaoMap: "カカオマップ",
+        googleMap: "Googleマップ",
+        statusOpenBreak: "営業中・{t}から休憩",
+        statusOpen: "営業中・ラストオーダー {t}",
+        statusBreak: "休憩中・{t}から再開",
+        statusLast: "オーダー終了・{t}閉店",
+        statusClosed: "営業時間外・{t}開店",
+        add: "注文メモに追加",
+        added: "注文メモに追加しました",
+        cartTitle: "注文メモ",
+        cartBar: "注文メモを見る",
+        cartGuide: "食べたいメニューを追加して、この画面をスタッフにお見せください。ご注文はスタッフが承ります。",
+        cartEmpty: "まだ何もありません。メニュー横の＋ボタンで追加できます。",
+        total: "合計",
+        cartNote: "金額は目安です。コースは2名様から、人数分を追加してください。",
+        clear: "すべて削除",
+        seeMenu: "メニューを見る ›",
+        won: "{n}ウォン"
+      },
+      zh: {
+        langName: "简体中文",
+        navInfo: "门店信息",
+        storeInfoTitle: "门店信息",
+        hours: "营业时间",
+        everyday: "每天",
+        breakTime: "休息时间（工作日）",
+        lastOrder: "最后点餐",
+        closedDays: "全年无休",
+        hoursNote: "法定节假日营业时间请向店内确认。",
+        address: "地址",
+        copyAddress: "复制地址",
+        copied: "已复制",
+        phone: "电话",
+        call: "拨打电话",
+        parking: "停车",
+        parkingValue: "可停车",
+        seats: "座位",
+        seatsValue: "约170席 · 大厅及包间",
+        naverMap: "Naver 地图",
+        kakaoMap: "Kakao 地图",
+        googleMap: "谷歌地图",
+        statusOpenBreak: "营业中 · {t} 开始休息",
+        statusOpen: "营业中 · 最后点餐 {t}",
+        statusBreak: "休息中 · {t} 重新营业",
+        statusLast: "已停止点餐 · {t} 打烊",
+        statusClosed: "已打烊 · {t} 开门",
+        add: "加入点餐清单",
+        added: "已加入点餐清单",
+        cartTitle: "点餐清单",
+        cartBar: "查看点餐清单",
+        cartGuide: "选好想吃的菜后，请把这个页面出示给店员，由店员为您下单。",
+        cartEmpty: "清单是空的。点击菜品旁的 + 按钮即可加入。",
+        total: "合计",
+        cartNote: "金额仅供参考。套餐2人起点，请按人数加入。",
+        clear: "全部清空",
+        seeMenu: "查看菜单 ›",
+        won: "{n}韩元"
+      },
+      zhTw: {
+        langName: "繁體中文",
+        navInfo: "店家資訊",
+        storeInfoTitle: "店家資訊",
+        hours: "營業時間",
+        everyday: "每天",
+        breakTime: "休息時間（平日）",
+        lastOrder: "最後點餐",
+        closedDays: "全年無休",
+        hoursNote: "國定假日營業時間請向店家確認。",
+        address: "地址",
+        copyAddress: "複製地址",
+        copied: "已複製",
+        phone: "電話",
+        call: "撥打電話",
+        parking: "停車",
+        parkingValue: "可停車",
+        seats: "座位",
+        seatsValue: "約170席 · 大廳及包廂",
+        naverMap: "Naver 地圖",
+        kakaoMap: "Kakao 地圖",
+        googleMap: "Google 地圖",
+        statusOpenBreak: "營業中 · {t} 開始休息",
+        statusOpen: "營業中 · 最後點餐 {t}",
+        statusBreak: "休息中 · {t} 重新營業",
+        statusLast: "已停止點餐 · {t} 打烊",
+        statusClosed: "已打烊 · {t} 開門",
+        add: "加入點餐清單",
+        added: "已加入點餐清單",
+        cartTitle: "點餐清單",
+        cartBar: "查看點餐清單",
+        cartGuide: "選好想吃的餐點後，請將此畫面出示給店員，由店員為您點餐。",
+        cartEmpty: "清單是空的。點選餐點旁的 + 按鈕即可加入。",
+        total: "合計",
+        cartNote: "金額僅供參考。套餐2人起點，請依人數加入。",
+        clear: "全部清除",
+        seeMenu: "查看菜單 ›",
+        won: "{n}韓元"
+      },
+      vi: {
+        langName: "Tiếng Việt",
+        navInfo: "Thông tin quán",
+        storeInfoTitle: "Thông tin quán",
+        hours: "Giờ mở cửa",
+        everyday: "Hằng ngày",
+        breakTime: "Giờ nghỉ (Thứ 2–Thứ 6)",
+        lastOrder: "Gọi món cuối",
+        closedDays: "Mở cửa cả năm",
+        hoursNote: "Ngày lễ vui lòng hỏi quán để biết giờ mở cửa.",
+        address: "Địa chỉ",
+        copyAddress: "Sao chép địa chỉ",
+        copied: "Đã sao chép",
+        phone: "Điện thoại",
+        call: "Gọi điện",
+        parking: "Đỗ xe",
+        parkingValue: "Có chỗ đỗ xe",
+        seats: "Chỗ ngồi",
+        seatsValue: "Khoảng 170 chỗ · Sảnh và phòng riêng",
+        naverMap: "Naver Map",
+        kakaoMap: "Kakao Map",
+        googleMap: "Google Maps",
+        statusOpenBreak: "Đang mở · Nghỉ lúc {t}",
+        statusOpen: "Đang mở · Gọi món cuối {t}",
+        statusBreak: "Đang nghỉ · Mở lại {t}",
+        statusLast: "Đã ngừng gọi món · Đóng cửa {t}",
+        statusClosed: "Đã đóng cửa · Mở cửa {t}",
+        add: "Thêm vào danh sách",
+        added: "Đã thêm vào danh sách",
+        cartTitle: "Danh sách gọi món",
+        cartBar: "Xem danh sách",
+        cartGuide: "Hãy thêm các món bạn muốn rồi đưa màn hình này cho nhân viên. Nhân viên sẽ ghi món cho bạn.",
+        cartEmpty: "Danh sách trống. Bấm nút + bên cạnh món ăn để thêm.",
+        total: "Tổng",
+        cartNote: "Giá chỉ để tham khảo. Set món từ 2 người, vui lòng thêm theo số người.",
+        clear: "Xóa tất cả",
+        seeMenu: "Xem món ›",
+        won: "{n} KRW"
+      },
+      fil: {
+        langName: "Filipino",
+        navInfo: "Tungkol sa Store",
+        storeInfoTitle: "Impormasyon ng Store",
+        hours: "Oras ng bukas",
+        everyday: "Araw-araw",
+        breakTime: "Break time (Lunes–Biyernes)",
+        lastOrder: "Last order",
+        closedDays: "Bukas araw-araw, buong taon",
+        hoursNote: "Pakitanong sa amin ang oras tuwing holiday.",
+        address: "Address",
+        copyAddress: "Kopyahin ang address",
+        copied: "Nakopya na",
+        phone: "Telepono",
+        call: "Tumawag",
+        parking: "Paradahan",
+        parkingValue: "May paradahan",
+        seats: "Upuan",
+        seatsValue: "Mga 170 upuan · Hall at private rooms",
+        naverMap: "Naver Map",
+        kakaoMap: "Kakao Map",
+        googleMap: "Google Maps",
+        statusOpenBreak: "Bukas ngayon · Break sa {t}",
+        statusOpen: "Bukas ngayon · Last order {t}",
+        statusBreak: "Break time · Bukas ulit {t}",
+        statusLast: "Tapos na ang order · Sarado {t}",
+        statusClosed: "Sarado · Bubukas {t}",
+        add: "Idagdag sa listahan",
+        added: "Naidagdag sa listahan",
+        cartTitle: "Listahan ng Order",
+        cartBar: "Tingnan ang listahan",
+        cartGuide: "Idagdag ang mga gusto ninyong pagkain, tapos ipakita ang screen na ito sa staff. Ang staff ang kukuha ng order ninyo.",
+        cartEmpty: "Wala pang laman. Pindutin ang + sa tabi ng pagkain para idagdag.",
+        total: "Kabuuan",
+        cartNote: "Para gabay lang ang presyo. Ang course ay para sa 2 o higit pang tao — isa bawat tao.",
+        clear: "Burahin lahat",
+        seeMenu: "Tingnan ›",
+        won: "{n} KRW"
+      },
+      ru: {
+        langName: "Русский",
+        navInfo: "О ресторане",
+        storeInfoTitle: "Информация",
+        hours: "Часы работы",
+        everyday: "Ежедневно",
+        breakTime: "Перерыв (пн–пт)",
+        lastOrder: "Последний заказ",
+        closedDays: "Без выходных",
+        hoursNote: "Режим работы в праздники уточняйте в ресторане.",
+        address: "Адрес",
+        copyAddress: "Скопировать адрес",
+        copied: "Скопировано",
+        phone: "Телефон",
+        call: "Позвонить",
+        parking: "Парковка",
+        parkingValue: "Есть парковка",
+        seats: "Места",
+        seatsValue: "Около 170 мест · Зал и отдельные комнаты",
+        naverMap: "Naver Map",
+        kakaoMap: "Kakao Map",
+        googleMap: "Google Карты",
+        statusOpenBreak: "Открыто · Перерыв в {t}",
+        statusOpen: "Открыто · Последний заказ {t}",
+        statusBreak: "Перерыв · Откроемся в {t}",
+        statusLast: "Заказы не принимаются · Закрытие в {t}",
+        statusClosed: "Закрыто · Откроемся в {t}",
+        add: "Добавить в список",
+        added: "Добавлено в список",
+        cartTitle: "Мой список заказа",
+        cartBar: "Открыть список",
+        cartGuide: "Добавьте блюда, которые хотите заказать, и покажите этот экран официанту. Заказ примет сотрудник.",
+        cartEmpty: "Список пуст. Нажмите + рядом с блюдом, чтобы добавить его.",
+        total: "Итого",
+        cartNote: "Сумма ориентировочная. Сеты — от 2 человек, добавьте по одному на человека.",
+        clear: "Очистить",
+        seeMenu: "К меню ›",
+        won: "{n} KRW"
+      },
+      mn: {
+        langName: "Монгол",
+        navInfo: "Мэдээлэл",
+        storeInfoTitle: "Рестораны мэдээлэл",
+        hours: "Ажиллах цаг",
+        everyday: "Өдөр бүр",
+        breakTime: "Завсарлага (Да–Ба)",
+        lastOrder: "Сүүлийн захиалга",
+        closedDays: "Амралтын өдөргүй",
+        hoursNote: "Баярын өдрүүдийн цагийг ресторанаас лавлана уу.",
+        address: "Хаяг",
+        copyAddress: "Хаяг хуулах",
+        copied: "Хуулсан",
+        phone: "Утас",
+        call: "Залгах",
+        parking: "Зогсоол",
+        parkingValue: "Зогсоолтой",
+        seats: "Суудал",
+        seatsValue: "Ойролцоогоор 170 суудал · Танхим ба тусгай өрөө",
+        naverMap: "Naver Map",
+        kakaoMap: "Kakao Map",
+        googleMap: "Google Maps",
+        statusOpenBreak: "Нээлттэй · {t}-д завсарлага",
+        statusOpen: "Нээлттэй · Сүүлийн захиалга {t}",
+        statusBreak: "Завсарлага · {t}-д дахин нээнэ",
+        statusLast: "Захиалга дууссан · {t}-д хаана",
+        statusClosed: "Хаалттай · {t}-д нээнэ",
+        add: "Жагсаалтад нэмэх",
+        added: "Жагсаалтад нэмлээ",
+        cartTitle: "Захиалгын жагсаалт",
+        cartBar: "Жагсаалт харах",
+        cartGuide: "Идэх хоолоо нэмээд энэ дэлгэцийг ажилтанд үзүүлнэ үү. Захиалгыг ажилтан авна.",
+        cartEmpty: "Жагсаалт хоосон байна. Хоолны хажууд байгаа + товчийг дарж нэмнэ үү.",
+        total: "Нийт",
+        cartNote: "Үнэ нь лавлах зорилготой. Сет меню 2 хүнээс дээш, хүний тоогоор нэмнэ үү.",
+        clear: "Бүгдийг устгах",
+        seeMenu: "Меню харах ›",
+        won: "{n} KRW"
+      }
+    };
+
+    function ui() {
+      return getLanguageBlock(uiTexts, currentLang);
+    }
+
+    function fillText(template, values) {
+      return template.replace(/\{(\w+)\}/g, (match, key) => values[key] ?? match);
+    }
+
+    function formatWon(amount, lang = currentLang) {
+      const n = Number(amount).toLocaleString("en-US");
+      return fillText(getLanguageBlock(uiTexts, lang).won, { n });
+    }
+
+    function parseWon(text) {
+      const match = String(text).match(/\d{1,3}(,\d{3})+|\d{4,}/);
+      return match ? Number(match[0].replace(/,/g, "")) : 0;
+    }
+
+    function escapeAttr(value) {
+      return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
+
+    function stripTags(value) {
+      return String(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    // ===== 영업 상태 =====
+    function getSeoulNow() {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Seoul",
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+      }).formatToParts(new Date());
+      const get = (type) => parts.find((part) => part.type === type)?.value;
+      const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+
+      return {
+        day: days[get("weekday")],
+        minutes: Number(get("hour")) * 60 + Number(get("minute"))
+      };
+    }
+
+    function toMinutes(hhmm) {
+      const [h, m] = hhmm.split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    function getStoreStatus() {
+      const now = getSeoulNow();
+      const t = now.minutes;
+      const hasBreak = storeInfo.breakDays.includes(now.day);
+      const breakStart = toMinutes(storeInfo.breakStart);
+      const breakEnd = toMinutes(storeInfo.breakEnd);
+
+      if (t < toMinutes(storeInfo.open) || t >= toMinutes(storeInfo.close)) {
+        return { state: "closed", key: "statusClosed", time: storeInfo.open };
+      }
+      if (hasBreak && t >= breakStart && t < breakEnd) {
+        return { state: "break", key: "statusBreak", time: storeInfo.breakEnd };
+      }
+      if (t >= toMinutes(storeInfo.lastOrder)) {
+        return { state: "last", key: "statusLast", time: storeInfo.close };
+      }
+      if (hasBreak && t < breakStart) {
+        return { state: "open", key: "statusOpenBreak", time: storeInfo.breakStart };
+      }
+      return { state: "open", key: "statusOpen", time: storeInfo.lastOrder };
+    }
+
+    function renderStoreStatus() {
+      const chip = document.getElementById("status-chip");
+      const textEl = document.getElementById("status-text");
+      if (!chip || !textEl) return;
+
+      const status = getStoreStatus();
+      chip.dataset.state = status.state;
+      textEl.textContent = fillText(ui()[status.key], { t: status.time });
+    }
+
+    function renderStoreInfo(lang) {
+      const text = ui();
+      const titleEl = document.getElementById("store-info-title-text");
+      const navEl = document.getElementById("nav-store-info-text");
+      const listEl = document.getElementById("store-info-list");
+
+      if (titleEl) titleEl.textContent = text.storeInfoTitle;
+      if (navEl) navEl.textContent = text.navInfo;
+      if (!listEl) return;
+
+      const isKo = lang === "ko";
+      const breakDaysLabel = text.breakTime;
+
+      listEl.innerHTML = `
+        <div class="info-row">
+          <span class="info-icon" aria-hidden="true">🕐</span>
+          <div>
+            <span class="info-label">${text.hours}</span>
+            <dl class="hours-table">
+              <dt>${text.everyday}</dt><dd>${storeInfo.open} – ${storeInfo.close}</dd>
+              <dt>${breakDaysLabel}</dt><dd>${storeInfo.breakStart} – ${storeInfo.breakEnd}</dd>
+              <dt>${text.lastOrder}</dt><dd>${storeInfo.lastOrder}</dd>
+            </dl>
+            <span class="info-sub">${text.closedDays} · ${text.hoursNote}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon" aria-hidden="true">📍</span>
+          <div>
+            <span class="info-label">${text.address}</span>
+            <span class="info-value">${storeInfo.addressKo}</span>
+            ${isKo ? "" : `<span class="info-sub">${storeInfo.addressEn}</span>`}
+            <div class="info-actions">
+              <a class="pill-btn primary" href="${storeInfo.naverMapUrl}" target="_blank" rel="noopener noreferrer">${text.naverMap}</a>
+              <a class="pill-btn" href="${storeInfo.kakaoMapUrl}" target="_blank" rel="noopener noreferrer">${text.kakaoMap}</a>
+              <a class="pill-btn" href="${storeInfo.googleMapUrl}" target="_blank" rel="noopener noreferrer">${text.googleMap}</a>
+              <button class="pill-btn" type="button" onclick="copyAddress()">${text.copyAddress}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon" aria-hidden="true">📞</span>
+          <div>
+            <span class="info-label">${text.phone}</span>
+            <span class="info-value">${isKo ? storeInfo.phone : storeInfo.phoneIntl}</span>
+            <div class="info-actions">
+              <a class="pill-btn primary" href="tel:${storeInfo.phoneIntl}">${text.call}</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon" aria-hidden="true">🅿️</span>
+          <div>
+            <span class="info-label">${text.parking} · ${text.seats}</span>
+            <span class="info-value">${text.parkingValue}</span>
+            <span class="info-sub">${text.seatsValue}</span>
+          </div>
+        </div>
+      `;
+
+      renderStoreStatus();
+    }
+
+    function copyAddress() {
+      const value = storeInfo.addressKo;
+      const done = () => showToast(ui().copied);
+
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(value).then(done).catch(() => fallbackCopy(value, done));
+      } else {
+        fallbackCopy(value, done);
+      }
+    }
+
+    function fallbackCopy(value, done) {
+      const area = document.createElement("textarea");
+      area.value = value;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      try {
+        document.execCommand("copy");
+        done();
+      } catch (error) {}
+      area.remove();
+    }
+
+    let toastTimer = null;
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    // ===== 주문 메모 =====
+    // 손님이 고른 메뉴를 한국어로 정리해 직원에게 보여주는 화면입니다. (실제 주문 기능은 아님)
+    const orderables = {};
+    let cart = loadCart();
+
+    function loadCart() {
+      try {
+        return JSON.parse(sessionStorage.getItem("soorim-cart") || "{}") || {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveCart() {
+      try {
+        sessionStorage.setItem("soorim-cart", JSON.stringify(cart));
+      } catch (error) {}
+    }
+
+    // key: 메뉴 고유값, ko/koOption: 직원용 한국어 이름, local/localOption: 손님 언어 이름, price: 숫자
+    function addButton(key, item) {
+      orderables[key] = item;
+      const count = cart[key] || 0;
+      const label = `${ui().add}: ${stripTags(item.local)}${item.localOption ? " " + stripTags(item.localOption) : ""}`;
+      return `<button class="add-btn" type="button" data-add="${escapeAttr(key)}" data-count="${count}" aria-label="${escapeAttr(label)}"><span aria-hidden="true">+</span></button>`;
+    }
+
+    function addToCart(key) {
+      if (!orderables[key]) return;
+      cart[key] = (cart[key] || 0) + 1;
+      saveCart();
+      updateCartUi();
+      showToast(ui().added);
+    }
+
+    function changeQty(key, delta) {
+      cart[key] = Math.max(0, (cart[key] || 0) + delta);
+      if (!cart[key]) delete cart[key];
+      saveCart();
+      updateCartUi();
+      renderCartContent();
+    }
+
+    function clearCart() {
+      cart = {};
+      saveCart();
+      updateCartUi();
+      renderCartContent();
+    }
+
+    function getCartLines() {
+      return Object.entries(cart)
+        .filter(([key, qty]) => qty > 0 && orderables[key])
+        .map(([key, qty]) => ({ key, qty, ...orderables[key] }));
+    }
+
+    function updateCartUi() {
+      const lines = getCartLines();
+      const count = lines.reduce((sum, line) => sum + line.qty, 0);
+      const total = lines.reduce((sum, line) => sum + line.qty * line.price, 0);
+
+      document.body.classList.toggle("has-cart", count > 0);
+      const countEl = document.getElementById("cart-count");
+      const totalEl = document.getElementById("cart-bar-total");
+      const labelEl = document.getElementById("cart-bar-label");
+      if (countEl) countEl.textContent = count;
+      if (totalEl) totalEl.textContent = formatWon(total);
+      if (labelEl) labelEl.textContent = ui().cartBar;
+
+      document.querySelectorAll(".add-btn[data-add]").forEach((button) => {
+        button.dataset.count = cart[button.dataset.add] || 0;
+      });
+    }
+
+    function renderCartContent() {
+      const text = ui();
+      const contentEl = document.getElementById("cart-content");
+      const titleEl = document.getElementById("cart-modal-title-text");
+      const guideEl = document.getElementById("cart-guide-text");
+      if (titleEl) titleEl.textContent = text.cartTitle;
+      if (guideEl) guideEl.textContent = text.cartGuide;
+      if (!contentEl) return;
+
+      const lines = getCartLines();
+
+      if (!lines.length) {
+        contentEl.innerHTML = `<div class="cart-empty">${text.cartEmpty}</div>`;
+        return;
+      }
+
+      const total = lines.reduce((sum, line) => sum + line.qty * line.price, 0);
+      const showLocal = currentLang !== "ko";
+
+      contentEl.innerHTML = `
+        <div class="cart-list">
+          ${lines.map((line) => `
+            <div class="cart-item">
+              <div class="cart-ko" lang="ko">
+                ${line.ko}${line.koOption ? ` <small>${line.koOption}</small>` : ""}
+                ${showLocal ? `<span class="cart-local" lang="${htmlLangCodes[currentLang]}">${stripTags(line.local)}${line.localOption ? " · " + stripTags(line.localOption) : ""}</span>` : ""}
+              </div>
+              <div class="qty">
+                <button type="button" aria-label="−" onclick="changeQty('${escapeAttr(line.key)}', -1)">−</button>
+                <output>${line.qty}</output>
+                <button type="button" aria-label="+" onclick="changeQty('${escapeAttr(line.key)}', 1)">+</button>
+              </div>
+              <div class="cart-price">${formatWon(line.price * line.qty)}</div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="cart-total-row">
+          <span>${text.total}</span>
+          <strong>${formatWon(total)}</strong>
+        </div>
+        <p class="cart-note">${text.cartNote}</p>
+
+        <div class="cart-actions">
+          <button class="pill-btn" type="button" onclick="clearCart()">${text.clear}</button>
+        </div>
+      `;
+    }
+
+    function openCart() {
+      renderCartContent();
+      openInfoModal("cart-modal");
+    }
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest(".add-btn[data-add]");
+      if (button) {
+        addToCart(button.dataset.add);
+      }
+    });
+
+    // ===== 사진 크게 보기 =====
+    function openPhoto(src, caption) {
+      const img = document.getElementById("photo-modal-img");
+      const captionEl = document.getElementById("photo-modal-caption");
+      if (!img) return;
+      img.src = src;
+      img.alt = caption || "";
+      if (captionEl) captionEl.textContent = caption || "";
+      openInfoModal("photo-modal");
+    }
+
+    // 대표 메뉴 사진 → 해당 메뉴 구역
+    const featuredTargets = {
+      "images/b-course.JPG": "course",
+      "images/wooreok-maeuntang.JPG": "meal",
+      "images/wooreok-tangsuyuk.JPG": "extra-menu",
+      "images/mulhoe.JPG": "meal",
+      "images/lunch-set.JPG": "lunch",
+      "images/hoedeopbap.JPG": "meal",
+      "images/kids-donkatsu.JPG": "kids",
+      "images/sashimi-red-sea-bream.JPG": "sashimi",
+      "images/live-octopus.JPG": "extra-seafood"
+    };
+
+    // 메뉴 카드 안의 "가격 줄"을 담기 버튼과 함께 만듭니다.
+    function priceRows(rows, makeKey, makeItem) {
+      return rows.map((row, index) => `
+        <div class="size-price-row">
+          <span class="size-name">${row.label}</span>
+          <span class="size-price">${row.price}</span>
+          ${addButton(makeKey(index), makeItem(index))}
+        </div>
+      `).join("");
+    }
+
+    // "소 30,000원<br>중 50,000원" 같은 가격 문구를 줄 단위로 나눕니다.
+    function splitPriceText(text) {
+      return String(text).split(/<br\s*\/?>/i).map((part) => {
+        const trimmed = part.trim();
+        const index = trimmed.search(/\d/);
+        return {
+          label: index > 0 ? trimmed.slice(0, index).trim() : "",
+          price: index >= 0 ? trimmed.slice(index).trim() : trimmed
+        };
+      }).filter((part) => part.price);
+    }
+
+    // "구성: A + B + C" → ["A", "B", "C"]
+    function splitCourseItems(text) {
+      const body = String(text).replace(/^[^:：]{1,20}[:：]\s*/, "");
+      const items = body.split(/\s+\+\s+/).map((item) => item.trim()).filter(Boolean);
+      return items.length > 1 ? items : null;
     }
 
     const featuredSectionTexts = {
@@ -2180,15 +3435,18 @@
           return `<span class="${badgeClass}">${badgeText[key] || key}</span>`;
         }).join("");
 
+        const target = featuredTargets[menu.image] || "featured";
+
         return `
           <article class="featured-card">
-            <img src="${menu.image}" alt="${getFeaturedText(menu.title, lang)}" loading="lazy" decoding="async">
-            <div class="featured-body">
+            <img src="${menu.image}" alt="${escapeAttr(stripTags(getFeaturedText(menu.title, lang)))}" loading="lazy" decoding="async" width="1200" height="800" data-photo>
+            <a class="featured-body" href="#${target}">
               <div class="featured-kicker">${badges}</div>
               <h3 class="featured-title">${getFeaturedText(menu.title, lang)}</h3>
               <p class="featured-price">${getFeaturedText(menu.price, lang)}</p>
               <p class="featured-desc">${getFeaturedText(menu.desc, lang)}</p>
-            </div>
+              <span class="photo-hint" style="margin: 2px 0 0; color: var(--brand);">${ui().seeMenu}</span>
+            </a>
           </article>
         `;
       }).join("");
@@ -2421,8 +3679,13 @@
       if (changeEl) changeEl.textContent = sectionText.change;
       if (!listEl) return;
 
-      listEl.innerHTML = courseMenus.map((menu) => {
+      listEl.innerHTML = courseMenus.map((menu, menuIndex) => {
         const bestBadge = menu.best ? `<span class="small-badge best-badge">★ BEST</span>` : "";
+        const itemsText = getCourseText(menu.items, lang);
+        const courseItems = splitCourseItems(itemsText);
+        const itemsHtml = courseItems
+          ? `<div class="course-items">${courseItems.map((item) => `<span class="course-item">${item}</span>`).join("")}</div>`
+          : `<div class="price-lines"><div>${itemsText}</div></div>`;
         const tags = menu.tags.map((tagKey) => {
           const className = tagKey === "rawTag" ? "menu-tag raw" : "menu-tag cooked";
           return `<span class="${className}">${sectionText[tagKey]}</span>`;
@@ -2432,13 +3695,20 @@
           <article class="menu-card">
             <div class="menu-head">
               <h3 class="menu-name">${getCourseText(menu.title, lang)} ${bestBadge}</h3>
-              <div class="menu-price">${getCourseText(menu.price, lang)}</div>
+              <div class="price-action">
+                <div class="menu-price">${getCourseText(menu.price, lang)}</div>
+                ${addButton(`course-${menuIndex}`, {
+                  ko: getCourseText(menu.title, "ko"),
+                  koOption: "",
+                  local: getCourseText(menu.title, lang),
+                  localOption: "",
+                  price: parseWon(getCourseText(menu.price, "ko"))
+                })}
+              </div>
             </div>
             <p class="menu-desc">${getCourseText(menu.desc, lang)}</p>
             <div class="menu-tags">${tags}</div>
-            <div class="price-lines">
-              <div>${getCourseText(menu.items, lang)}</div>
-            </div>
+            ${itemsHtml}
           </article>
         `;
       }).join("");
@@ -2801,20 +4071,24 @@
       if (noticeEl) noticeEl.textContent = sectionText.notice;
       if (!listEl) return;
 
-      listEl.innerHTML = sashimiMenus.map((menu) => {
+      listEl.innerHTML = sashimiMenus.map((menu, menuIndex) => {
         const tags = menu.tags.map((tagKey) => {
           const className = tagKey === "rawTag" ? "menu-tag raw" : "menu-tag";
           return `<span class="${className}">${sectionText[tagKey]}</span>`;
         }).join("");
 
-        const prices = getAnyArray(menu.prices, lang).map((row) => {
-          return `
-            <div class="size-price-row">
-              <span class="size-name">${row[0]}</span>
-              <span class="size-price">${row[1]}</span>
-            </div>
-          `;
-        }).join("");
+        const koRows = getAnyArray(menu.prices, "ko");
+        const prices = priceRows(
+          getAnyArray(menu.prices, lang).map((row) => ({ label: row[0], price: row[1] })),
+          (index) => `sashimi-${menuIndex}-${index}`,
+          (index) => ({
+            ko: getSashimiText(menu.title, "ko"),
+            koOption: koRows[index][0],
+            local: getSashimiText(menu.title, lang),
+            localOption: getAnyArray(menu.prices, lang)[index][0],
+            price: parseWon(koRows[index][1])
+          })
+        );
 
         return `
           <article class="menu-card">
@@ -3106,7 +4380,9 @@
       if (titleEl) titleEl.textContent = sectionText.title;
       if (!listEl) return;
 
-      listEl.innerHTML = mealMenus.map((menu) => {
+      listEl.innerHTML = mealMenus.map((menu, menuIndex) => {
+        const koTitle = getMealText(menu.title, "ko");
+        const localTitle = getMealText(menu.title, lang);
         const bestBadge = menu.best ? ` <span class="small-badge best-badge">${sectionText.bestTag}</span>` : "";
 
         const tags = menu.tags.map((tagKey) => {
@@ -3121,28 +4397,31 @@
         let priceHtml = "";
 
         if (menu.type === "sizes") {
-          const prices = getAnyArray(menu.prices, lang).map((row) => {
-            return `
-              <div class="size-price-row">
-                <span class="size-name">${row[0]}</span>
-                <span class="size-price">${row[1]}</span>
-              </div>
-            `;
-          }).join("");
+          const koRows = getAnyArray(menu.prices, "ko");
+          const localRows = getAnyArray(menu.prices, lang);
+          const prices = priceRows(
+            localRows.map((row) => ({ label: row[0], price: row[1] })),
+            (index) => `meal-${menuIndex}-${index}`,
+            (index) => ({ ko: koTitle, koOption: koRows[index][0], local: localTitle, localOption: localRows[index][0], price: parseWon(koRows[index][1]) })
+          );
           priceHtml = `<div class="size-price-list">${prices}</div>`;
         }
 
         if (menu.type === "single") {
           priceHtml = `
             <div class="menu-head">
-              <h3 class="menu-name">${getMealText(menu.title, lang)}${bestBadge}</h3>
-              <div class="menu-price">${getMealText(menu.price, lang)}</div>
+              <h3 class="menu-name">${localTitle}${bestBadge}</h3>
+              <div class="price-action">
+                <div class="menu-price">${getMealText(menu.price, lang)}</div>
+                ${addButton(`meal-${menuIndex}`, { ko: koTitle, koOption: "", local: localTitle, localOption: "", price: parseWon(getMealText(menu.price, "ko")) })}
+              </div>
             </div>
           `;
         }
 
         if (menu.type === "options") {
-          const options = getAnyArray(menu.options, lang).map((row) => {
+          const koOptions = getAnyArray(menu.options, "ko");
+          const options = getAnyArray(menu.options, lang).map((row, index) => {
             return `
               <div class="option-row">
                 <div class="option-left">
@@ -3150,6 +4429,7 @@
                   <span class="option-desc">${row[1]}</span>
                 </div>
                 <span class="option-price">${row[2]}</span>
+                ${addButton(`meal-${menuIndex}-${index}`, { ko: koTitle, koOption: koOptions[index][0], local: localTitle, localOption: row[0], price: parseWon(koOptions[index][2]) })}
               </div>
             `;
           }).join("");
@@ -3393,12 +4673,15 @@
       if (kidsTitleEl) kidsTitleEl.textContent = text.kidsTitle;
 
       if (lunchListEl) {
-        lunchListEl.innerHTML = lunchMenus.map((menu) => {
+        lunchListEl.innerHTML = lunchMenus.map((menu, menuIndex) => {
           return `
             <article class="menu-card">
               <div class="menu-head">
                 <h3 class="menu-name">${getLunchKidsText(menu.title, lang)}</h3>
-                <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
+                <div class="price-action">
+                  <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
+                  ${addButton(`lunch-${menuIndex}`, { ko: getLunchKidsText(menu.title, "ko"), koOption: "", local: getLunchKidsText(menu.title, lang), localOption: "", price: parseWon(getLunchKidsText(menu.price, "ko")) })}
+                </div>
               </div>
               <p class="menu-desc">${getLunchKidsText(menu.desc, lang)}</p>
               <div class="menu-tags">
@@ -3414,12 +4697,15 @@
       }
 
       if (kidsListEl) {
-        kidsListEl.innerHTML = kidsMenus.map((menu) => {
+        kidsListEl.innerHTML = kidsMenus.map((menu, menuIndex) => {
           return `
             <article class="menu-card">
               <div class="menu-head">
                 <h3 class="menu-name">${getLunchKidsText(menu.title, lang)}</h3>
-                <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
+                <div class="price-action">
+                  <div class="menu-price">${getLunchKidsText(menu.price, lang)}</div>
+                  ${addButton(`kids-${menuIndex}`, { ko: getLunchKidsText(menu.title, "ko"), koOption: "", local: getLunchKidsText(menu.title, lang), localOption: "", price: parseWon(getLunchKidsText(menu.price, "ko")) })}
+                </div>
               </div>
               <p class="menu-desc">${getLunchKidsText(menu.desc, lang)}</p>
               <div class="menu-tags">
@@ -4127,7 +5413,27 @@
     function renderMenuCards(listEl, menus, text, lang) {
       if (!listEl) return;
 
-      listEl.innerHTML = menus.map((menu) => {
+      listEl.innerHTML = menus.map((menu, menuIndex) => {
+        const keyBase = `${listEl.id}-${menuIndex}`;
+        const koTitle = getExtraText(menu.title, "ko");
+        const localTitle = getExtraText(menu.title, lang);
+        const koParts = splitPriceText(getExtraText(menu.price, "ko"));
+        const localParts = splitPriceText(getExtraText(menu.price, lang));
+        const isMultiPrice = koParts.length > 1 && koParts.length === localParts.length;
+        const priceHtml = isMultiPrice
+          ? `<div class="size-price-list">${priceRows(
+              localParts,
+              (index) => `${keyBase}-${index}`,
+              (index) => ({ ko: koTitle, koOption: koParts[index].label, local: localTitle, localOption: localParts[index].label, price: parseWon(koParts[index].price) })
+            )}</div>`
+          : "";
+        const headPrice = isMultiPrice
+          ? ""
+          : `<div class="price-action">
+              <div class="menu-price">${getExtraText(menu.price, lang)}</div>
+              ${addButton(keyBase, { ko: koTitle, koOption: "", local: localTitle, localOption: "", price: parseWon(getExtraText(menu.price, "ko")) })}
+            </div>`;
+
         const tags = (menu.tags || []).map((tagKey) => {
           const className = tagKey === "rawTag" ? "menu-tag raw" :
                             tagKey === "cookedTag" ? "menu-tag cooked" :
@@ -4142,10 +5448,11 @@
         return `
           <article class="menu-card">
             <div class="menu-head">
-              <h3 class="menu-name">${getExtraText(menu.title, lang)}</h3>
-              <div class="menu-price">${getExtraText(menu.price, lang)}</div>
+              <h3 class="menu-name">${localTitle}</h3>
+              ${headPrice}
             </div>
             ${descHtml}
+            ${priceHtml}
             ${tagsHtml}
             ${noticeHtml}
           </article>
@@ -4493,12 +5800,14 @@
       if (drinkNoticeEl) drinkNoticeEl.textContent = text.drinkNotice;
 
       if (drinkListEl) {
-        drinkListEl.innerHTML = drinkGroups.map((group) => {
-          const items = group.items.map((item) => {
+        drinkListEl.innerHTML = drinkGroups.map((group, groupIndex) => {
+          const items = group.items.map((item, itemIndex) => {
+            const price = parseWon(item.price);
             return `
               <div class="drink-group">
                 <h3 class="drink-title">${getInfoText(item.name, lang)}</h3>
-                <p class="drink-text"><strong>${item.price} KRW</strong></p>
+                <p class="drink-text"><strong>${formatWon(price, lang)}</strong></p>
+                ${addButton(`drink-${groupIndex}-${itemIndex}`, { ko: getInfoText(item.name, "ko"), koOption: "", local: getInfoText(item.name, lang), localOption: "", price })}
               </div>
             `;
           }).join("");
@@ -5224,6 +6533,7 @@
 
     function applyLanguage(lang) {
       if (!htmlLangCodes[lang]) lang = "ko";
+      currentLang = lang;
       const selectedTexts = getLanguageBlock(translations, lang);
 
       renderFeatured(lang);
@@ -5235,6 +6545,7 @@
       renderInfoSections(lang);
       renderModals(lang);
       renderAboutModal(lang);
+      renderStoreInfo(lang);
 
       document.querySelectorAll("[data-i18n]").forEach((element) => {
         const key = element.dataset.i18n;
@@ -5247,6 +6558,12 @@
       document.querySelectorAll(".lang-btn").forEach((button) => {
         button.classList.toggle("active", button.dataset.lang === lang);
       });
+
+      const currentLangEl = document.getElementById("lang-current");
+      if (currentLangEl) currentLangEl.textContent = ui().langName;
+
+      updateCartUi();
+      renderCartContent();
 
       document.documentElement.lang = htmlLangCodes[lang];
       saveLanguage(lang);
@@ -5289,6 +6606,7 @@
     document.querySelectorAll(".lang-btn").forEach((button) => {
       button.addEventListener("click", () => {
         applyLanguage(button.dataset.lang);
+        closeInfoModal("lang-modal");
       });
     });
 
@@ -5356,8 +6674,8 @@
       });
     }
 
-    enableDragScroll(".language-bar");
     enableDragScroll(".quick-nav");
+    enableDragScroll(".featured-grid");
 
     applyLanguage(getSavedLanguage() || detectLanguage());
 
@@ -5521,12 +6839,14 @@
     });
 
     document.addEventListener("click", (event) => {
-      const photo = event.target.closest(".main-photo, .featured-card img");
+      const photo = event.target.closest(".main-photo, .featured-card img[data-photo]");
 
       if (photo) {
-        photo.classList.toggle("photo-expanded");
+        openPhoto(photo.getAttribute("src"), photo.getAttribute("alt"));
       }
     });
+
+    setInterval(renderStoreStatus, 60 * 1000);
   </script>
 
 <script>

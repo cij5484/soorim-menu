@@ -1,5 +1,5 @@
 // 메뉴판을 수정해 올릴 때 이 버전 숫자를 하나 올려 주세요. (예: v3 → v4)
-const MENU_CACHE_NAME = "soorim-menu-v3";
+const MENU_CACHE_NAME = "soorim-menu-v4";
 
 const MENU_FILES_TO_CACHE = [
   "./",
